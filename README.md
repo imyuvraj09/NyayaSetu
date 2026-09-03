@@ -45,7 +45,7 @@
 - [Legal Disclaimer](#-legal-disclaimer)
 - [Documentation](#-documentation)
 - [License](#-license)
-- [Author](#-author)
+- [Authors](#-authors)
 - [Acknowledgements](#-acknowledgements)
 
 ---
@@ -567,13 +567,13 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
-## 👤 Author
+## 👥 Authors
 
 ```text
 Developed as a B.Tech Final Year Project
 
 Project:     NyayaSetu — The Bridge to Justice
-Author's:      Yuvraj Singh
+Author's:    Yuvraj Singh, Sunit Das, Raju Shaw, Pallab Bag, Sumit Kumar Nath, Nababrato Bishwas
 Institution: MCKV Institute of Engineering
 Department:  Computer Science & Engineering
              Artificial Intelligence & Machine Learning
