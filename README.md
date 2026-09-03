@@ -1,7 +1,8 @@
 <div align="center">
 
-# ⚖️ NyayaSetu
-### The Bridge to Justice
+<img src="docs/images/nyayasetu-logo.png" alt="NyayaSetu — The Bridge to Justice" width="380" />
+
+<br />
 
 > An AI-Powered RAG-Based Legal Assistant for Accessible, Explainable, and Citation-Backed Legal Knowledge in India
 
@@ -602,5 +603,7 @@ NyayaSetu builds on the work of the broader open-source and research community, 
 ---
 
 <div align="center">
-⚖️ NyayaSetu — Bridging the gap between complex law and everyday understanding.
+  <img src="docs/images/nyayasetu-mark.png" alt="NyayaSetu" width="42" />
+  <br />
+  <strong>NyayaSetu</strong> — Bridging the gap between complex law and everyday understanding.
 </div>
