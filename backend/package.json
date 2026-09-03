@@ -1,0 +1,33 @@
+{
+  "name": "nyayasetu-backend",
+  "version": "1.0.0",
+  "description": "NyayaSetu API Gateway — Node.js + Express backend",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "node tests/api.test.js"
+  },
+  "keywords": [
+    "legal",
+    "ai",
+    "rag",
+    "india",
+    "nyayasetu"
+  ],
+  "author": "Yuvraj Singh",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "mongoose": "^9.9.4",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^11.2.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.2.2"
+  }
+}

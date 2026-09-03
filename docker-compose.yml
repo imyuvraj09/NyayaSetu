@@ -1,0 +1,44 @@
+# NyayaSetu — Docker Compose
+
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_BASE_URL=http://localhost:3000/api
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/Dockerfile.backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - rag-service
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - RAG_SERVICE_URL=http://rag-service:8000
+    env_file:
+      - ./backend/.env
+
+  rag-service:
+    build:
+      context: ./rag-service
+      dockerfile: ../docker/Dockerfile.rag-service
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+    env_file:
+      - ./rag-service/.env
+    volumes:
+      - ./rag-service/data:/app/data

@@ -1,0 +1,121 @@
+"""
+NyayaSetu RAG Service — API route handlers.
+
+All routes are mounted under the /api/v1 prefix (configured in main.py).
+Wires the complete Phase 7 Legal RAG pipeline into POST /api/v1/query.
+"""
+
+import uuid
+from typing import Optional
+
+from fastapi import APIRouter, HTTPException, status
+
+from rag.rag_pipeline import LegalRAGPipeline
+from schemas.query import QueryRequest
+from schemas.response import QueryResponse, SourceDocument
+from utils.config import settings
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
+
+router = APIRouter()
+
+# Singleton pipeline instance initialized on module load
+_RAG_PIPELINE: Optional[LegalRAGPipeline] = None
+
+
+def get_pipeline() -> LegalRAGPipeline:
+    """Lazy loader for the LegalRAGPipeline singleton."""
+    global _RAG_PIPELINE
+    if _RAG_PIPELINE is None:
+        _RAG_PIPELINE = LegalRAGPipeline()
+    return _RAG_PIPELINE
+
+
+@router.get("/health")
+async def health_check():
+    """Return the service health and configuration status."""
+    pipeline = get_pipeline()
+    return {
+        "status": "healthy",
+        "service": settings.APP_NAME,
+        "version": settings.APP_VERSION,
+        "llm_provider": settings.LLM_PROVIDER,
+        "llm_configured": pipeline.llm_provider.is_configured(),
+        "vector_db_collection": settings.VECTOR_COLLECTION_NAME,
+    }
+
+
+@router.post("/query", response_model=QueryResponse)
+async def query(request: QueryRequest):
+    """Accept a legal question and return a grounded, cited RAG-generated response.
+
+    Executes:
+    1. Query preprocessing
+    2. Phase 6 two-stage dense retrieval + cross-encoder reranking
+    3. Structured legal context construction with [SOURCE N] labels
+    4. Grounded answer generation via LLM provider
+    5. Deterministic citation validation and safety checks
+    """
+    session_id = request.session_id or str(uuid.uuid4())
+
+    if not request.query or not request.query.strip():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Query string cannot be empty or whitespace only.",
+        )
+
+    logger.info(
+        "API Query received | session=%s | length=%d",
+        session_id,
+        len(request.query),
+    )
+
+    try:
+        pipeline = get_pipeline()
+        rag_result = pipeline.query(request.query)
+
+        # Convert SourceReference list to SourceDocument list for response
+        mapped_sources = [
+            SourceDocument(
+                source_label=src.source_label,
+                chunk_id=src.chunk_id,
+                document_name=src.document_name,
+                document_type=src.document_type,
+                source_filename=src.source_filename,
+                page=src.page_numbers[0] if src.page_numbers else None,
+                page_numbers=src.page_numbers,
+                content_snippet=src.text_snippet,
+                relevance_score=src.similarity_score,
+                reranker_score=src.reranker_score,
+                metadata=src.metadata,
+            )
+            for src in rag_result.sources
+        ]
+
+        return QueryResponse(
+            answer=rag_result.answer,
+            sources=mapped_sources,
+            session_id=session_id,
+            query=request.query,
+            retrieval_metadata=rag_result.retrieval_metadata,
+            model_metadata=rag_result.model_metadata,
+            warnings=rag_result.warnings,
+            status=rag_result.status,
+        )
+
+    except HTTPException:
+        raise
+    except Exception as err:
+        logger.error("API error processing query: %s", err, exc_info=True)
+        return QueryResponse(
+            answer=(
+                "A system error occurred while processing your legal query. "
+                "Please try again or contact system support."
+            ),
+            sources=[],
+            session_id=session_id,
+            query=request.query,
+            warnings=[f"Internal processing error: {err}"],
+            status="error",
+        )

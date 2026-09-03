@@ -1,0 +1,28 @@
+{
+  "total_documents": 14,
+  "total_input_pages": 2053,
+  "total_chunks": 6545,
+  "average_chunk_size": 990.38,
+  "minimum_chunk_size": 150,
+  "maximum_chunk_size": 1781,
+  "documents_processed": [
+    "Bharatiya Nyaya Sanhita, 2023",
+    "Bharatiya Nagarik Suraksha Sanhita, 2023",
+    "Bharatiya Sakshya Adhiniyam, 2023",
+    "The Companies Act, 2013",
+    "Constitution of India",
+    "Consumer Protection Act",
+    "The Goods and Services Tax Act, 2017",
+    "The Insolvency and Bankruptcy Code, 2016",
+    "Information Technology Act",
+    "Motor Vehicles Act",
+    "The Protection of Children from Sexual Offences Act, 2012",
+    "The Right of Children to Free and Compulsory Education Act, 2009",
+    "The Right to Information Act, 2005",
+    "The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013"
+  ],
+  "failed_documents": [],
+  "processing_timestamp": "2026-09-03T18:40:02.357403+00:00",
+  "chunk_size_configuration": 1200,
+  "overlap_configuration": 200
+}

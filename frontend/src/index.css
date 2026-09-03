@@ -1,0 +1,506 @@
+/* ==========================================================================
+   NyayaSetu Design System Tokens & Base Styles
+   Professional Research-Tool Aesthetic (Clean, Minimal, Academic)
+   ========================================================================== */
+
+:root {
+  /* Color Palette - Deep Navy / Blue + Subtle Teal Accent */
+  --bg-app: #fafbfc;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8fafc;
+  --bg-subtle: #f1f5f9;
+  --bg-accent-subtle: #e6f4f1;
+  --bg-accent-light: #f0fdfa;
+
+  --border-color: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --border-accent: #99f6e4;
+
+  --text-primary: #0f172a;       /* Dark charcoal/navy */
+  --text-secondary: #334155;     /* Slate grey */
+  --text-muted: #64748b;         /* Muted grey */
+  --text-light: #94a3b8;
+
+  /* Accent Colors */
+  --primary-deep: #0f3a68;       /* Primary authoritative deep blue */
+  --primary-hover: #0b2c52;
+  --accent-teal: #0d9488;        /* Subtle interactive teal */
+  --accent-teal-dark: #0f766e;
+  --accent-teal-soft: #14b8a6;
+  --accent-pill-bg: #e6f4f1;
+  --accent-pill-text: #0d9488;
+
+  /* Layout & Geometry */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+
+  --max-width: 1140px;
+  --header-height: 58px;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+}
+
+/* ----------------- Reset & Base ----------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  color-scheme: light;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: all 0.15s ease;
+}
+
+/* ----------------- Layout Utilities ----------------- */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
+.section-spacer {
+  padding: 3.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section-header {
+  margin-bottom: 2rem;
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-teal);
+  margin-bottom: 0.4rem;
+}
+
+.section-title {
+  font-size: 1.875rem; /* 30px compact research title */
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  margin-bottom: 0.45rem;
+}
+
+.section-desc {
+  font-size: 0.9375rem; /* 15px clean description */
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-width: 620px;
+}
+
+/* ----------------- Buttons ----------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.15rem;
+  font-size: 0.875rem; /* 14px compact */
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background-color: var(--accent-teal);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-teal-dark);
+}
+
+.btn-secondary {
+  background-color: #ffffff;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-subtle);
+  border-color: var(--border-hover);
+}
+
+.btn-outline {
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  background-color: transparent;
+  font-size: 0.8125rem;
+  padding: 0.35rem 0.75rem;
+}
+
+.btn-outline:hover {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .hero-heading {
+    font-size: 2.625rem !important; /* 42px on tablet */
+    line-height: 1.15 !important;
+  }
+  .section-title {
+    font-size: 1.6875rem !important; /* 27px on tablet */
+  }
+}
+
+@media (max-width: 840px) {
+  .desktop-nav {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: inline-flex !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-spacer {
+    padding: 2.75rem 0;
+  }
+  .section-title {
+    font-size: 1.5rem !important; /* 24px on mobile */
+  }
+  .hero-container {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+  .hero-heading {
+    font-size: 2.125rem !important; /* 34px on mobile */
+    line-height: 1.18 !important;
+  }
+  .hero-description {
+    font-size: 0.9375rem !important; /* 15px on mobile */
+  }
+  .hero-features {
+    grid-template-columns: 1fr !important;
+  }
+  .cta-group {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .two-column-layout {
+    grid-template-columns: 1fr !important;
+  }
+  .footer-container {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1.15rem !important;
+  }
+  .right-col {
+    align-items: flex-start !important;
+  }
+}
+
+/* ==========================================================================
+   Rotating Legal Knowledge Wheel Animation
+   Subtle, continuous, professional 28s orbit with counter-rotating labels
+   ========================================================================== */
+
+@keyframes rotateKnowledgeNetwork {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes counterRotateLabel {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.rotating-knowledge-network {
+  transform-origin: 200px 200px;
+  animation: rotateKnowledgeNetwork 28s linear infinite;
+  will-change: transform;
+}
+
+.counter-rotating-label {
+  transform-origin: 0px 0px;
+  animation: counterRotateLabel 28s linear infinite;
+  will-change: transform;
+}
+
+/* ==========================================================================
+   Contributors Section Responsive Grid & Links
+   ========================================================================== */
+
+.contributors-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .contributors-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.875rem !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .contributors-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+}
+
+.contrib-link {
+  color: #0d9488;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease, text-decoration 0.15s ease;
+}
+
+.contrib-link:hover,
+.contrib-link:focus-visible {
+  color: #0f766e;
+  text-decoration: underline;
+}
+
+.contrib-link-disabled {
+  color: #94a3b8;
+  font-weight: 400;
+  cursor: default;
+  user-select: none;
+}
+
+.contrib-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #0d9488;
+  background-color: #f0fdfa;
+  border: 1px solid #ccfbf1;
+  border-radius: var(--radius-sm, 4px);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.contrib-btn:hover,
+.contrib-btn:focus-visible {
+  background-color: #0d9488;
+  color: #ffffff;
+  border-color: #0d9488;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   NyayaSetu AI Chat Assistant Dark Interface Styles
+   ========================================================================== */
+
+@keyframes chatDotPulse {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  40% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+.chat-scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-scroll-area::-webkit-scrollbar-track {
+  background: #141c28;
+}
+
+.chat-scroll-area::-webkit-scrollbar-thumb {
+  background: #253040;
+  border-radius: 3px;
+}
+
+.chat-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+.chat-suggestion-chip:hover {
+  background-color: #222e40 !important;
+  border-color: #0d9488 !important;
+  color: #e2e8f0 !important;
+}
+
+.chat-input-field::placeholder {
+  color: #64748b;
+}
+
+/* ==========================================================================
+   NyayaSetu Modal AI Legal Assistant Styles (Matching Reference)
+   ========================================================================== */
+
+@keyframes modalBackdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-chat-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.modal-chat-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-chat-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.modal-chat-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.modal-input-field::placeholder {
+  color: #8898aa;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .legal-chat-modal {
+    width: 95vw !important;
+    height: 88vh !important;
+    max-height: none !important;
+    border-radius: 20px !important;
+  }
+  .legal-modal-chat-area {
+    padding: 1rem !important;
+  }
+  .legal-assistant-bubble {
+    max-width: 92% !important;
+  }
+}
+
+@media (max-width: 540px) {
+  .legal-header-title {
+    font-size: 0.9375rem !important;
+  }
+  .legal-header-pill {
+    padding: 0.25rem 0.6rem !important;
+  }
+  .legal-status-text {
+    font-size: 0.6875rem !important;
+  }
+}
+
+@media (max-width: 440px) {
+  .legal-header-title {
+    font-size: 0.85rem !important;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .legal-chat-modal {
+    width: 98vw !important;
+    height: 94vh !important;
+    border-radius: 12px !important;
+  }
+  .legal-modal-backdrop {
+    padding: 0.35rem !important;
+  }
+}
+
+/* ==========================================================================
+   Phase 10: Chat Workspace Responsive & Styling Additions
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .desktop-sidebar-pane {
+    display: none !important;
+  }
+  .mobile-sidebar-toggle {
+    display: flex !important;
+  }
+}
+
+.sidebar-sessions-scroll::-webkit-scrollbar,
+.modal-chat-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-sessions-scroll::-webkit-scrollbar-track,
+.modal-chat-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-sessions-scroll::-webkit-scrollbar-thumb,
+.modal-chat-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.sidebar-sessions-scroll::-webkit-scrollbar-thumb:hover,
+.modal-chat-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+
+
+

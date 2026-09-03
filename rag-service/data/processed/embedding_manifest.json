@@ -1,0 +1,10 @@
+{
+  "total_chunks_discovered": 6545,
+  "total_chunks_embedded": 6545,
+  "failed_chunks": 0,
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "embedding_dimension": 384,
+  "batch_size": 32,
+  "vector_collection_name": "nyayasetu_legal_documents",
+  "processing_timestamp": "2026-09-03T18:46:56.305368+00:00"
+}

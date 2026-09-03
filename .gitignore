@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+*.egg-info/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Docker
+docker-compose.override.yml
+
+# RAG Service data (large files)
+rag-service/data/raw/*.pdf
+rag-service/data/raw/*.txt
+rag-service/vectorstore/chroma_db/
+rag-service/vector_store/
+
+# Evaluation results
+evaluation/results/*.json
+evaluation/results/*.csv

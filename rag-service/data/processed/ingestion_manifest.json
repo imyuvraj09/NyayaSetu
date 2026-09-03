@@ -1,0 +1,26 @@
+{
+  "total_files_discovered": 14,
+  "successfully_processed_files": 14,
+  "failed_files": 0,
+  "total_pages": 2053,
+  "pages_containing_text": 2052,
+  "empty_pages": 1,
+  "processing_timestamp": "2026-09-03T18:39:54.473103+00:00",
+  "processed_documents": [
+    "bns_2023.pdf",
+    "bnss_2023.pdf",
+    "bsa_2023.pdf",
+    "companies_act_2013.pdf",
+    "constitution_of_india.pdf",
+    "consumer_protection_act.pdf",
+    "gst_act_2017.pdf",
+    "insolvency_bankruptcy_code_2016.pdf",
+    "it_act.pdf",
+    "motor_vehicle_act.pdf",
+    "pocso_act_2012.pdf",
+    "right_to_education_act_2009.pdf",
+    "right_to_information_act_2005.pdf",
+    "sexual_harassment_workplace_act_2013.pdf"
+  ],
+  "failed_documents": []
+}
