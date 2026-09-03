@@ -569,15 +569,22 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## 👥 Authors
 
-```text
-Developed as a B.Tech Final Year Project
+*Developed as a B.Tech Final Year Project*
 
-Project:     NyayaSetu — The Bridge to Justice
-Author's:    Yuvraj Singh, Sunit Das, Raju Shaw, Pallab Bag, Sumit Kumar Nath, Nababrato Bishwas
-Institution: MCKV Institute of Engineering
-Department:  Computer Science & Engineering
-             Artificial Intelligence & Machine Learning
-```
+- **Project:** NyayaSetu — The Bridge to Justice
+- **Authors:** [Yuvraj Singh](https://www.linkedin.com/in/imyuvraj-singh/), [Sunit Das](https://www.linkedin.com/in/dassunit/), [Raju Shaw](https://www.linkedin.com/in/rajushaw-tech4u/), [Pallab Bag](https://www.linkedin.com/in/pallab-bag/), [Sumit Kumar Nath](https://www.linkedin.com/in/sumit-nath-b8b972198/), [Nababrato Bishwas](https://www.linkedin.com/in/nababrato-biswas-77bb992b7/)
+- **Institution:** MCKV Institute of Engineering
+- **Department:** Computer Science & Engineering (Artificial Intelligence & Machine Learning)
+- **Project Supervisor:** [Dr. Deep Suman Dev](https://www.linkedin.com/in/dr-deep-suman-dev-phd-8a500622/)
+
+| Author | Role | LinkedIn Profile |
+| :--- | :--- | :--- |
+| **[Yuvraj Singh](https://www.linkedin.com/in/imyuvraj-singh/)** | Lead Developer | [linkedin.com/in/imyuvraj-singh](https://www.linkedin.com/in/imyuvraj-singh/) |
+| **[Sunit Das](https://www.linkedin.com/in/dassunit/)** | Developer | [linkedin.com/in/dassunit](https://www.linkedin.com/in/dassunit/) |
+| **[Raju Shaw](https://www.linkedin.com/in/rajushaw-tech4u/)** | Developer | [linkedin.com/in/rajushaw-tech4u](https://www.linkedin.com/in/rajushaw-tech4u/) |
+| **[Pallab Bag](https://www.linkedin.com/in/pallab-bag/)** | Developer | [linkedin.com/in/pallab-bag](https://www.linkedin.com/in/pallab-bag/) |
+| **[Sumit Kumar Nath](https://www.linkedin.com/in/sumit-nath-b8b972198/)** | Developer | [linkedin.com/in/sumit-nath-b8b972198](https://www.linkedin.com/in/sumit-nath-b8b972198/) |
+| **[Nababrato Bishwas](https://www.linkedin.com/in/nababrato-biswas-77bb992b7/)** | Developer | [linkedin.com/in/nababrato-biswas-77bb992b7](https://www.linkedin.com/in/nababrato-biswas-77bb992b7/) |
 
 ---
 
