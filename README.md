@@ -158,29 +158,21 @@ Layer responsibilities:
 
 The core of NyayaSetu is its Retrieval-Augmented Generation pipeline, which grounds every response in retrieved legal text rather than relying purely on the LLM's parametric knowledge.
 
-```mermaid
-flowchart LR
-    A[1️⃣ User Query] --> B[2️⃣ Query Processing]
-    B --> C[3️⃣ Embedding Generation]
-    C --> D[4️⃣ Semantic Retrieval]
-    D --> E[5️⃣ Context Selection]
-    E --> F[6️⃣ Prompt Construction]
-    F --> G[7️⃣ LLM Generation]
-    G --> H[8️⃣ Citation Generation]
-    H --> I[9️⃣ Response Delivery]
-```
+<p align="center">
+  <img src="docs/images/rag-pipeline.jpg" alt="NyayaSetu RAG Pipeline Architecture — From Legal Query to Explainable Answer" width="100%" />
+</p>
 
 | Stage | Description |
 | :--- | :--- |
-| **1. User Query** | The user asks a legal question through the NyayaSetu interface. |
-| **2. Query Processing** | The raw query is cleaned, normalized, and prepared for semantic retrieval. |
-| **3. Embedding Generation** | The processed query is converted into a semantic vector using `BAAI/bge-small-en-v1.5`. |
-| **4. Semantic Retrieval** | The vector database is searched for the most semantically relevant legal document chunks. |
-| **5. Context Selection** | Retrieved passages are ranked and filtered to the most relevant subset. |
-| **6. Prompt Construction** | Selected legal context is combined with the user's query and system instructions into a structured prompt. |
-| **7. LLM Generation** | The language model generates a response grounded in the retrieved context. |
-| **8. Citation Generation** | The response is annotated with references to the specific legal sources used. |
-| **9. Response Delivery** | The final answer, along with its citations, is returned to the frontend via the backend gateway. |
+| **1. User Query** | User asks a legal question in natural language. |
+| **2. Query Processing** | Query is cleaned, normalized, and expanded with legal synonyms. |
+| **3. Embedding Generation** | Query is converted into dense vector representation (`BAAI/bge-small-en-v1.5`). |
+| **4. Semantic Retrieval** | Top relevant passages are retrieved from vector database (ChromaDB). |
+| **5. Context Selection** | Most relevant and diverse passages are selected as context. |
+| **6. Prompt Construction** | Structured prompt is built using the query and retrieved context. |
+| **7. LLM Generation** | LLM generates a grounded and accurate legal answer. |
+| **8. Citation Generation** | Citations with document name, section & page numbers are extracted. |
+| **9. Response Delivery** | Final answer with citations is delivered to the user. |
 
 ---
 
@@ -581,7 +573,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 Developed as a B.Tech Final Year Project
 
 Project:     NyayaSetu — The Bridge to Justice
-Author:      Yuvraj Singh
+Author's:      Yuvraj Singh
 Institution: MCKV Institute of Engineering
 Department:  Computer Science & Engineering
              Artificial Intelligence & Machine Learning
