@@ -1,0 +1,67 @@
+[
+  {
+    "id": "CASE_BENCH_01",
+    "query": "What is consent in sexual offences under Bharatiya Nyaya Sanhita, and what are the Supreme Court principles regarding consent vs misconception of fact in a promise to marry?",
+    "expected_authority": "BOTH",
+    "expected_statutes": ["bns_2023"],
+    "expected_sections": ["63", "69", "27"],
+    "expected_cases": [
+      "Pramod Suryabhan Pawar v. State of Maharashtra",
+      "State of UP v. Chhotey Lal",
+      "Kaini Rajan v. State of Kerala",
+      "Anurag Soni v. State of Chhattisgarh"
+    ],
+    "expected_facets": ["definition", "elements", "judicial_principles", "holding"],
+    "anti_fabrication_check": true
+  },
+  {
+    "id": "CASE_BENCH_02",
+    "query": "What is murder under BNS, what are the five exceptions where culpable homicide is not murder, and what is the punishment prescribed under Section 103?",
+    "expected_authority": "STATUTE",
+    "expected_statutes": ["bns_2023"],
+    "expected_sections": ["100", "101", "103"],
+    "expected_cases": [],
+    "expected_facets": ["definition", "elements", "exceptions", "punishment"],
+    "anti_fabrication_check": true
+  },
+  {
+    "id": "CASE_BENCH_03",
+    "query": "What did the Supreme Court hold in Pramod Suryabhan Pawar v. State of Maharashtra regarding Section 90 of IPC and breach of promise to marry?",
+    "expected_authority": "CASE_LAW",
+    "expected_statutes": [],
+    "expected_sections": ["90", "375", "63"],
+    "expected_cases": ["Pramod Suryabhan Pawar v. State of Maharashtra"],
+    "expected_facets": ["judicial_principles", "holding", "ratio"],
+    "anti_fabrication_check": true
+  },
+  {
+    "id": "CASE_BENCH_04",
+    "query": "Can an examining body withhold evaluated answer sheets under the fiduciary exemption of RTI Act according to CBSE v. Aditya Bandopadhyay?",
+    "expected_authority": "BOTH",
+    "expected_statutes": ["right_to_information_act"],
+    "expected_sections": ["8(1)(e)"],
+    "expected_cases": ["Central Board of Secondary Education v. Aditya Bandopadhyay"],
+    "expected_facets": ["judicial_principles", "holding"],
+    "anti_fabrication_check": true
+  },
+  {
+    "id": "CASE_BENCH_05",
+    "query": "What is the procedure established by law under Article 21 according to Maneka Gandhi v. Union of India?",
+    "expected_authority": "BOTH",
+    "expected_statutes": ["constitution_of_india"],
+    "expected_sections": ["21"],
+    "expected_cases": ["Maneka Gandhi v. Union of India"],
+    "expected_facets": ["judicial_principles", "rights", "holding"],
+    "anti_fabrication_check": true
+  },
+  {
+    "id": "CASE_BENCH_06",
+    "query": "What did the Supreme Court hold in the judgment of Rao v. State of Atlantis regarding interplanetary banking secrecy?",
+    "expected_authority": "CASE_LAW",
+    "expected_statutes": [],
+    "expected_sections": [],
+    "expected_cases": [],
+    "expected_case_law_status": "NOT_FOUND",
+    "anti_fabrication_check": true
+  }
+]
