@@ -47,7 +47,7 @@ class Settings(BaseSettings):
 
     # ── LLM & Answer Generation (Google Gemini Primary) ─────────
     LLM_PROVIDER: str = "gemini"  # Primary: "gemini" / "google" | Also supports: "openai", "mock"
-    LLM_MODEL: str = "gemini-3.5-flash"
+    LLM_MODEL: str = "gemini-3.6-flash"
     GEMINI_API_KEY: Optional[str] = None
     GOOGLE_API_KEY: Optional[str] = None
     OPENAI_API_KEY: Optional[str] = None

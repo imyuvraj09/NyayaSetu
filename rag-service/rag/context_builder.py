@@ -57,32 +57,70 @@ class LegalContextBuilder:
         current_chars = 0
         truncated = False
 
-        for idx, chunk in enumerate(ranked_chunks, start=1):
+        statute_blocks: List[str] = []
+        case_blocks: List[str] = []
+
+        statute_idx = 1
+        case_idx = 1
+
+        for chunk in ranked_chunks:
             # Text deduplication check
             normalized_passage = " ".join(chunk.text.split())
             if normalized_passage in seen_texts:
                 continue
             seen_texts.add(normalized_passage)
 
-            source_label = f"[SOURCE {idx}]"
-            pages_str = ", ".join(map(str, chunk.page_numbers)) if chunk.page_numbers else "N/A"
+            ev_type = getattr(chunk, "evidence_type", "STATUTE")
+            if not ev_type and isinstance(chunk.metadata, dict):
+                ev_type = chunk.metadata.get("evidence_type", "STATUTE")
 
-            block = (
-                f"{source_label}\n"
-                f"Document: {chunk.document_name} ({chunk.document_type})\n"
-                f"Pages: {pages_str}\n"
-                f"Chunk ID: {chunk.chunk_id}\n\n"
-                f"Legal Text:\n"
-                f"{chunk.text}\n"
-            )
+            if ev_type == "CASE_LAW":
+                source_label = f"[Case Source C{case_idx}]"
+                case_name = getattr(chunk, "case_name", "") or chunk.document_name
+                court_name = getattr(chunk, "court", "") or "Supreme Court of India"
+                cite = getattr(chunk, "citation", "") or ""
+                j_date = getattr(chunk, "judgment_date", "") or ""
+                para_num = getattr(chunk, "paragraph_number", "") or (str(chunk.page_numbers[0]) if chunk.page_numbers else "1")
+
+                block = (
+                    f"{source_label}\n"
+                    f"Case: {case_name}\n"
+                    f"Court: {court_name}\n"
+                    f"Citation: {cite}\n"
+                    f"Date: {j_date}\n"
+                    f"Paragraph: {para_num}\n"
+                    f"Chunk ID: {chunk.chunk_id}\n\n"
+                    f"Judgment Text:\n"
+                    f"{chunk.text}\n"
+                )
+                case_idx += 1
+            else:
+                source_label = f"[Source S{statute_idx}]"
+                pages_str = ", ".join(map(str, chunk.page_numbers)) if chunk.page_numbers else "N/A"
+                sec_num = getattr(chunk, "section_number", "") or ""
+                sec_title = getattr(chunk, "section_title", "") or ""
+                short_name = getattr(chunk, "act_short_name", "") or ""
+
+                sec_display = f"Section {sec_num}" if sec_num else "Section Unspecified"
+                if sec_title:
+                    sec_display += f" — {sec_title}"
+
+                block = (
+                    f"{source_label}\n"
+                    f"Act: {chunk.document_name} ({short_name or chunk.document_type})\n"
+                    f"Provision: {sec_display}\n"
+                    f"Pages: {pages_str}\n"
+                    f"Chunk ID: {chunk.chunk_id}\n\n"
+                    f"Statutory Text:\n"
+                    f"{chunk.text}\n"
+                )
+                statute_idx += 1
 
             block_length = len(block)
-
-            # Check if adding this block exceeds limit (ensure at least 1 source is included)
-            if blocks and (current_chars + block_length > limit):
+            if (statute_blocks or case_blocks) and (current_chars + block_length > limit):
                 logger.warning(
                     "Context truncation: Context limit reached (%d chars + %d > %d limit). "
-                    "Prioritizing higher-ranked sources; skipping %s and remaining.",
+                    "Skipping %s and remaining.",
                     current_chars,
                     block_length,
                     limit,
@@ -91,7 +129,11 @@ class LegalContextBuilder:
                 truncated = True
                 break
 
-            blocks.append(block)
+            if ev_type == "CASE_LAW":
+                case_blocks.append(block)
+            else:
+                statute_blocks.append(block)
+
             current_chars += block_length
 
             sources.append(
@@ -106,13 +148,30 @@ class LegalContextBuilder:
                     reranker_score=chunk.reranker_score,
                     text_snippet=chunk.text[:300] + ("..." if len(chunk.text) > 300 else ""),
                     metadata=chunk.metadata,
+                    section_number=getattr(chunk, "section_number", ""),
+                    section_title=getattr(chunk, "section_title", ""),
+                    act_short_name=getattr(chunk, "act_short_name", ""),
+                    evidence_type=ev_type,
+                    case_name=getattr(chunk, "case_name", ""),
+                    court=getattr(chunk, "court", ""),
+                    citation=getattr(chunk, "citation", ""),
+                    judgment_date=getattr(chunk, "judgment_date", ""),
+                    paragraph_number=str(getattr(chunk, "paragraph_number", "")),
                 )
             )
 
-        formatted_context = "\n---\n\n".join(blocks)
+        context_sections: List[str] = []
+        if statute_blocks:
+            context_sections.append("=== STATUTORY EVIDENCE ===\n\n" + "\n---\n\n".join(statute_blocks))
+        if case_blocks:
+            context_sections.append("=== CASE-LAW EVIDENCE ===\n\n" + "\n---\n\n".join(case_blocks))
+
+        formatted_context = "\n\n====================\n\n".join(context_sections)
         logger.info(
-            "Built legal context: %d sources included, %d total chars (limit: %d), truncated=%s",
+            "Built legal context: %d sources included (%d statutory, %d case-law), %d total chars (limit: %d), truncated=%s",
             len(sources),
+            len(statute_blocks),
+            len(case_blocks),
             len(formatted_context),
             limit,
             truncated,

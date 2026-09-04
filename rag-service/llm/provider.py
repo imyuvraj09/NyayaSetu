@@ -32,7 +32,13 @@ except ImportError:
 
 from llm.base import (
     BaseLLMProvider,
+    LLMAuthenticationError,
+    LLMEmptyResponseError,
     LLMError,
+    LLMInvalidModelError,
+    LLMMalformedResponseError,
+    LLMNetworkError,
+    LLMProviderError,
     LLMQuotaExceededError,
     LLMRateLimitError,
     LLMResponse,
@@ -43,6 +49,19 @@ from utils.config import settings
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
+
+
+def _sanitize_log(text: str) -> str:
+    """Scrub sensitive API tokens or keys from log messages."""
+    if not text:
+        return ""
+    # Redact common Gemini / OpenAI API key patterns
+    text = re.sub(r"AQ\.[A-Za-z0-9_\-]{20,}", "[REDACTED_GEMINI_KEY]", text)
+    text = re.sub(r"AIza[0-9A-Za-z\-_]{35}", "[REDACTED_GOOGLE_KEY]", text)
+    text = re.sub(r"sk-[a-zA-Z0-9_\-]{20,}", "[REDACTED_OPENAI_KEY]", text)
+    text = re.sub(r"key=[A-Za-z0-9_\-]+", "key=[REDACTED]", text)
+    text = re.sub(r"Bearer\s+[A-Za-z0-9_\.\-]+", "Bearer [REDACTED]", text)
+    return text
 
 
 class OpenAIProvider(BaseLLMProvider):
@@ -145,11 +164,9 @@ class OpenAIProvider(BaseLLMProvider):
 
         # Authentication errors (non-retryable)
         if (OPENAI_AVAILABLE and isinstance(exc, openai.AuthenticationError)) or status_code == 401:
-            return LLMError(
+            return LLMAuthenticationError(
                 message="OpenAI authentication failed. Please verify your OPENAI_API_KEY.",
-                category="AUTH_ERROR",
                 status_code=401,
-                retryable=False,
             )
 
         # Generic API Error
@@ -322,7 +339,9 @@ OpenAICompatibleProvider = OpenAIProvider
 
 
 class GoogleGeminiProvider(BaseLLMProvider):
-    """Production Google Gemini LLM provider using Google's official google-genai Python SDK."""
+    """Production Google Gemini LLM provider using Google's official google-genai Python SDK.
+    Enforces a single authoritative model configuration with controlled single retry for transient faults.
+    """
 
     def __init__(
         self,
@@ -340,7 +359,7 @@ class GoogleGeminiProvider(BaseLLMProvider):
                 or os.environ.get("LLM_API_KEY")
                 or ""
             ).strip()
-        self._model = model or settings.LLM_MODEL or "gemini-2.5-flash"
+        self._model = model or settings.LLM_MODEL or "gemini-3.6-flash"
         if self._model.startswith("models/"):
             self._model = self._model.replace("models/", "")
         self._timeout = timeout if timeout is not None else settings.LLM_TIMEOUT_SECONDS
@@ -357,12 +376,68 @@ class GoogleGeminiProvider(BaseLLMProvider):
         """Verify API key is present and non-empty."""
         return bool(self._api_key and self._api_key.strip())
 
-    def _classify_gemini_error(self, exc: Exception) -> LLMError:
-        """Classify Gemini API and HTTP exceptions into typed LLMError subclasses with retryability."""
-        err_str = str(exc).lower()
+    def check_health(self) -> dict:
+        """Perform a lightweight diagnostic check without making billable generation calls.
+        Never exposes API keys.
+        """
+        configured = self.is_configured()
+        available = False
+        if configured and GEMINI_AVAILABLE:
+            try:
+                # Lightweight initialization check
+                _ = genai.Client(api_key=self._api_key)
+                available = True
+            except Exception as exc:
+                logger.warning("Gemini diagnostic health check failed: %s", _sanitize_log(str(exc)))
+                available = False
 
-        # Check for HTTP 429 or ResourceExhausted
+        return {
+            "provider": "google_gemini",
+            "model": self._model,
+            "configured": configured,
+            "available": available,
+        }
+
+    def _classify_gemini_error(self, exc: Exception) -> LLMError:
+        """Classify Gemini API and HTTP exceptions into typed LLMError subclasses with safe logging."""
+        err_str = _sanitize_log(str(exc)).lower()
         status_code = getattr(exc, "code", None) or getattr(exc, "status_code", None)
+
+        # 1. Model not found / invalid model (HTTP 404)
+        if (
+            status_code == 404
+            or "not found" in err_str
+            or "is not found for api version" in err_str
+            or "invalid model" in err_str
+            or "models/" in err_str and "not found" in err_str
+        ):
+            return LLMInvalidModelError(
+                message=f"Configured Gemini model '{self._model}' is invalid or not found on Google AI.",
+                status_code=404,
+            )
+
+        # 2. Authentication / Permission errors (HTTP 401/403)
+        if (
+            status_code in (400, 401, 403)
+            or any(
+                k in err_str
+                for k in (
+                    "api_key_invalid",
+                    "unauthenticated",
+                    "permission_denied",
+                    "permission",
+                    "invalid api key",
+                    "api key not valid",
+                    "api key is invalid",
+                )
+            )
+        ):
+            return LLMAuthenticationError(
+                message="Google Gemini authentication failed. Please verify your GEMINI_API_KEY.",
+                status_code=status_code or 401,
+            )
+
+        # 3. Rate Limit vs Quota Exceeded (HTTP 429 or ResourceExhausted)
         is_429 = (
             status_code == 429
             or "429" in err_str
@@ -373,56 +448,64 @@ class GoogleGeminiProvider(BaseLLMProvider):
         )
 
         if is_429:
-            if "quota" in err_str or "exhausted" in err_str:
+            if "quota" in err_str or "exhausted" in err_str or "billing" in err_str or "plan" in err_str:
                 return LLMQuotaExceededError(
                     message="Google Gemini API quota or request limit reached. Please check your Google AI project quota.",
                     status_code=429,
                 )
             return LLMRateLimitError(
-                message="Google Gemini API rate limit reached. Please try again later.",
+                message="Google Gemini API rate limit reached. Please try again shortly.",
                 status_code=429,
             )
 
-        # Timeout errors
+        # 4. Timeout errors (HTTP 408 / 504 / client timeout)
         if (
             isinstance(exc, httpx.TimeoutException)
             or status_code in (408, 504)
             or "timeout" in err_str
             or "timed out" in err_str
+            or "deadline exceeded" in err_str
         ):
             return LLMTimeoutError(
                 message=f"Google Gemini API request timed out after {self._timeout} seconds.",
                 status_code=504,
             )
 
-        # Connection / Network errors
-        if isinstance(exc, (httpx.ConnectError, httpx.NetworkError)) or "connection" in err_str:
-            return LLMServiceUnavailableError(
+        # 5. Network / Connection errors
+        if (
+            isinstance(exc, (httpx.ConnectError, httpx.NetworkError))
+            or "connection refused" in err_str
+            or "failed to connect" in err_str
+            or "dns" in err_str
+        ):
+            return LLMNetworkError(
                 message="Network connection error communicating with Google Gemini API.",
                 status_code=503,
             )
 
-        # Server-side 5xx errors
-        if (status_code and 500 <= status_code <= 599) or "internal" in err_str or "unavailable" in err_str:
-            return LLMServiceUnavailableError(
+        # 6. Server-side 5xx errors
+        if (
+            (status_code and 500 <= status_code <= 599)
+            or "internal" in err_str
+            or "unavailable" in err_str
+            or "service unavailable" in err_str
+        ):
+            return LLMProviderError(
                 message=f"Google Gemini API temporary server error (HTTP {status_code or 503}).",
                 status_code=status_code or 503,
             )
 
-        # Authentication errors
-        if status_code in (400, 401, 403) and (
-            "api_key_invalid" in err_str or "unauthenticated" in err_str or "permission" in err_str
-        ):
-            return LLMError(
-                message="Google Gemini authentication failed. Please verify your GEMINI_API_KEY.",
-                category="AUTH_ERROR",
-                status_code=401,
-                retryable=False,
+        # 7. Malformed / Empty responses
+        if "empty" in err_str and "response" in err_str:
+            return LLMEmptyResponseError(
+                message="Google Gemini API returned an empty response.",
+                status_code=502,
             )
 
+        # Fallback to generic classified LLMError
         return LLMError(
-            message=f"Google Gemini API error: {str(exc)}",
-            category="LLM_ERROR",
+            message=f"Google Gemini API error: {_sanitize_log(str(exc))}",
+            category="UNKNOWN_ERROR",
             status_code=status_code or 500,
             retryable=False,
         )
@@ -434,7 +517,7 @@ class GoogleGeminiProvider(BaseLLMProvider):
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
     ) -> LLMResponse:
-        """Generate legal response via Google Gemini API with automatic retry and exponential backoff."""
+        """Generate legal response via Google Gemini API using authoritative model with controlled single retry."""
         if not self.is_configured():
             raise RuntimeError(
                 "Google Gemini provider is not configured. "
@@ -445,100 +528,106 @@ class GoogleGeminiProvider(BaseLLMProvider):
         max_t = max_tokens if max_tokens is not None else settings.LLM_MAX_TOKENS
 
         logger.info(
-            "Sending request to Google Gemini API (model: %s, temp: %.2f, max_tokens: %d, timeout: %.1fs)",
+            "Sending request to Google Gemini API (authoritative model: %s, temp: %.2f, max_tokens: %d, timeout: %.1fs)",
             self._model,
             temp,
             max_t,
             self._timeout,
         )
 
-        max_attempts = 3
-        backoff_delays = [2.0, 4.0]
-        candidate_models = [self._model] + [m for m in ["gemini-3.5-flash", "gemini-3.7-flash", "gemini-3.8-flash"] if m != self._model]
+        # Controlled retry: exactly 1 retry (max 2 total attempts) for transient failures only
+        max_attempts = 2
 
-        for model_to_use in candidate_models:
-            for attempt in range(1, max_attempts + 1):
-                try:
-                    if GEMINI_AVAILABLE:
-                        client = genai.Client(api_key=self._api_key)
-                        effective_max_tokens = max(max_t, 3500)
-                        config = types.GenerateContentConfig(
-                            system_instruction=system_instruction,
-                            temperature=temp,
-                            max_output_tokens=effective_max_tokens,
-                            response_mime_type="application/json",
-                            thinking_config=types.ThinkingConfig(thinking_budget=256),
-                            automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
-                        )
-                        response = client.models.generate_content(
-                            model=model_to_use,
-                            contents=prompt,
-                            config=config,
-                        )
-
-                        content = response.text or ""
-                        prompt_tokens = None
-                        completion_tokens = None
-                        finish_reason = None
-
-                        if hasattr(response, "usage_metadata") and response.usage_metadata:
-                            prompt_tokens = getattr(response.usage_metadata, "prompt_token_count", None)
-                            completion_tokens = getattr(response.usage_metadata, "candidates_token_count", None)
-
-                        if hasattr(response, "candidates") and response.candidates:
-                            finish_reason = getattr(response.candidates[0], "finish_reason", None)
-
-                        logger.info(
-                            "Google Gemini API response received successfully from %s on attempt %d (length: %d chars)",
-                            model_to_use,
-                            attempt,
-                            len(content),
-                        )
-
-                        return LLMResponse(
-                            content=content.strip(),
-                            model=model_to_use,
-                            prompt_tokens=prompt_tokens,
-                            completion_tokens=completion_tokens,
-                            metadata={
-                                "provider": "gemini",
-                                "finish_reason": str(finish_reason) if finish_reason else None,
-                                "attempts": attempt,
-                            },
-                        )
-                    else:
-                        return self._generate_via_rest(prompt, system_instruction, temp, max_t)
-
-                except Exception as raw_exc:
-                    classified_err = self._classify_gemini_error(raw_exc)
-
-                    logger.warning(
-                        "Google Gemini (%s) attempt %d/%d failed [category=%s, status=%s]: %s",
-                        model_to_use,
-                        attempt,
-                        max_attempts,
-                        classified_err.category,
-                        classified_err.status_code,
-                        classified_err.message,
+        for attempt in range(1, max_attempts + 1):
+            try:
+                if GEMINI_AVAILABLE:
+                    client = genai.Client(api_key=self._api_key)
+                    effective_max_tokens = max(max_t, 3500)
+                    config = types.GenerateContentConfig(
+                        system_instruction=system_instruction,
+                        temperature=temp,
+                        max_output_tokens=effective_max_tokens,
+                        response_mime_type="application/json",
+                        thinking_config=types.ThinkingConfig(thinking_budget=256),
+                        automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
+                    )
+                    response = client.models.generate_content(
+                        model=self._model,
+                        contents=prompt,
+                        config=config,
                     )
 
-                    # If quota exhausted, immediately break attempt loop and try next candidate model
-                    if classified_err.category in ("QUOTA_EXCEEDED", "RATE_LIMIT_EXCEEDED") and model_to_use != candidate_models[-1]:
-                        logger.info("Switching to alternative Gemini model due to rate limit / quota...")
-                        break
+                    content = response.text or ""
+                    if not content or not content.strip():
+                        raise LLMEmptyResponseError("Google Gemini API returned an empty text completion.")
 
-                    if not classified_err.retryable or attempt >= max_attempts:
-                        if model_to_use == candidate_models[-1]:
-                            logger.error(
-                                "Google Gemini generation failed across all models [category=%s, status=%s]",
-                                classified_err.category,
-                                classified_err.status_code,
-                            )
-                            raise classified_err from raw_exc
-                        break
+                    prompt_tokens = None
+                    completion_tokens = None
+                    finish_reason = None
 
-                    delay = backoff_delays[attempt - 1] if attempt - 1 < len(backoff_delays) else 3.0
-                    time.sleep(delay)
+                    if hasattr(response, "usage_metadata") and response.usage_metadata:
+                        prompt_tokens = getattr(response.usage_metadata, "prompt_token_count", None)
+                        completion_tokens = getattr(response.usage_metadata, "candidates_token_count", None)
+
+                    if hasattr(response, "candidates") and response.candidates:
+                        finish_reason = getattr(response.candidates[0], "finish_reason", None)
+
+                    logger.info(
+                        "Google Gemini API response received successfully on attempt %d (model: %s, length: %d chars)",
+                        attempt,
+                        self._model,
+                        len(content),
+                    )
+
+                    return LLMResponse(
+                        content=content.strip(),
+                        model=self._model,
+                        prompt_tokens=prompt_tokens,
+                        completion_tokens=completion_tokens,
+                        metadata={
+                            "provider": "gemini",
+                            "finish_reason": str(finish_reason) if finish_reason else None,
+                            "attempts": attempt,
+                        },
+                    )
+                else:
+                    return self._generate_via_rest(prompt, system_instruction, temp, max_t)
+
+            except Exception as raw_exc:
+                if isinstance(raw_exc, LLMError):
+                    classified_err = raw_exc
+                else:
+                    classified_err = self._classify_gemini_error(raw_exc)
+
+                safe_msg = _sanitize_log(classified_err.message)
+                logger.warning(
+                    "Google Gemini generation attempt %d/%d failed [category=%s, status=%s]: %s",
+                    attempt,
+                    max_attempts,
+                    classified_err.category,
+                    classified_err.status_code,
+                    safe_msg,
+                )
+
+                # Non-retryable errors (auth, quota, invalid model, etc.) fail immediately without retrying
+                if not classified_err.retryable or attempt >= max_attempts:
+                    logger.error(
+                        "Google Gemini request failed [category=%s, status=%s, retryable=%s, attempts=%d]",
+                        classified_err.category,
+                        classified_err.status_code,
+                        classified_err.retryable,
+                        attempt,
+                    )
+                    raise classified_err from raw_exc
+
+                # Transient retryable error (1 retry allowed)
+                logger.info(
+                    "Retrying Gemini generation in 1.0s (attempt %d of %d) for transient %s...",
+                    attempt + 1,
+                    max_attempts,
+                    classified_err.category,
+                )
+                time.sleep(1.0)
 
     def _generate_via_rest(
         self,
@@ -547,7 +636,7 @@ class GoogleGeminiProvider(BaseLLMProvider):
         temperature: float,
         max_tokens: int,
     ) -> LLMResponse:
-        """Direct REST fallback for Gemini API via httpx."""
+        """Direct REST fallback for Gemini API via httpx using authoritative model."""
         url = (
             f"https://generativelanguage.googleapis.com/v1beta/models/"
             f"{self._model}:generateContent?key={self._api_key}"
@@ -570,9 +659,12 @@ class GoogleGeminiProvider(BaseLLMProvider):
         data = resp.json()
         candidates = data.get("candidates", [])
         if not candidates:
-            raise RuntimeError("Google Gemini API returned an empty candidate list.")
+            raise LLMEmptyResponseError("Google Gemini API returned an empty candidate list.")
 
         content_part = candidates[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+        if not content_part or not content_part.strip():
+            raise LLMEmptyResponseError("Google Gemini API returned empty content.")
+
         usage = data.get("usageMetadata", {})
 
         return LLMResponse(
