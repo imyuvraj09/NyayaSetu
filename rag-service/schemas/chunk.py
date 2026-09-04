@@ -48,6 +48,11 @@ class LegalChunk(BaseModel):
         description="Language of the legal text",
         examples=["English"],
     )
+    evidence_type: str = Field(
+        default="STATUTE",
+        description="Evidence type: STATUTE, CASE_LAW, etc.",
+        examples=["STATUTE"],
+    )
     text: str = Field(
         ...,
         description="Cleaned text content of the chunk",

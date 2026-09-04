@@ -105,6 +105,46 @@ class RerankedChunk(BaseModel):
         default_factory=dict,
         description="Preserved source metadata",
     )
+    section_number: str = Field(
+        default="",
+        description="Statutory section number (e.g. '101', '103', 'Article 21')",
+    )
+    section_title: str = Field(
+        default="",
+        description="Official title or marginal note of the statutory section",
+    )
+    act_short_name: str = Field(
+        default="",
+        description="Abbreviated statutory enactment name (e.g. 'BNS', 'BNSS', 'BSA')",
+    )
+    evidence_type: str = Field(
+        default="STATUTE",
+        description="Evidence classification: STATUTE, CASE_LAW, etc.",
+    )
+    case_name: str = Field(
+        default="",
+        description="Official case name if evidence_type is CASE_LAW",
+    )
+    court: str = Field(
+        default="",
+        description="Court name (e.g. Supreme Court of India)",
+    )
+    citation: str = Field(
+        default="",
+        description="Official case citation",
+    )
+    judgment_date: str = Field(
+        default="",
+        description="Judgment date (YYYY-MM-DD)",
+    )
+    paragraph_number: str = Field(
+        default="",
+        description="Numbered paragraph or passage in judgment",
+    )
+    is_holding_or_ratio: bool = Field(
+        default=False,
+        description="Whether passage contains holding or ratio decidendi",
+    )
 
 
 class RetrievalResult(BaseModel):
@@ -173,6 +213,22 @@ class AdvancedRetrievalResult(BaseModel):
     document_distribution: Dict[str, int] = Field(
         default_factory=dict,
         description="Distribution of final results across legal enactments",
+    )
+    query_analysis: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="Structured query analysis and legal intent breakdown",
+    )
+    facet_analysis: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="Extracted legal facets and requirement status",
+    )
+    facet_coverage: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="Evidence support and source sections per facet",
+    )
+    debug_telemetry: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="Multi-strategy retrieval and secondary retrieval telemetry",
     )
     retrieval_timestamp: str = Field(
         default_factory=lambda: datetime.now(timezone.utc).isoformat(),

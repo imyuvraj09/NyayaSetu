@@ -109,6 +109,27 @@ class LegalReranker:
 
         return scored_candidates
 
+    def compute_scores(self, pairs: List[Any]) -> List[float]:
+        """Compute cross-encoder scores directly on (query, text) pairs.
+
+        Args:
+            pairs: List of [query, text] pairs or tuples.
+
+        Returns:
+            List of float scores mapped to [0.0, 1.0] via sigmoid.
+        """
+        if not pairs:
+            return []
+
+        model = self._load_model()
+        formatted_pairs = [[p[0], p[1]] for p in pairs]
+        raw_scores = model.predict(
+            formatted_pairs,
+            batch_size=self.batch_size,
+            show_progress_bar=False,
+        )
+        return [round(sigmoid(float(s)), 4) for s in raw_scores]
+
 
 # Factory helper
 def get_legal_reranker(
