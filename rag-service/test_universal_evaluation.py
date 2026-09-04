@@ -261,11 +261,121 @@ def test_constitutional_article_distinction():
     print("-> PASS: Constitutional provisions strictly formatted as Article 21, never Section 21!")
 
 
+def test_adaptive_professional_legal_response_generation():
+    print("\n" + "=" * 70)
+    print("TEST 5: Adaptive Professional Legal Response Generation")
+    print("=" * 70)
+
+    # 1. Practical Action Query (UPI Fraud)
+    upi_query = "A victim loses money through a fraudulent UPI transaction. What immediate legal remedies and reporting mechanisms are available?"
+    upi_sources = [
+        SourceReference(
+            chunk_id="it_act_sec_43",
+            similarity_score=0.92,
+            reranker_score=0.95,
+            source_label="[Source S1]",
+            document_name="Information Technology Act, 2000",
+            section_number="43",
+            section_title="Penalty and compensation for damage to computer, computer system, etc.",
+            act_short_name="Information Technology Act, 2000",
+            text_snippet="If any person without permission of the owner or any other person who is in charge of a computer, computer system or computer network accesses or downloads, he shall be liable to pay damages by way of compensation.",
+            evidence_type="STATUTE",
+        ),
+        SourceReference(
+            chunk_id="bns_sec_318",
+            similarity_score=0.90,
+            reranker_score=0.93,
+            source_label="[Source S2]",
+            document_name="Bharatiya Nyaya Sanhita, 2023",
+            section_number="318",
+            section_title="Cheating",
+            act_short_name="Bharatiya Nyaya Sanhita, 2023",
+            text_snippet="Whoever, by deceiving any person, fraudulently or dishonestly induces the person so deceived to deliver any property, commits cheating.",
+            evidence_type="STATUTE",
+        ),
+    ]
+
+    upi_ans_json = DeterministicAnswerBuilder.build_answer(upi_query, upi_sources)
+    upi_data = json.loads(upi_ans_json)
+
+    assert upi_data["legalDomain"] == "Cybercrime / Financial Fraud", f"Expected Cybercrime domain, got {upi_data['legalDomain']}"
+    upi_main = upi_data["mainAnswer"]
+
+    print("UPI Practical Main Answer Preview:")
+    print(upi_main[:350] + "...\n")
+
+    # Verify Adaptive Sections
+    assert "Answer\n" in upi_main or upi_main.startswith("Answer")
+    assert "Immediate Steps\n" in upi_main
+    assert "Reporting Mechanisms\n" in upi_main
+    assert "Applicable Legal Position\n" in upi_main
+    assert "Evidence to Preserve\n" in upi_main
+    assert "Important Qualifications\n" in upi_main
+    assert "Conclusion\n" in upi_main
+
+    # Verify Numbered Steps & Bullet points
+    assert "1. Contact the bank" in upi_main
+    assert "2. Document and preserve" in upi_main
+    assert "3. Register an official" in upi_main
+    assert "- Transaction reference IDs" in upi_main
+
+    # Verify Direct Answer First
+    assert "immediate priority is to report" in upi_main
+
+    # Verify Strict Styling Rules
+    assert "**" not in upi_main
+    assert "###" not in upi_main
+    assert "---" not in upi_main
+
+    print("-> PASS: Practical action / fraud inquiry correctly adapted!")
+
+    # 2. Direct Answer First for YES/NO questions
+    consent_query = "Does a previous consensual relationship constitute consent for a subsequent sexual act under Indian law?"
+    consent_sources = [
+        SourceReference(
+            chunk_id="bns_63",
+            similarity_score=0.95,
+            reranker_score=0.98,
+            source_label="[Source S1]",
+            document_name="Bharatiya Nyaya Sanhita, 2023",
+            section_number="63",
+            section_title="Rape",
+            act_short_name="Bharatiya Nyaya Sanhita, 2023",
+            text_snippet="A man is said to commit rape who has sexual intercourse with a woman without her consent.",
+            evidence_type="STATUTE",
+        )
+    ]
+    consent_ans = json.loads(DeterministicAnswerBuilder.build_answer(consent_query, consent_sources))["mainAnswer"]
+    assert "No. A prior consensual relationship does not automatically establish consent" in consent_ans
+    print("-> PASS: YES/NO consent question begins immediately with substantive 'No.'!")
+
+    # 3. Case-law limitation when judicial principles requested but absent
+    case_query = "What are the judicial principles and precedent tests governing preventive detention?"
+    case_sources = [
+        SourceReference(
+            chunk_id="stat_only_1",
+            similarity_score=0.88,
+            reranker_score=0.90,
+            source_label="[Source S1]",
+            document_name="Constitution of India",
+            section_number="22",
+            section_title="Protection against arrest and detention in certain cases",
+            act_short_name="Constitution of India",
+            text_snippet="No person who is arrested shall be detained in custody without being informed...",
+            evidence_type="STATUTE",
+        )
+    ]
+    case_basis = json.loads(DeterministicAnswerBuilder.build_answer(case_query, case_sources))["legalBasis"]
+    assert "The current indexed sources do not contain verified judicial decisions sufficient to substantiate the case-law aspect of this question." in case_basis
+    print("-> PASS: Unindexed case-law limitation correctly handled without hallucination!")
+
+
 if __name__ == "__main__":
     test_universal_question_modeling()
     test_universal_evidence_relevance_filter()
     test_deterministic_answer_builder_style_and_substance()
     test_constitutional_article_distinction()
+    test_adaptive_professional_legal_response_generation()
     print("\n" + "=" * 70)
-    print("ALL UNIVERSAL EVALUATION TESTS COMPLETED SUCCESSFULLY!")
+    print("ALL UNIVERSAL & ADAPTIVE EVALUATION TESTS COMPLETED SUCCESSFULLY!")
     print("=" * 70)

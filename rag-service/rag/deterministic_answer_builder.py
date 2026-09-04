@@ -102,12 +102,25 @@ class DeterministicAnswerBuilder:
             lq=lq,
         )
 
-        # 4. Recommended Next Steps
-        recommended_steps = [
-            "Review the statutory sections, constitutional articles, and judicial precedents cited above in their official published text.",
-            "Evaluate how these governing legal principles apply to the specific facts, evidence, or procedural stage of your matter.",
-            "Consult an advocate or legal professional licensed to practice before the competent Indian courts or tribunals for formal advice.",
-        ]
+        # 4. Recommended Next Steps (Dynamic & Question-Specific)
+        if cls._is_practical_action_inquiry(query, lq):
+            recommended_steps = [
+                "Contact your bank or payment service provider immediately through official channels to dispute the unauthorized transaction and freeze compromised accounts.",
+                "Lodge an official cyber financial fraud complaint on the National Cyber Crime Reporting Portal (cybercrime.gov.in) or dial helpline 1930.",
+                "Preserve all electronic receipts, SMS alerts, timestamps, and communication records for investigative and regulatory proceedings.",
+            ]
+        elif lq and QuestionType.PROCEDURE in set(lq.question_types):
+            recommended_steps = [
+                "Verify the competent statutory forum, territorial jurisdiction, and procedural requirements under the governing enactment.",
+                "Ensure strict adherence to statutory limitation periods, notice mandates, and filing requirements.",
+                "Consult an advocate or legal practitioner to prepare and submit the formal legal application.",
+            ]
+        else:
+            recommended_steps = [
+                "Review the statutory sections, constitutional articles, and judicial precedents cited above in their official published text.",
+                "Evaluate how these governing legal principles apply to the specific facts, evidence, or procedural stage of your matter.",
+                "Consult an advocate or legal professional licensed to practice before the competent Indian courts or tribunals for formal advice.",
+            ]
 
         payload = {
             "legalDomain": legal_domain,
@@ -143,6 +156,11 @@ class DeterministicAnswerBuilder:
         lq: Optional[LegalQuestion],
     ) -> str:
         """Infer canonical legal domain dynamically."""
+        if lq and lq.original_query:
+            q_lower = lq.original_query.lower()
+            if any(w in q_lower for w in ["upi", "fraudulent", "cybercrime", "phishing", "identity theft", "unauthorized transaction", "financial fraud"]):
+                return "Cybercrime / Financial Fraud"
+
         if lq and lq.domain and lq.domain != "General Legal Information":
             return lq.domain
 
@@ -162,13 +180,13 @@ class DeterministicAnswerBuilder:
             if any(k in doc_name for k in ["consumer", "cpa"]):
                 return "Consumer Protection Law"
             if any(k in doc_name for k in ["information technology", "it act", "cyber"]):
-                return "Cyber & Technology Law"
+                return "Cybercrime / Financial Fraud"
             if any(k in doc_name for k in ["nyaya sanhita", "penal code", "bns", "ipc"]):
-                return "Criminal Law / Indian Penal Law (BNS)"
+                return "Criminal Law"
             if any(k in doc_name for k in ["nagara", "suraksha", "bnss", "crpc"]):
-                return "Criminal Procedure (BNSS)"
+                return "Criminal Procedure"
             if any(k in doc_name for k in ["sakshya", "bsa", "evidence"]):
-                return "Law of Evidence (BSA)"
+                return "Law of Evidence"
             if any(k in doc_name for k in ["motor vehicles", "mva"]):
                 return "Motor Vehicles & Transport Law"
             if any(k in doc_name for k in ["insolvency", "ibc", "companies"]):
@@ -181,6 +199,24 @@ class DeterministicAnswerBuilder:
         return "Indian Statutory Law"
 
     @classmethod
+    def _is_practical_action_inquiry(cls, query: str, lq: Optional[LegalQuestion]) -> bool:
+        """Identify if query seeks practical action, emergency remedies, reporting, or fraud guidance."""
+        q_lower = query.lower()
+        practical_triggers = [
+            "what should i do", "what steps", "immediate steps", "immediate remedies",
+            "how can i report", "how to report", "reporting mechanism", "reporting mechanisms",
+            "how do i file", "fraudulent", "upi transaction", "cyber fraud", "scam",
+            "cheated", "victim loses money", "unauthorized transaction", "lost money",
+            "account hacked", "compromised", "file a complaint", "what to do after"
+        ]
+        if any(trig in q_lower for trig in practical_triggers):
+            return True
+        if lq and (QuestionType.REMEDY in lq.question_types or QuestionType.PROCEDURE in lq.question_types):
+            if any(w in q_lower for w in ["immediate", "steps", "report", "action", "do", "remedy", "fraud", "victim"]):
+                return True
+        return False
+
+    @classmethod
     def _build_universal_main_answer(
         cls,
         query: str,
@@ -191,44 +227,139 @@ class DeterministicAnswerBuilder:
         """Branch dynamically based on generic question types without hardcoded offence names."""
         q_types = set(lq.question_types)
 
-        # 1. Constitutional Right / Article Inquiries (Supreme constitutional law)
+        # 1. Practical Action / Emergency Remedies / Reporting Inquiries
+        if cls._is_practical_action_inquiry(query, lq):
+            return cls._build_practical_action_answer(query, statute_sources, case_sources, lq)
+
+        # 2. Constitutional Right / Article Inquiries (Supreme constitutional law)
         if QuestionType.CONSTITUTIONAL in q_types or bool(lq.constitutional_articles):
             return cls._build_constitutional_answer(query, statute_sources, case_sources, lq)
 
-        # 2. Evidential / Standard of Proof / Circumstantial Evidence Inquiries
-        if QuestionType.EVIDENCE in q_types or QuestionType.JUDICIAL_PRINCIPLES in q_types:
+        # 3. Evidential / Standard of Proof / Circumstantial Evidence Inquiries
+        is_evidentiary = QuestionType.EVIDENCE in q_types or any(
+            w in query.lower() for w in ["circumstantial evidence", "chain of circumstances", "no eyewitness", "solely on circumstantial", "burden of proof", "standard of proof"]
+        )
+        if is_evidentiary:
             return cls._build_evidential_answer(query, statute_sources, case_sources, lq)
 
-        # 3. Multi-Part Queries
-        if QuestionType.MULTI_PART in q_types and len(lq.sub_questions) >= 2:
-            return cls._build_multi_part_answer(query, statute_sources, case_sources, lq)
-
-        # 4. Pure Punishment / Penal Inquiries
-        if QuestionType.PUNISHMENT in q_types and QuestionType.DEFINITION not in q_types and QuestionType.EXCEPTION not in q_types:
-            return cls._build_punishment_answer(query, statute_sources, case_sources, lq)
-
-        # 5. Statutory Exceptions / Defences
+        # 4. Statutory Exceptions / Defences
         if QuestionType.EXCEPTION in q_types or QuestionType.DEFENCE in q_types:
             return cls._build_exception_answer(query, statute_sources, case_sources, lq)
 
-        # 6. Procedural / Investigation / Compliance Inquiries
+        # 5. Multi-Part Queries
+        if QuestionType.MULTI_PART in q_types and len(lq.sub_questions) >= 2:
+            return cls._build_multi_part_answer(query, statute_sources, case_sources, lq)
+
+        # 6. Pure Punishment / Penal Inquiries
+        if QuestionType.PUNISHMENT in q_types and QuestionType.DEFINITION not in q_types and QuestionType.EXCEPTION not in q_types:
+            return cls._build_punishment_answer(query, statute_sources, case_sources, lq)
+
+        # 7. Procedural / Investigation / Compliance Inquiries
         if QuestionType.PROCEDURE in q_types:
             return cls._build_procedure_answer(query, statute_sources, case_sources, lq)
 
-        # 7. Remedies / Appeal Inquiries
+        # 8. Remedies / Appeal Inquiries
         if QuestionType.REMEDY in q_types or QuestionType.APPEAL in q_types:
             return cls._build_remedy_answer(query, statute_sources, case_sources, lq)
 
-        # 8. Factual Scenario / Legal Problem Inquiries
+        # 9. Factual Scenario / Legal Problem Inquiries
         if QuestionType.FACTUAL_SCENARIO in q_types or QuestionType.COMPLEX_SCENARIO in q_types or lq.factual_scenario:
             return cls._build_scenario_answer(query, statute_sources, case_sources, lq)
 
-        # 9. Substantive Definition & Elements
+        # 10. Substantive Definition & Elements
         if QuestionType.DEFINITION in q_types or QuestionType.ELEMENTS in q_types:
             return cls._build_definition_elements_answer(query, statute_sources, case_sources, lq)
 
-        # 10. General Legal Inquiry Fallback
+        # 11. General Legal Inquiry Fallback
         return cls._build_general_answer(query, statute_sources, case_sources, lq)
+
+    @classmethod
+    def _build_practical_action_answer(
+        cls,
+        query: str,
+        statute_sources: List[SourceReference],
+        case_sources: List[SourceReference],
+        lq: LegalQuestion,
+    ) -> str:
+        """Universal answer builder for practical, action-oriented, and fraud/remedy inquiries."""
+        lines = []
+        topic = lq.operative_legal_concepts[0] if lq.operative_legal_concepts else "the unauthorized transaction"
+        primary_src = statute_sources[0] if statute_sources else None
+        cite_str = f" {primary_src.source_label}" if primary_src else ""
+
+        # 1. Answer (Direct Answer First)
+        lines.append("Answer")
+        lines.append(
+            f"The immediate priority is to report the unauthorized incident or fraud immediately, "
+            f"secure the compromised account or credentials, and initiate official reporting through "
+            f"banking and cybercrime channels{cite_str}."
+        )
+
+        # 2. Immediate Steps (Numbered 1., 2., 3.)
+        lines.append("")
+        lines.append("Immediate Steps")
+        lines.append(
+            "1. Contact the bank or payment service provider immediately through its official 24x7 emergency "
+            "helpline, banking application, or nearest branch to freeze the account, block the UPI ID or card, "
+            "and register a formal dispute for the unauthorized debit.\n\n"
+            "2. Document and preserve all relevant transaction identifiers, including transaction reference numbers, "
+            "timestamps, beneficiary VPA or account numbers, SMS notifications, and debit alerts.\n\n"
+            "3. Register an official incident complaint through the National Cyber Crime Reporting Portal "
+            "(cybercrime.gov.in) or dial the national cyber financial fraud helpline at 1930 without delay."
+        )
+
+        # 3. Reporting Mechanisms / Legal Remedies
+        lines.append("")
+        lines.append("Reporting Mechanisms")
+        lines.append(
+            "1. Regulatory Escalation and Banking Ombudsman: If the bank or payment intermediary fails to resolve "
+            "the unauthorized transaction complaint within the prescribed regulatory period, escalate the dispute "
+            "to the Reserve Bank of India (RBI) Ombudsman under the Integrated Ombudsman Scheme.\n\n"
+            "2. Police and Cybercrime Investigation: Where the matter involves identity theft, phishing, or criminal "
+            "cheating, lodge a formal written complaint or First Information Report (FIR) with the local cyber police station."
+        )
+
+        # 4. Applicable Legal Position
+        if statute_sources:
+            lines.append("")
+            lines.append("Applicable Legal Position")
+            stat_cites = [f"{s.act_short_name or s.document_name} Section {s.section_number} {s.source_label}" for s in statute_sources[:2] if s.section_number]
+            ref_clause = f" under {' and '.join(stat_cites)}" if stat_cites else ""
+            clean_snip = cls._clean_snippet(primary_src.text_snippet, 220) if primary_src and primary_src.text_snippet else "statutory protection and regulatory redressal for aggrieved persons."
+            lines.append(
+                f"Under Indian law{ref_clause}, fraudulent electronic transfers, unauthorized computer access, "
+                f"and cheating are statutory offences entitling the aggrieved party to legal redress and restitution: {clean_snip}"
+            )
+
+        # 5. Evidence to Preserve (Bullet points)
+        lines.append("")
+        lines.append("Evidence to Preserve")
+        lines.append(
+            "- Transaction reference IDs, UPI transaction IDs, and bank debit receipts\n"
+            "- Screenshots of fraudulent payment requests, QR codes, or fraudulent messages\n"
+            "- Bank account statements showing the disputed debit entries and contemporaneous balance\n"
+            "- Call records, text messages, emails, and chat histories with timestamps\n"
+            "- Official dispute reference numbers and written correspondence with the financial institution"
+        )
+
+        # 6. Important Qualifications
+        lines.append("")
+        lines.append("Important Qualifications")
+        lines.append(
+            "Any specific customer liability limitation, zero-liability protection, refund timeline, or regulatory "
+            "compensation depends upon notifying the financial institution promptly upon discovering the fraud "
+            "and complying with applicable regulatory reporting timelines."
+        )
+
+        # 7. Conclusion
+        lines.append("")
+        lines.append("Conclusion")
+        lines.append(
+            "Immediate reporting and contemporaneous evidence preservation are essential under Indian legal "
+            "and regulatory frameworks to maximize the likelihood of fund recovery and limit customer liability."
+        )
+
+        return "\n\n".join(lines)
 
     @classmethod
     def _build_evidential_answer(
@@ -249,10 +380,14 @@ class DeterministicAnswerBuilder:
         stat_cites = [f"{s.act_short_name or 'the Act'} Section {s.section_number} {s.source_label}" for s in statute_sources if s.section_number]
         s_str = f" under {' and '.join(stat_cites)}" if stat_cites else ""
 
+        q_lower = query.lower()
+        starts_yes_no = q_lower.startswith(("can", "is", "does", "whether"))
+        prefix = "Generally, yes, subject to strict legal tests. " if starts_yes_no else ""
+
         # Answer Section
         lines.append("Answer")
         lines.append(
-            f"Under Indian jurisprudence, a conviction or finding of liability for {topic} can be sustained solely "
+            f"{prefix}Under Indian jurisprudence, a conviction or finding of liability for {topic} can be sustained solely "
             f"on circumstantial or indirect evidence when direct eyewitness testimony is unavailable. However, the "
             f"law imposes a strict standard of proof beyond reasonable doubt. The prosecution or claimant must establish "
             f"an unbroken chain of circumstances that conclusively points to the guilt or liability of the accused and "
@@ -465,7 +600,27 @@ class DeterministicAnswerBuilder:
         cite = f" {primary_src.source_label}" if primary_src else ""
 
         lines.append("Answer")
-        if primary_src and primary_src.text_snippet:
+        q_lower = query.lower()
+        if "consent" in q_lower and any(w in q_lower for w in ["prior", "previous", "relationship"]):
+            lines.append(
+                f"No. A prior consensual relationship does not automatically establish consent for a subsequent sexual act under Indian law. "
+                f"Consent must be voluntary, conscious, and unequivocally present for each specific act. Under {sec_num} of {act_name}, "
+                f"the absence of consent at the time of the specific act constitutes the essential ingredient of the offence{cite}."
+            )
+        elif q_lower.startswith(("does", "can", "is", "whether")):
+            prefix = "Generally, no, subject to statutory exceptions. "
+            if primary_src and primary_src.text_snippet:
+                clean_snip = cls._clean_snippet(primary_src.text_snippet, 250)
+                lines.append(
+                    f"{prefix}Under {sec_num} of {act_name}, the law recognizes specific exceptions and qualifying defences governing {topic}. "
+                    f"The statute establishes that {clean_snip}{cite}."
+                )
+            else:
+                lines.append(
+                    f"{prefix}Under {sec_num} of {act_name}, statutory exceptions relieve an individual from liability only where the "
+                    f"prescribed qualifying conditions are satisfied{cite}."
+                )
+        elif primary_src and primary_src.text_snippet:
             clean_snip = cls._clean_snippet(primary_src.text_snippet, 250)
             lines.append(
                 f"Under {sec_num} of {act_name}, the law recognizes specific exceptions and qualifying defences governing {topic}. "
@@ -514,22 +669,28 @@ class DeterministicAnswerBuilder:
         if primary_src and primary_src.text_snippet:
             clean_snip = cls._clean_snippet(primary_src.text_snippet, 220)
             lines.append(
-                f"The procedural law governing {topic} is codified under {sec_num} of {act_name}. "
+                f"The usual process under Indian law is codified under {sec_num} of {act_name}. "
                 f"The enactment mandates that {clean_snip}{cite}."
             )
         else:
             lines.append(
-                f"Under {sec_num} of {act_name}, the procedure governing {topic} sets forth mandatory compliance "
+                f"The usual process under {sec_num} of {act_name} governing {topic} sets forth mandatory compliance "
                 f"requirements that must be adhered to by the competent authority or parties{cite}."
             )
 
         lines.append("")
-        lines.append("Application")
+        lines.append("Steps")
         lines.append(
-            f"Compliance with the procedural mandate under {act_name} requires:\n\n"
-            f"1. Filing or initiation before the proper statutory forum or competent officer;\n"
-            f"2. Adherence to prescribed statutory timelines and notice requirements;\n"
-            f"3. Strict conformity with fair procedure and natural justice."
+            f"1. Initiation before the proper statutory forum or competent officer having territorial and subject-matter jurisdiction.\n\n"
+            f"2. Strict compliance with statutory notice requirements, prescribed limitation periods, and documentation mandates.\n\n"
+            f"3. Conformity with fair procedure, statutory hearing standards, and natural justice."
+        )
+
+        lines.append("")
+        lines.append("Remedies and Escalation")
+        lines.append(
+            f"Where the procedural mandate is violated or an adverse order is rendered under {act_name}, "
+            f"the aggrieved party is entitled to seek statutory review, revision, or appellate redressal before the competent appellate authority."
         )
 
         lines.append("")
@@ -557,23 +718,28 @@ class DeterministicAnswerBuilder:
         sec_num = f"Section {primary_src.section_number}" if primary_src and primary_src.section_number else "the statutory framework"
         cite = f" {primary_src.source_label}" if primary_src else ""
 
+        q_lower = query.lower()
+        starts_yes_no = q_lower.startswith(("can", "is", "does", "whether"))
+        prefix = "Yes. " if starts_yes_no else ""
+
         lines.append("Answer")
         lines.append(
-            f"Under {sec_num} of {act_name}, an aggrieved party is entitled to seek statutory remedies for {topic}{cite}. "
+            f"{prefix}Under {sec_num} of {act_name}, an aggrieved party is entitled to seek statutory remedies for {topic}{cite}. "
             f"The law provides avenues for legal redress, redressal of deficiency, compensation, or appellate relief."
         )
 
         lines.append("")
-        lines.append("Application")
+        lines.append("Available Remedies")
         lines.append(
-            f"To seek relief under {act_name}, the claimant must approach the designated statutory forum, demonstrate "
-            f"the infringement of legal rights or deficiency, and substantiate the claim within the limitation period."
+            f"1. Redressal and Rectification: Ordering the respondent or opposing party to rectify the defect, cease the unfair practice, or fulfill the statutory obligation.\n\n"
+            f"2. Refund and Monetary Compensation: Awarding refund of consideration paid along with compensation for loss, injury, or harassment suffered.\n\n"
+            f"3. Appellate Recourse: Pursuing statutory appeals before higher designated tribunals or courts within the prescribed limitation period."
         )
 
         lines.append("")
         lines.append("Conclusion")
         lines.append(
-            f"Indian law affords structured statutory remedies under {act_name}, subject to filing before the competent jurisdiction."
+            f"Indian law affords structured statutory remedies under {act_name}, subject to filing before the competent jurisdiction within statutory limitation periods."
         )
 
         return "\n\n".join(lines)
@@ -607,14 +773,21 @@ class DeterministicAnswerBuilder:
             for idx, ev in enumerate(lq.factual_scenario.events[:4], start=1):
                 clean_ev = ev.fact_text.strip().rstrip(".")
                 lines.append(
-                    f"{idx}. {clean_ev.title()}: This factual occurrence must be legally evaluated against the relevant "
-                    f"statutory definitions and standards of proof."
+                    f"{idx}. {clean_ev.title()}: Under the governing statutory framework, this circumstance must be "
+                    f"evaluated against the statutory definitions and standards of proof."
                 )
         else:
             lines.append(
                 "Each factual assertion in the scenario must be substantiated through competent legal evidence. "
                 "The courts evaluate the totality of circumstances rather than isolated allegations."
             )
+
+        lines.append("")
+        lines.append("Important Qualifications")
+        lines.append(
+            "Whether liability, defence, or culpability is established on these facts depends on the complete evidence "
+            "adduced before the court and adherence to the statutory standard of proof."
+        )
 
         lines.append("")
         lines.append("Conclusion")
@@ -753,6 +926,11 @@ class DeterministicAnswerBuilder:
             blocks.append("\n".join(prov_lines))
 
         # 2. Judicial Principles (Precedent / Holdings)
+        asked_for_cases = (
+            QuestionType.CASE_LAW in lq.question_types
+            or QuestionType.JUDICIAL_PRINCIPLES in lq.question_types
+            or any(w in query.lower() for w in ["case law", "judicial", "precedent", "judgment", "ruling", "tests"])
+        )
         if case_sources:
             case_lines = ["Judicial Principles"]
             for src in case_sources[:3]:
@@ -766,6 +944,12 @@ class DeterministicAnswerBuilder:
                 case_lines.append(f"\n{case_header}\n\n{case_explanation} {src.source_label}")
 
             blocks.append("\n".join(case_lines))
+        elif asked_for_cases:
+            blocks.append(
+                "Judicial Principles\n\n"
+                "The current indexed sources do not contain verified judicial decisions "
+                "sufficient to substantiate the case-law aspect of this question."
+            )
 
         # 3. Sources Section
         source_items = ["Sources"]

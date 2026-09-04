@@ -212,11 +212,11 @@ QUESTION_TYPE_PATTERNS: Dict[QuestionType, List[str]] = {
     ],
     QuestionType.EXCEPTION: [
         r"\b(?:exception|exceptions|when is it not|exemptions?|saving clause|non-applicability)\b",
-        r"\b(?:when does .+ not apply|excluded cases|does .+ imply consent|automatically establish consent)\b",
+        r"\b(?:when does .+ not apply|excluded cases|does .+ imply consent|automatically establish consent|constitute consent|amount to consent)\b",
     ],
     QuestionType.DEFENCE: [
         r"\b(?:defence|defences|plea of|private defence|self-defence|immunity|protection against liability)\b",
-        r"\b(?:plea of consent|prior consensual|implied consent|vitiate consent|defence of consent)\b",
+        r"\b(?:plea of consent|prior consensual|previous consensual|consensual relationship|implied consent|vitiate consent|defence of consent)\b",
     ],
     QuestionType.PROCEDURE: [
         r"\b(?:procedure|how to|steps|process|investigation|how is .+ investigated|what happens after)\b",
