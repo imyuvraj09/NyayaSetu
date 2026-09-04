@@ -21,6 +21,7 @@ from retrieval.query_analyzer import LegalQueryAnalyzer
 from retrieval.answer_planner import AnswerPlanner
 from retrieval.evidence_relevance_filter import UniversalEvidenceFilter, EvidenceCompatibility
 from rag.deterministic_answer_builder import DeterministicAnswerBuilder
+from retrieval.claim_evidence_validator import get_claim_evidence_validator
 from schemas.generation import SourceReference
 
 def test_universal_question_modeling():
@@ -612,6 +613,143 @@ def test_required_regression_tests_section_24():
     print("-> PASS: TEST 8 (Ransomware demand payment offences) passed!")
 
 
+def test_claim_level_grounding_and_unsupported_claim_prevention():
+    print("\n" + "=" * 70)
+    print("TEST 9: Claim-Level Grounding & Unsupported Legal Claim Prevention")
+    print("=" * 70)
+
+    validator = get_claim_evidence_validator()
+
+    # 1. Cybercrime Scenario where ONLY Section 66 is retrieved
+    q = (
+        "A hacker gains unauthorized access to a company's computer system, copies confidential files, "
+        "and demands ransom. What offences may apply, what investigation procedures are relevant, "
+        "and what evidence could establish the offence?"
+    )
+
+    sec66_source = SourceReference(
+        source_label="[Source 1]",
+        chunk_id="it_act_sec_66",
+        document_name="Information Technology Act, 2000",
+        section="66",
+        section_number="66",
+        section_title="Computer related offences",
+        similarity_score=0.92,
+        reranker_score=0.98,
+        text_snippet=(
+            "Section 66. Computer related offences. If any person, dishonestly or fraudulently, does any act "
+            "referred to in section 43, he shall be punishable with imprisonment for a term which may extend to "
+            "three years or with fine which may extend to five lakh rupees or with both."
+        ),
+        evidence_type="STATUTE",
+    )
+
+    answer_json = DeterministicAnswerBuilder.build_answer(query=q, sources=[sec66_source])
+    data = json.loads(answer_json)
+    main_ans = data["mainAnswer"]
+
+    print(f"\n--- Output for Section 66 Only ---\n{main_ans}\n")
+
+    # Assertion 1: Retrieved only Section 66 -> answer does NOT assert Section 43, 66C, 66D, or BNS 308 as offences
+    assert "Section 66" in main_ans
+    assert "Section 66C" not in main_ans
+    assert "Section 66D" not in main_ans
+    assert "Section 308" not in main_ans and "BNS" not in main_ans
+    # Section 43 must not be listed as an offence block
+    offences_part = main_ans[main_ans.find("Possible Offences"):main_ans.find("Investigation")] if "Investigation" in main_ans else main_ans
+    assert "Section 43" not in offences_part
+    print("-> PASS: Assertion 1 (Retrieved only Section 66 -> answer does NOT mention Section 43, 66C, 66D, or BNS 308)")
+
+    # Assertion 4: No investigation statute -> answer does not assert statutory investigation requirement as fact
+    assert "mandatorily register an fir under section 154" not in main_ans.lower()
+    assert "statutory investigation mandate" not in main_ans.lower()
+    assert "practical evidence preservation" in main_ans.lower() or "preserved carefully" in main_ans.lower()
+    print("-> PASS: Assertion 4 (No investigation statute -> answer does not assert statutory investigation requirement as fact)")
+
+    # Assertion 5: Evidence logs mentioned -> phrased as factual/may help establish, no statutory admissibility claims
+    assert "section 63" not in main_ans.lower()
+    assert "section 65b" not in main_ans.lower()
+    assert "may help establish" in main_ans.lower()
+    print("-> PASS: Assertion 5 (Evidence logs mentioned -> phrased as 'may help establish', no statutory admissibility claims)")
+
+    # Assertion 6: Conclusion guard -> conclusion summarizes only retrieved sections
+    conclusion_idx = main_ans.find("Conclusion")
+    assert conclusion_idx != -1
+    conclusion_part = main_ans[conclusion_idx:]
+    assert "Section 66" in conclusion_part
+    assert "66C" not in conclusion_part
+    assert "66D" not in conclusion_part
+    assert "308" not in conclusion_part
+    print("-> PASS: Assertion 6 (Conclusion guard -> no unretrieved sections in Conclusion)")
+
+    # 2. Scenario where Section 66C IS retrieved for identity theft
+    q_id = "A perpetrator stole employee login credentials and passwords to access company networks. What offence applies?"
+    sec66c_source = SourceReference(
+        source_label="[Source 1]",
+        chunk_id="it_act_sec_66c",
+        document_name="Information Technology Act, 2000",
+        section="66C",
+        section_number="66C",
+        section_title="Punishment for identity theft",
+        similarity_score=0.91,
+        reranker_score=0.97,
+        text_snippet=(
+            "Section 66C. Whoever, fraudulently or dishonestly make use of the electronic signature, password or "
+            "any other unique identification feature of any other person, shall be punished with imprisonment."
+        ),
+        evidence_type="STATUTE",
+    )
+    answer_66c = DeterministicAnswerBuilder.build_answer(query=q_id, sources=[sec66c_source])
+    data_66c = json.loads(answer_66c)
+    assert "Section 66C" in data_66c["mainAnswer"]
+    print("-> PASS: Assertion 2 (Retrieved Section 66C correctly mentioned matching identity-theft facts)")
+
+    # 3. Scenario with NCRP reporting source
+    q_rep = "How and where can cybercrime be reported online in India?"
+    ncrp_source = SourceReference(
+        source_label="[Source 1]",
+        chunk_id="ncrp_portal_admin",
+        document_name="National Cyber Crime Reporting Portal (cybercrime.gov.in)",
+        section="Administrative Portal",
+        section_number="",
+        section_title="Cybercrime Reporting Portal",
+        similarity_score=0.88,
+        reranker_score=0.95,
+        text_snippet="The National Cyber Crime Reporting Portal (cybercrime.gov.in) provides a citizen-centric facility to report cybercrimes online.",
+        evidence_type="ADMINISTRATIVE",
+    )
+    answer_ncrp = DeterministicAnswerBuilder.build_answer(query=q_rep, sources=[ncrp_source])
+    data_ncrp = json.loads(answer_ncrp)
+    assert "cybercrime.gov.in" in data_ncrp["mainAnswer"].lower() or "reporting portal" in data_ncrp["mainAnswer"].lower()
+    print("-> PASS: Assertion 3 (NCRP reporting source cited with its source without IT Act citation borrowing)")
+
+    # 4. Post-generation Auditor & Sanitizer Test
+    hallucinated_answer = (
+        "Answer\n\n"
+        "Possible Offences\n\n"
+        "- Section 66 of Information Technology Act, 2000 [Source 1]\n"
+        "- Section 43 of Information Technology Act, 2000 [Source 1]\n"
+        "- Section 66C of Information Technology Act, 2000 [Source 1]\n"
+        "- Section 308 of BNS [Source 1]\n\n"
+        "Investigation Procedures\n"
+        "The investigating officer must mandatorily register an FIR under Section 154.\n\n"
+        "Evidence\n"
+        "A mandatory certificate under Section 65B is strictly required.\n\n"
+        "Conclusion\n"
+        "In summary, liability is attracted under Section 66, Section 43, Section 66C, and Section 308."
+    )
+
+    sanitized = validator.audit_and_sanitize_answer(hallucinated_answer, [sec66_source])
+    print(f"\n--- Sanitized Post-Generation Text ---\n{sanitized}\n")
+    assert "Section 66" in sanitized
+    assert "Section 43" not in sanitized
+    assert "Section 66C" not in sanitized
+    assert "Section 308" not in sanitized
+    assert "mandatorily register an fir under section 154" not in sanitized.lower()
+    assert "section 65b" not in sanitized.lower()
+    print("-> PASS: Post-generation auditor and sanitizer successfully eliminated all ungrounded claims!")
+
+
 if __name__ == "__main__":
     test_universal_question_modeling()
     test_universal_evidence_relevance_filter()
@@ -621,6 +759,8 @@ if __name__ == "__main__":
     test_universal_fact_first_domain_routing_20_categories()
     test_cross_domain_negative_tests()
     test_required_regression_tests_section_24()
+    test_claim_level_grounding_and_unsupported_claim_prevention()
     print("\n" + "=" * 70)
     print("ALL UNIVERSAL & ADAPTIVE EVALUATION TESTS COMPLETED SUCCESSFULLY!")
     print("=" * 70)
+

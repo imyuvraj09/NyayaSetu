@@ -1027,35 +1027,37 @@ class DeterministicAnswerBuilder:
         # 2. Facet: Possible Offences / Substantive Offence
         has_offence_facet = (
             "OFFENCES" in facets or "OFFENCE" in facets
-            or any(w in q_lower for w in ["what offences", "what offence", "offence may apply", "punishable"])
+            or any(w in q_lower for w in ["what offences", "what offence", "offence may apply", "punishable", "what crime"])
             or "cyber" in domain.lower()
         )
         if has_offence_facet:
             lines.append("")
             lines.append("Possible Offences")
-            if "cyber" in domain.lower():
-                lines.append(
-                    "Section 43 read with Section 66 of the Information Technology Act\n"
-                    "Penalizes unauthorized access, downloading, copying, or extraction of data or confidential files from "
-                    "any computer system, network, or server without permission of the owner or person in charge."
+            seen_offence_keys = set()
+            offence_blocks = []
+            for s in statute_sources:
+                sec_num = getattr(s, "section_number", "")
+                sec_title = getattr(s, "section_title", "")
+                act_name = getattr(s, "act_short_name", "") or getattr(s, "document_name", "")
+                cite = s.source_label or ""
+                key = (act_name.lower(), sec_num)
+                if key in seen_offence_keys:
+                    continue
+                seen_offence_keys.add(key)
+                sec_label = f"Section {sec_num}" if sec_num else "Governing Provision"
+                title_label = f" ({sec_title})" if sec_title else ""
+                clean_snip = cls._clean_snippet(s.text_snippet, 220)
+                offence_blocks.append(
+                    f"{act_name} {sec_label}{title_label} {cite}\n"
+                    f"Where the factual conduct satisfies the constituent elements defined under this provision, "
+                    f"liability may arise. The provision provides that {clean_snip}."
                 )
+            if offence_blocks:
+                lines.append("\n\n".join(offence_blocks))
+            else:
                 lines.append(
-                    "\nSection 66C and Section 66D of the Information Technology Act\n"
-                    "Applies where the unauthorized access involves stolen credentials, digital identity theft, or cheating "
-                    "by personation through any computer resource."
+                    "The current retrieved sources do not contain specific statutory offence provisions defining penal liability for this conduct. Applicable penal enactments should be verified."
                 )
-                if any(w in q_lower for w in ["ransom", "ransomware", "demands payment"]):
-                    lines.append(
-                        "\nSection 308 of the Bharatiya Nyaya Sanhita, 2023 (Extortion)\n"
-                        "Where the perpetrator puts any person in fear of injury, harm, or release of confidential data to "
-                        "dishonestly induce payment or ransom, the conduct may attract extortion-related penal provisions."
-                    )
-            elif statute_sources:
-                for s in statute_sources[:2]:
-                    act = s.act_short_name or s.document_name
-                    sec = f"Section {s.section_number}" if s.section_number else "Governing Provision"
-                    clean_text = cls._clean_snippet(s.text_snippet, 220)
-                    lines.append(f"{act} {sec} {s.source_label}\n{clean_text}")
 
         # 3. Facet: Investigation
         has_investigation_facet = (
@@ -1065,28 +1067,29 @@ class DeterministicAnswerBuilder:
         if has_investigation_facet:
             lines.append("")
             lines.append("Investigation")
-            if "cyber" in domain.lower():
-                lines.append(
-                    "Relevant investigative procedures connected to the offence focus on technical attribution and digital "
-                    "forensics, including:\n"
-                    "- Registration of First Information Report (FIR) or incident complaint with the competent cyber police station or National Cyber Crime Reporting Portal\n"
-                    "- Immediate preservation of affected systems, volatile memory, and network logs under a verified chain of custody\n"
-                    "- Extraction of forensic images of compromised servers and storage media\n"
-                    "- Tracing of IP addresses, proxy routing, virtual private network (VPN) hops, and internet service provider (ISP) logs\n"
-                    "- Recovery and technical verification of ransom communications, payment wallet addresses, or transaction headers"
-                )
-            elif "murder" in q_lower or "criminal" in domain.lower():
-                lines.append(
-                    "The statutory investigative procedure governs the collection of all material facts and evidence, including:\n"
-                    "- Registration of FIR under procedural law and prompt forwarding to the competent magistrate\n"
-                    "- Inspection and preservation of the scene of crime, preparation of spot memo, and seizure of physical artifacts\n"
-                    "- Examination and recording of statements of witnesses under procedural provisions\n"
-                    "- Forwarding seized forensic, biological, or digital materials to forensic science laboratories under unbroken seal"
-                )
+            proc_sources = [
+                s for s in statute_sources
+                if any(k in (s.document_name or "").lower() for k in ["bnss", "crpc", "procedure", "investigation"])
+            ]
+            ncrp_sources = [
+                s for s in statute_sources
+                if "ncrp" in (s.document_name or "").lower() or "cybercrime.gov.in" in (s.text_snippet or "").lower()
+            ]
+
+            if proc_sources:
+                for ps in proc_sources:
+                    lines.append(
+                        f"Statutory investigative procedure under {ps.document_name} Section {ps.section_number} {ps.source_label} "
+                        f"governs official documentation, evidentiary collection, and procedural inquiry."
+                    )
+            elif ncrp_sources:
+                for ns in ncrp_sources:
+                    lines.append(
+                        f"Cybercrime complaints and official incident reports may be registered through the National Cyber Crime Reporting Portal (cybercrime.gov.in) {ns.source_label}."
+                    )
             else:
                 lines.append(
-                    "The investigative process requires the competent statutory authority to verify facts, summon relevant records, "
-                    "examine concerned individuals, and document compliance under governing procedural rules."
+                    "From a practical evidence preservation standpoint, relevant records such as system logs, affected communications, and transaction trails should be preserved carefully so that their integrity and admissibility can be assessed under the applicable law."
                 )
 
         # 4. Facet: Evidence
@@ -1097,27 +1100,23 @@ class DeterministicAnswerBuilder:
         if has_evidence_facet:
             lines.append("")
             lines.append("Evidence")
-            if "cyber" in domain.lower():
-                lines.append(
-                    "Evidence that can establish the digital offence and link the activity to the perpetrator may include:\n"
-                    "- Authentication logs, server access records, and active directory audit trails\n"
-                    "- Forensic disk images and hash values establishing unauthorized file access, copying, or deletion\n"
-                    "- Network firewall, intrusion detection, and proxy logs capturing external connections and data transfers\n"
-                    "- Contemporaneous ransom emails, chat transcripts, extortion notes, and associated header metadata\n"
-                    "- Digital device records, compromised credential dumps, and payment gateway or cryptocurrency tracking records\n\n"
-                    "The evidentiary value of these electronic records depends upon proper preservation, strict maintenance of the "
-                    "chain of custody, and compliance with the statutory rules of admissibility governing electronic evidence under Indian law."
-                )
-            elif "murder" in q_lower:
-                lines.append(
-                    "Evidence capable of establishing the charge includes direct witness testimony, contemporaneous CCTV footage, "
-                    "call detail records (CDRs), weapon recovery under procedural search rules, post-mortem medical findings, and forensic "
-                    "laboratory reports. Each circumstance must be independently established by admissible evidence."
-                )
+            evid_sources = [
+                s for s in statute_sources
+                if any(k in (s.document_name or "").lower() for k in ["bsa", "sakshya", "evidence"])
+            ]
+            lines.append(
+                "In evaluating the factual circumstances, material records such as access logs, digital timestamps, electronic communications, and related system data may help establish the occurrence of unauthorized access or conduct."
+            )
+            if evid_sources:
+                for es in evid_sources:
+                    sec_desc = f"Section {es.section_number}" if es.section_number else "governing provisions"
+                    clean_snip = cls._clean_snippet(es.text_snippet, 200)
+                    lines.append(
+                        f"\nUnder {es.document_name} {sec_desc} {es.source_label}, the admissibility of electronic records is subject to statutory authentication and verification requirements, establishing that {clean_snip}."
+                    )
             else:
                 lines.append(
-                    "Relevant evidence includes contemporaneous written agreements, communication records, electronic documents, "
-                    "transaction statements, official notices, and witness accounts establishing the material facts."
+                    "\nWhether such digital or physical records are legally admissible in court proceedings would depend upon the governing evidence law requirements."
                 )
 
         # 5. Facet: Available Remedies
@@ -1171,23 +1170,14 @@ class DeterministicAnswerBuilder:
         # 7. Application (Natural synthesis of scenario facts)
         lines.append("")
         lines.append("Application")
-        if "cyber" in domain.lower():
+        if statute_sources:
+            primary_src = statute_sources[0]
+            clean_snip = cls._clean_snippet(primary_src.text_snippet, 220)
+            sec_ref = f"Section {primary_src.section_number}" if primary_src.section_number else "the governing statutory framework"
             lines.append(
-                "Applying these legal principles to the stated facts, the unauthorized entry into the company's network satisfies "
-                "the foundational element of unauthorized computer access. The copying and extraction of confidential company files "
-                "creates independent statutory liability for data theft and misuse. The demand for ransom introduces potential "
-                "extortion liability, while proper preservation of digital forensic logs is necessary to establish technical attribution."
-            )
-        elif "consumer" in domain.lower():
-            lines.append(
-                "On the facts presented, the supply of a defective product constitutes a breach of statutory standards, entitling "
-                "the purchaser to establish the defect through purchase records, warranty cards, and service center receipts, and to "
-                "claim replacement or refund along with compensation."
-            )
-        elif "employment" in domain.lower():
-            lines.append(
-                "Applying employment jurisprudence, a termination executed in violation of statutory procedures or contractual "
-                "terms entitles the affected employee to challenge the dismissal and claim notice pay, severance benefits, and statutory damages."
+                f"Applying the retrieved statutory framework to the described facts, liability is assessed based on whether the conduct "
+                f"satisfies the essential elements under {primary_src.document_name} {sec_ref} {primary_src.source_label}. "
+                f"The provision establishes that {clean_snip}."
             )
         elif lq.facts:
             facts_text = "; ".join(f.fact_text.strip().rstrip(".") for f in lq.facts[:3])
@@ -1203,20 +1193,23 @@ class DeterministicAnswerBuilder:
                 f"claims through credible evidence."
             )
 
-        # 8. Conclusion
+        # 8. Conclusion (Strict Conclusion Guard: summarize only validated law)
         lines.append("")
         lines.append("Conclusion")
-        if "cyber" in domain.lower():
-            lines.append(
-                "A legally robust response requires proceeding along distinct facets: establishing the substantive computer breach, "
-                "initiating digital investigation through official cybercrime channels, and securing contemporaneous electronic records "
-                "under rigorous chain-of-custody standards."
-            )
-        elif "consumer" in domain.lower():
-            lines.append(
-                "The consumer should preserve all purchase documentation and written complaints, serve a formal demand notice on the seller, "
-                "and escalate to the competent Consumer Disputes Redressal Commission if redressal is not provided."
-            )
+        if statute_sources:
+            sec_summaries = [
+                f"{s.act_short_name or s.document_name} Section {s.section_number}"
+                for s in statute_sources if s.section_number
+            ]
+            if sec_summaries:
+                sec_text = ", ".join(dict.fromkeys(sec_summaries))
+                lines.append(
+                    f"The conduct should therefore be evaluated under {sec_text} based on the specific facts and verified evidentiary materials."
+                )
+            else:
+                lines.append(
+                    "The conduct should be evaluated under the applicable statutory provisions based on the specific facts and verified evidentiary materials."
+                )
         else:
             lines.append(
                 "The matter should be pursued by identifying the governing substantive provisions, preserving relevant documentary and "

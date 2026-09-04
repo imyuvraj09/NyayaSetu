@@ -657,6 +657,160 @@ class ClaimEvidenceValidator:
 
         return results, metrics
 
+    def audit_and_sanitize_answer(
+        self,
+        answer_text: str,
+        sources: List[Any],
+        query_analysis: Optional[Any] = None,
+    ) -> str:
+        """Audit and sanitize a generated answer to strictly eliminate unsupported legal claims,
+
+        model-knowledge backfill of unretrieved sections, citation borrowing, and ungrounded
+        procedural or evidentiary overclaims.
+        """
+        if not answer_text or not sources:
+            return answer_text
+
+        # Collect valid retrieved sections and Acts
+        valid_sections: Set[str] = set()
+        valid_acts: Set[str] = set()
+        has_procedural_source = False
+        has_evidence_source = False
+        has_ncrp_source = False
+
+        for s in sources:
+            all_secs = self._get_source_sections_all(s)
+            for sc in all_secs:
+                clean_sc = sc.lower().strip()
+                valid_sections.add(clean_sc)
+                valid_sections.add(re.sub(r"[^0-9a-z]", "", clean_sc))
+
+            doc_name = self._get_source_doc_name(s).lower()
+            text_content = self._get_source_text(s).lower()
+            valid_acts.add(doc_name)
+
+            if any(p in doc_name or p in text_content for p in ["procedural", "suraksha", "bnss", "crpc", "criminal procedure"]):
+                has_procedural_source = True
+            if any(e in doc_name or e in text_content for e in ["sakshya", "evidence", "bsa", "indian evidence"]):
+                has_evidence_source = True
+            if any(n in doc_name or n in text_content for n in ["cybercrime.gov.in", "ncrp", "national cyber crime reporting"]):
+                has_ncrp_source = True
+
+        def sanitize_content_string(content: str) -> str:
+            lines = content.splitlines()
+            sanitized_lines: List[str] = []
+            in_offences_section = False
+            in_investigation_section = False
+            in_evidence_section = False
+            in_conclusion_section = False
+
+            for line in lines:
+                trimmed = line.strip()
+                lower_line = trimmed.lower()
+
+                # Track section headers (with or without markdown '#' formatting)
+                if re.match(r"^(?:#{1,4}\s+)?(?:possible\s+offences|relevant\s+offences|applicable\s+offences|offences|provisions)\b", lower_line):
+                    in_offences_section = True
+                    in_investigation_section = False
+                    in_evidence_section = False
+                    in_conclusion_section = False
+                    sanitized_lines.append(line)
+                    continue
+                elif re.match(r"^(?:#{1,4}\s+)?(?:investigation\s+procedures?|investigation|procedural\s+steps?)\b", lower_line):
+                    in_offences_section = False
+                    in_investigation_section = True
+                    in_evidence_section = False
+                    in_conclusion_section = False
+                    sanitized_lines.append(line)
+                    continue
+                elif re.match(r"^(?:#{1,4}\s+)?(?:evidence(?:\s+to\s+preserve|\s+required)?|proof)\b", lower_line):
+                    in_offences_section = False
+                    in_investigation_section = False
+                    in_evidence_section = True
+                    in_conclusion_section = False
+                    sanitized_lines.append(line)
+                    continue
+                elif re.match(r"^(?:#{1,4}\s+)?(?:conclusion|summary|takeaways?)\b", lower_line):
+                    in_offences_section = False
+                    in_investigation_section = False
+                    in_evidence_section = False
+                    in_conclusion_section = True
+                    sanitized_lines.append(line)
+                    continue
+                elif re.match(r"^(?:#{1,4}\s+)?[A-Z][A-Za-z\s]{2,30}$", trimmed) and any(hdr in lower_line for hdr in ["answer", "application", "steps", "sources", "disclaimer"]):
+                    in_offences_section = False
+                    in_investigation_section = False
+                    in_evidence_section = False
+                    in_conclusion_section = False
+
+                # Check for unretrieved section references
+                sec_matches = re.findall(r"\b(?:Section|Sec\.)\s+(\d+[A-Za-z]*)", line, re.IGNORECASE)
+                if sec_matches:
+                    unretrieved_found = False
+                    for sm in sec_matches:
+                        clean_sm = re.sub(r"[^0-9a-z]", "", sm.lower())
+                        if clean_sm not in valid_sections:
+                            unretrieved_found = True
+                            break
+
+                    if unretrieved_found:
+                        # If inside an offence bullet or list item, prune the unretrieved section claim
+                        if in_offences_section or trimmed.startswith(("-", "*", "•", "1.", "2.", "3.", "4.", "5.")):
+                            logger.info("Pruning unsupported offence claim with unretrieved section: %s", trimmed)
+                            continue
+                        elif in_conclusion_section:
+                            # Prune unretrieved sections from conclusion
+                            clean_line = line
+                            for sm in sec_matches:
+                                clean_sm = re.sub(r"[^0-9a-z]", "", sm.lower())
+                                if clean_sm not in valid_sections:
+                                    clean_line = re.sub(rf",?\s*(?:and\s+)?(?:Section|Sec\.)\s+{re.escape(sm)}", "", clean_line, flags=re.IGNORECASE)
+                            clean_line = re.sub(r"\s+,\s+", ", ", clean_line)
+                            clean_line = re.sub(r"under\s*\.", "under the governing statutory provisions.", clean_line)
+                            sanitized_lines.append(clean_line)
+                            continue
+                        else:
+                            # If line asserts unretrieved section as applicable law
+                            if any(w in lower_line for w in ["applies", "punishes", "attracted", "liable", "penalty", "offence", "provides", "fir", "certificate"]):
+                                if in_investigation_section and not has_procedural_source:
+                                    line = "Practical steps involve securing audit trails, access logs, and communications to facilitate formal reporting."
+                                elif in_evidence_section and not has_evidence_source:
+                                    line = "Digital evidence such as server logs, IP access records, and file checksums may help establish the facts of unauthorized entry."
+                                else:
+                                    logger.info("Pruning unsupported statutory assertion: %s", trimmed)
+                                    continue
+
+                # In investigation section without procedural statute, sanitize statutory procedure claims
+                if in_investigation_section and not has_procedural_source:
+                    if any(sp in lower_line for sp in ["mandatorily register an fir", "section 154", "statutory investigation mandate", "mandatory statutory procedure"]):
+                        line = "Practical steps involve securing audit trails, access logs, and communications to facilitate formal reporting."
+
+                # In evidence section without evidence statute, sanitize statutory certificate mandates
+                if in_evidence_section and not has_evidence_source:
+                    if any(es in lower_line for es in ["section 63", "section 65b", "statutory certificate under", "mandatory certificate under"]):
+                        line = "Digital evidence such as server logs, IP access records, and file checksums may help establish the facts of unauthorized entry."
+
+                sanitized_lines.append(line)
+
+            # Recombine and clean double blank lines
+            cleaned = "\n".join(sanitized_lines)
+            cleaned = re.sub(r"\n{3,}", "\n\n", cleaned)
+            return cleaned
+
+        # Handle JSON format
+        try:
+            parsed = json.loads(answer_text)
+            if isinstance(parsed, dict):
+                if parsed.get("mainAnswer"):
+                    parsed["mainAnswer"] = sanitize_content_string(parsed["mainAnswer"])
+                if parsed.get("legalBasis"):
+                    parsed["legalBasis"] = sanitize_content_string(parsed["legalBasis"])
+                return json.dumps(parsed, ensure_ascii=False)
+        except Exception:
+            pass
+
+        return sanitize_content_string(answer_text)
+
 
 _CLAIM_VALIDATOR_INSTANCE = None
 
@@ -667,3 +821,4 @@ def get_claim_evidence_validator() -> ClaimEvidenceValidator:
     if _CLAIM_VALIDATOR_INSTANCE is None:
         _CLAIM_VALIDATOR_INSTANCE = ClaimEvidenceValidator()
     return _CLAIM_VALIDATOR_INSTANCE
+

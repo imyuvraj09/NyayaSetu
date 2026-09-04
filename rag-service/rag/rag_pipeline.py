@@ -452,6 +452,16 @@ class LegalRAGPipeline:
                 except Exception as rec_err:
                     logger.warning("Facet recovery generation failed: %s", rec_err)
 
+        # Step 8b: Strictly audit and sanitize answer to eliminate ungrounded claims, unretrieved sections, and citation borrowing
+        try:
+            raw_answer = self.facet_validator.claim_validator.audit_and_sanitize_answer(
+                answer_text=raw_answer,
+                sources=sources,
+                query_analysis=active_q_analysis,
+            )
+        except Exception as audit_err:
+            logger.warning("Answer sanitization audit failed: %s", audit_err)
+
         warnings_combined = list(val_result.warnings) + case_warnings
         if is_deterministic_fallback:
             if generation_error_category in ("RATE_LIMIT", "QUOTA_EXCEEDED"):
