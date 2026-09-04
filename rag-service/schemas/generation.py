@@ -60,6 +60,42 @@ class SourceReference(BaseModel):
         default_factory=dict,
         description="Extensible metadata",
     )
+    section_number: str = Field(
+        default="",
+        description="Statutory section number (e.g. '101', '103')",
+    )
+    section_title: str = Field(
+        default="",
+        description="Official title of the statutory section",
+    )
+    act_short_name: str = Field(
+        default="",
+        description="Abbreviated statutory enactment name (e.g. 'BNS')",
+    )
+    evidence_type: str = Field(
+        default="STATUTE",
+        description="Evidence type: STATUTE, CASE_LAW, etc.",
+    )
+    case_name: str = Field(
+        default="",
+        description="Official case name if evidence_type is CASE_LAW",
+    )
+    court: str = Field(
+        default="",
+        description="Court name (e.g. Supreme Court of India)",
+    )
+    citation: str = Field(
+        default="",
+        description="Official case citation",
+    )
+    judgment_date: str = Field(
+        default="",
+        description="Judgment date (YYYY-MM-DD)",
+    )
+    paragraph_number: str = Field(
+        default="",
+        description="Numbered paragraph or passage in judgment",
+    )
 
 
 class RAGResponse(BaseModel):
@@ -93,7 +129,48 @@ class RAGResponse(BaseModel):
         default="success",
         description="Execution status ('success', 'unconfigured_llm', 'no_sources_found', 'error')",
     )
+    requested_facets: List[str] = Field(
+        default_factory=list,
+        description="Requested legal facets identified from the query",
+    )
+    facet_coverage: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Coverage status for each required facet in the retrieved evidence",
+    )
+    facet_validation: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Facet completeness validation results on generated answer",
+    )
+    claim_validation: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Substantive claim-to-evidence validation metrics",
+    )
+    quality_status: str = Field(
+        default="COMPLETE",
+        description="Overall legal answer quality gate status ('COMPLETE', 'PARTIALLY_COMPLETE', 'UNSUPPORTED_CLAIM', 'INSUFFICIENT_EVIDENCE')",
+    )
+    case_law_status: str = Field(
+        default="NOT_REQUESTED",
+        description="Case law availability status: 'NOT_REQUESTED', 'FOUND', 'NOT_FOUND', 'CORPUS_UNAVAILABLE'",
+    )
+    evidence_graph: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Structural summary of the multi-authority evidence graph",
+    )
+    generation_status: str = Field(
+        default="SUCCESS",
+        description="LLM generation outcome: 'SUCCESS', 'RETRIEVAL_ONLY', 'RATE_LIMITED', 'QUOTA_EXCEEDED', 'TIMEOUT', 'PROVIDER_ERROR', 'VALIDATION_FAILED', 'AUTHENTICATION_ERROR', 'INVALID_MODEL', 'UNCONFIGURED'",
+    )
+    retrieval_status: str = Field(
+        default="SUCCESS",
+        description="Retrieval pipeline outcome: 'SUCCESS', 'NO_SOURCES_FOUND', 'ERROR'",
+    )
+    validation_status: str = Field(
+        default="PASSED",
+        description="Answer validation outcome: 'PASSED', 'FAILED', 'NOT_RUN'",
+    )
     timestamp: str = Field(
         default_factory=lambda: datetime.now(timezone.utc).isoformat(),
         description="ISO 8601 UTC timestamp of generation",
     )
+

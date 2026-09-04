@@ -120,7 +120,13 @@ class RAGService {
           : typeof s.similarity_score === 'number'
           ? s.similarity_score
           : null,
-        snippet: s.text_snippet || '',
+        snippet: s.text_snippet || s.content_snippet || '',
+        evidenceType: s.evidence_type || 'STATUTE',
+        caseName: s.case_name || null,
+        court: s.court || null,
+        citation: s.citation || null,
+        paragraphNumber: s.paragraph_number || null,
+        isHoldingOrRatio: Boolean(s.is_holding_or_ratio),
       }));
 
       // Normalize metadata
@@ -131,6 +137,16 @@ class RAGService {
         totalDuration: durationMs,
         warnings: Array.isArray(data.warnings) ? data.warnings : [],
         status: data.status || 'success',
+        requestedFacets: Array.isArray(data.requested_facets) ? data.requested_facets : [],
+        facetCoverage: data.facet_coverage || {},
+        facetValidation: data.facet_validation || {},
+        claimValidation: data.claim_validation || {},
+        qualityStatus: data.quality_status || 'COMPLETE',
+        caseLawStatus: data.case_law_status || null,
+        evidenceGraph: data.evidence_graph || null,
+        generationStatus: data.generation_status || (data.status === 'retrieval_only' ? 'RETRIEVAL_ONLY' : 'SUCCESS'),
+        retrievalStatus: data.retrieval_status || 'SUCCESS',
+        validationStatus: data.validation_status || 'PASSED',
       };
 
       console.log(

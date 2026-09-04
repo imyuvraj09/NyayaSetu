@@ -36,14 +36,24 @@ def get_pipeline() -> LegalRAGPipeline:
 async def health_check():
     """Return the service health and configuration status."""
     pipeline = get_pipeline()
+    llm_health = pipeline.llm_provider.check_health()
     return {
         "status": "healthy",
         "service": settings.APP_NAME,
         "version": settings.APP_VERSION,
-        "llm_provider": settings.LLM_PROVIDER,
-        "llm_configured": pipeline.llm_provider.is_configured(),
+        "llm_provider": llm_health.get("provider", settings.LLM_PROVIDER),
+        "llm_model": llm_health.get("model", settings.LLM_MODEL),
+        "llm_configured": llm_health.get("configured", False),
+        "llm_available": llm_health.get("available", False),
         "vector_db_collection": settings.VECTOR_COLLECTION_NAME,
     }
+
+
+@router.get("/health/llm")
+async def llm_health_check():
+    """Expose safe health information for LLM provider without revealing secrets."""
+    pipeline = get_pipeline()
+    return pipeline.llm_provider.check_health()
 
 
 @router.post("/query", response_model=QueryResponse)
@@ -88,6 +98,12 @@ async def query(request: QueryRequest):
                 content_snippet=src.text_snippet,
                 relevance_score=src.similarity_score,
                 reranker_score=src.reranker_score,
+                evidence_type=getattr(src, "evidence_type", "STATUTE"),
+                case_name=getattr(src, "case_name", None),
+                court=getattr(src, "court", None),
+                citation=getattr(src, "citation", None),
+                paragraph_number=getattr(src, "paragraph_number", None),
+                is_holding_or_ratio=getattr(src, "is_holding_or_ratio", False),
                 metadata=src.metadata,
             )
             for src in rag_result.sources
@@ -102,6 +118,16 @@ async def query(request: QueryRequest):
             model_metadata=rag_result.model_metadata,
             warnings=rag_result.warnings,
             status=rag_result.status,
+            requested_facets=getattr(rag_result, "requested_facets", []),
+            facet_coverage=getattr(rag_result, "facet_coverage", {}),
+            facet_validation=getattr(rag_result, "facet_validation", {}),
+            claim_validation=getattr(rag_result, "claim_validation", {}),
+            quality_status=getattr(rag_result, "quality_status", "COMPLETE"),
+            case_law_status=getattr(rag_result, "case_law_status", None),
+            evidence_graph=getattr(rag_result, "evidence_graph", None),
+            generation_status=getattr(rag_result, "generation_status", "SUCCESS"),
+            retrieval_status=getattr(rag_result, "retrieval_status", "SUCCESS"),
+            validation_status=getattr(rag_result, "validation_status", "PASSED"),
         )
 
     except HTTPException:

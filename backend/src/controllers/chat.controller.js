@@ -136,8 +136,15 @@ async function handleDirectChat(req, res, next) {
         role: result.assistantMessage.role,
         content: result.assistantMessage.content,
         sources: result.assistantMessage.sources || [],
+        metadata: result.assistantMessage.ragMetadata || result.assistantMessage.metadata || {},
+        ragMetadata: result.assistantMessage.ragMetadata || {},
+        generationStatus: result.assistantMessage.ragMetadata?.generationStatus || result.assistantMessage.generationStatus || 'SUCCESS',
+        retrievalStatus: result.assistantMessage.ragMetadata?.retrievalStatus || result.assistantMessage.retrievalStatus || 'SUCCESS',
+        validationStatus: result.assistantMessage.ragMetadata?.validationStatus || result.assistantMessage.validationStatus || 'PASSED',
         createdAt: result.assistantMessage.createdAt,
       },
+
+
       userMessage: result.userMessage,
       data: {
         sessionId: result.sessionId,

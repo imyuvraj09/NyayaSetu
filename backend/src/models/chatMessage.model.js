@@ -34,8 +34,32 @@ const sourceReferenceSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    evidenceType: {
+      type: String,
+      default: 'STATUTE',
+    },
+    caseName: {
+      type: String,
+      default: null,
+    },
+    court: {
+      type: String,
+      default: null,
+    },
+    citation: {
+      type: String,
+      default: null,
+    },
+    paragraphNumber: {
+      type: String,
+      default: null,
+    },
+    isHoldingOrRatio: {
+      type: Boolean,
+      default: false,
+    },
   },
-  { _id: false }
+  { _id: false, strict: false }
 );
 
 const ragMetadataSchema = new mongoose.Schema(
@@ -64,8 +88,40 @@ const ragMetadataSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    requestedFacets: {
+      type: [String],
+      default: [],
+    },
+    facetCoverage: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
+    facetValidation: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
+    claimValidation: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
+    qualityStatus: {
+      type: String,
+      default: 'COMPLETE',
+    },
+    generationStatus: {
+      type: String,
+      default: 'SUCCESS',
+    },
+    retrievalStatus: {
+      type: String,
+      default: 'SUCCESS',
+    },
+    validationStatus: {
+      type: String,
+      default: 'PASSED',
+    },
   },
-  { _id: false }
+  { _id: false, strict: false }
 );
 
 const chatMessageSchema = new mongoose.Schema(

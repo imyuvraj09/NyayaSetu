@@ -71,9 +71,33 @@ class SourceDocument(BaseModel):
     reranker_score: Optional[float] = Field(
         default=None,
         ge=0.0,
-        le=1.0,
-        description="Cross-encoder relevance score (0-1).",
+        le=10.0,
+        description="Cross-encoder relevance score (can be boosted by court level and holding).",
         examples=[0.9996],
+    )
+    evidence_type: str = Field(
+        default="STATUTE",
+        description="Evidence type: STATUTE or CASE_LAW.",
+    )
+    case_name: Optional[str] = Field(
+        default=None,
+        description="Judicial case name for case law sources.",
+    )
+    court: Optional[str] = Field(
+        default=None,
+        description="Court name (e.g. Supreme Court of India).",
+    )
+    citation: Optional[str] = Field(
+        default=None,
+        description="Law report citation (e.g. (2019) 9 SCC 608).",
+    )
+    paragraph_number: Optional[str] = Field(
+        default=None,
+        description="Paragraph number of the judgment.",
+    )
+    is_holding_or_ratio: bool = Field(
+        default=False,
+        description="Whether this excerpt contains the judicial ratio or holding.",
     )
     metadata: Dict[str, Any] = Field(
         default_factory=dict,
@@ -110,9 +134,50 @@ class QueryResponse(BaseModel):
     )
     warnings: List[str] = Field(
         default_factory=list,
-        description="Validation, safety, and evidence limitation notices.",
+        description="Operational warnings or fallback notices.",
     )
     status: str = Field(
         default="success",
-        description="Status indicator ('success', 'unconfigured_llm', 'no_sources_found', 'error').",
+        description="Execution status of the query pipeline.",
     )
+    requested_facets: List[str] = Field(
+        default_factory=list,
+        description="Legal information facets identified in the query.",
+    )
+    facet_coverage: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Coverage mapping for requested facets.",
+    )
+    facet_validation: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Facet completeness validation report.",
+    )
+    claim_validation: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Claim-evidence validation report.",
+    )
+    quality_status: str = Field(
+        default="COMPLETE",
+        description="Quality status (COMPLETE, PARTIALLY_COMPLETE, UNSUPPORTED_CLAIM).",
+    )
+    case_law_status: Optional[str] = Field(
+        default=None,
+        description="Status of case law retrieval: NOT_REQUESTED, FOUND, NOT_FOUND, CORPUS_UNAVAILABLE.",
+    )
+    evidence_graph: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="In-memory structural legal evidence graph.",
+    )
+    generation_status: str = Field(
+        default="SUCCESS",
+        description="Generation status: SUCCESS, RETRIEVAL_ONLY, RATE_LIMITED, QUOTA_EXCEEDED, TIMEOUT, PROVIDER_ERROR, VALIDATION_FAILED, AUTHENTICATION_ERROR, INVALID_MODEL",
+    )
+    retrieval_status: str = Field(
+        default="SUCCESS",
+        description="Retrieval status: SUCCESS, NO_SOURCES_FOUND, ERROR",
+    )
+    validation_status: str = Field(
+        default="PASSED",
+        description="Validation status: PASSED, FAILED, NOT_RUN",
+    )
+
