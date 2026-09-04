@@ -37,9 +37,12 @@ export async function sendChatMessage(message, sessionId = null) {
     const data = await response.json().catch(() => null);
 
     if (!response.ok) {
+      // Backend sendError format: { error: { code, message } }
+      // Safely extract a renderable string from any error shape.
+      const rawError = data?.error;
       const errorMessage =
         data?.message ||
-        data?.error ||
+        (typeof rawError === 'string' ? rawError : rawError?.message) ||
         `Server responded with error status ${response.status}`;
       return {
         success: false,

@@ -39,7 +39,11 @@ export default function ChatMessage({ message }) {
       ) : structured ? (
         /* ── Structured Legal Response Card ── */
         <div style={styles.assistantCardWrapper}>
-          <AssistantLegalResponse structured={structured} sources={sources} />
+          <AssistantLegalResponse
+            structured={structured}
+            sources={sources}
+            ragMetadata={message.ragMetadata || message.metadata || {}}
+          />
           {message.timestamp && (
             <div style={{ ...styles.timestamp, textAlign: 'left', color: '#94a3b8' }}>
               {message.timestamp}
@@ -50,6 +54,16 @@ export default function ChatMessage({ message }) {
         /* ── Legacy / Fallback Plain-text Assistant Bubble ── */
         <div style={{ ...styles.bubble, ...styles.assistantBubble }}>
           <div style={styles.assistantContent}>
+            {((message.ragMetadata?.generationStatus === 'RETRIEVAL_ONLY') || (message.metadata?.generationStatus === 'RETRIEVAL_ONLY')) && (
+              <div style={styles.fallbackStatusNotice}>
+                AI synthesis temporarily unavailable; answer limited to retrieved legal evidence.
+              </div>
+            )}
+            {((message.ragMetadata?.generationStatus === 'RATE_LIMITED') || (message.metadata?.generationStatus === 'RATE_LIMITED')) && (
+              <div style={{ ...styles.fallbackStatusNotice, ...styles.fallbackStatusNoticeAmber }}>
+                AI synthesis is temporarily unavailable. The retrieved legal evidence is shown below.
+              </div>
+            )}
             <LegalMarkdown content={safeContent} />
 
             {/* Statutory Citations Section for legacy messages */}
@@ -151,5 +165,21 @@ const styles = {
   sourcesList: {
     display: 'flex',
     flexDirection: 'column',
+  },
+  fallbackStatusNotice: {
+    padding: '0.55rem 0.85rem',
+    marginBottom: '0.75rem',
+    backgroundColor: '#f0fdfa',
+    border: '1px solid #ccfbf1',
+    borderRadius: '6px',
+    color: '#0f766e',
+    fontSize: '0.8125rem',
+    fontWeight: '500',
+    lineHeight: '1.4',
+  },
+  fallbackStatusNoticeAmber: {
+    backgroundColor: '#fffbeb',
+    border: '1px solid #fef3c7',
+    color: '#b45309',
   },
 };

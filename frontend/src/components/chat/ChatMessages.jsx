@@ -58,7 +58,9 @@ export default function ChatMessages({
           </div>
           <div style={styles.errorContent}>
             <div style={styles.errorTitle}>Unable to generate a response</div>
-            <div style={styles.errorMessage}>{error}</div>
+            <div style={styles.errorMessage}>
+              {typeof error === 'string' ? error : error?.message || 'An unexpected error occurred.'}
+            </div>
             {onRetry && (
               <button type="button" onClick={onRetry} style={styles.retryButton}>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">

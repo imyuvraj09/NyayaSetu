@@ -49,14 +49,41 @@ export function parseStructuredResponse(content) {
  * Renders a structured legal response card with sections:
  * Legal Domain → Main Answer → Legal Basis → Recommended Next Steps → Sources
  */
-export default function AssistantLegalResponse({ structured, sources }) {
+export default function AssistantLegalResponse({ structured, sources, ragMetadata = {} }) {
   const { legalDomain, mainAnswer, legalBasis, recommendedNextSteps } = structured;
   const hasSteps = recommendedNextSteps && recommendedNextSteps.length > 0;
   const hasBasis = legalBasis && legalBasis.trim().length > 0;
   const hasSources = sources && sources.length > 0;
 
+  const genStatus = ragMetadata?.generationStatus || null;
+  const isRetrievalOnly = genStatus === 'RETRIEVAL_ONLY';
+  const isRateLimited = genStatus === 'RATE_LIMITED' || genStatus === 'QUOTA_EXCEEDED';
+
   return (
     <div style={styles.responseCard}>
+      {/* ── Status Banner (Subtle, Non-intrusive) ── */}
+      {isRetrievalOnly && !isRateLimited && (
+        <div style={styles.statusNotice}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.45rem', flexShrink: 0 }}>
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+          <span>AI synthesis temporarily unavailable; answer limited to retrieved legal evidence.</span>
+        </div>
+      )}
+
+      {isRateLimited && (
+        <div style={{ ...styles.statusNotice, ...styles.statusNoticeAmber }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.45rem', flexShrink: 0 }}>
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <span>AI synthesis is temporarily unavailable. The retrieved legal evidence is shown below.</span>
+        </div>
+      )}
+
       {/* ── Legal Domain Badge ── */}
       {legalDomain && (
         <div style={styles.domainSection}>
@@ -187,6 +214,24 @@ const styles = {
     gap: 0,
     transition: 'box-shadow 0.15s ease',
     maxWidth: '100%',
+  },
+  statusNotice: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0.55rem 0.85rem',
+    marginBottom: '0.9rem',
+    backgroundColor: '#f0fdfa',
+    border: '1px solid #ccfbf1',
+    borderRadius: '6px',
+    color: '#0f766e',
+    fontSize: '0.8125rem',
+    lineHeight: '1.4',
+    fontWeight: '500',
+  },
+  statusNoticeAmber: {
+    backgroundColor: '#fffbeb',
+    border: '1px solid #fef3c7',
+    color: '#b45309',
   },
   domainSection: {
     marginBottom: '1rem',

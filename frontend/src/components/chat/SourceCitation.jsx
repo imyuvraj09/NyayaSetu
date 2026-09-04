@@ -10,12 +10,19 @@ import React, { useState } from 'react';
 export default function SourceCitation({ source, index }) {
   const [expanded, setExpanded] = useState(false);
 
-  const docName = source.documentName || source.document_name || 'Statutory Source';
+  const isCaseLaw = source.evidenceType === 'CASE_LAW' || source.evidence_type === 'CASE_LAW';
+  const docName = source.caseName || source.documentName || source.document_name || (isCaseLaw ? 'Judicial Decision' : 'Statutory Source');
   const pageNumbers = source.pageNumbers || source.page_numbers || [];
+  const paragraphNumber = source.paragraphNumber || source.paragraph_number;
+  const citation = source.citation || '';
+  const court = source.court || '';
   const snippet = source.snippet || source.content || '';
   const score = source.relevanceScore !== undefined ? source.relevanceScore : source.relevance_score;
+  const isHolding = Boolean(source.isHoldingOrRatio || source.is_holding_or_ratio);
 
-  const pageDisplay = pageNumbers.length > 0 ? `Page ${pageNumbers.join(', ')}` : null;
+  const locDisplay = isCaseLaw
+    ? [court, citation, paragraphNumber ? `Para ${paragraphNumber}` : null].filter(Boolean).join(' • ')
+    : (pageNumbers.length > 0 ? `Page ${pageNumbers.join(', ')}` : null);
 
   const formatRelevance = (val) => {
     if (val === undefined || val === null) return null;
@@ -29,19 +36,39 @@ export default function SourceCitation({ source, index }) {
   const relevance = formatRelevance(score);
 
   return (
-    <div style={styles.card}>
+    <div style={{ ...styles.card, borderColor: isCaseLaw ? '#cbd5e1' : '#e2e8f0' }}>
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
-        style={styles.headerButton}
+        style={{
+          ...styles.headerButton,
+          backgroundColor: isCaseLaw ? '#f8fafc' : 'transparent',
+        }}
         aria-expanded={expanded}
         title={expanded ? 'Collapse source excerpt' : 'Expand source excerpt'}
       >
         <div style={styles.headerLeft}>
-          <span style={styles.badge}>[{index + 1}]</span>
+          <span
+            style={{
+              ...styles.badge,
+              color: isCaseLaw ? '#4338ca' : '#0d9488',
+              backgroundColor: isCaseLaw ? '#eef2ff' : '#f0fdfa',
+              borderColor: isCaseLaw ? '#c7d2fe' : '#ccfbf1',
+            }}
+          >
+            {isCaseLaw ? `[C${index + 1}]` : `[S${index + 1}]`}
+          </span>
           <div style={styles.titleColumn}>
-            <span style={styles.docTitle}>{docName}</span>
-            {pageDisplay && <span style={styles.metaText}>{pageDisplay}</span>}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+              <span style={styles.docTitle}>{docName}</span>
+              {isCaseLaw && (
+                <span style={styles.caseLawTag}>Case Law</span>
+              )}
+              {isHolding && (
+                <span style={styles.ratioTag}>Holding / Ratio</span>
+              )}
+            </div>
+            {locDisplay && <span style={styles.metaText}>{locDisplay}</span>}
           </div>
         </div>
 
@@ -80,7 +107,9 @@ export default function SourceCitation({ source, index }) {
 
       {expanded && snippet && (
         <div style={styles.excerptBody}>
-          <div style={styles.excerptLabel}>Official Statutory Excerpt:</div>
+          <div style={styles.excerptLabel}>
+            {isCaseLaw ? 'Verified Judicial Excerpt / Ratio:' : 'Official Statutory Excerpt:'}
+          </div>
           <div style={styles.excerptText}>"{snippet}"</div>
         </div>
       )}
@@ -139,6 +168,28 @@ const styles = {
     color: '#0f172a',
     lineHeight: '1.35',
     wordBreak: 'break-word',
+  },
+  caseLawTag: {
+    fontSize: '0.625rem',
+    fontWeight: '700',
+    color: '#4338ca',
+    backgroundColor: '#eef2ff',
+    border: '1px solid #c7d2fe',
+    borderRadius: '3px',
+    padding: '0.05rem 0.35rem',
+    textTransform: 'uppercase',
+    letterSpacing: '0.03em',
+  },
+  ratioTag: {
+    fontSize: '0.625rem',
+    fontWeight: '700',
+    color: '#b45309',
+    backgroundColor: '#fffbeb',
+    border: '1px solid #fde68a',
+    borderRadius: '3px',
+    padding: '0.05rem 0.35rem',
+    textTransform: 'uppercase',
+    letterSpacing: '0.03em',
   },
   metaText: {
     fontSize: '0.6875rem', /* 11px */
