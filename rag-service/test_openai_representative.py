@@ -2,6 +2,16 @@
 Representative test script for 5 legal queries using OpenAI configuration.
 """
 
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+RAG_DIR = Path(__file__).resolve().parent
+if str(RAG_DIR) not in sys.path:
+    sys.path.insert(0, str(RAG_DIR))
+
 from evaluation.validators.citation_validator import CitationValidator
 from evaluation.validators.source_validator import SourceValidator
 from llm.provider import MockLLMProvider

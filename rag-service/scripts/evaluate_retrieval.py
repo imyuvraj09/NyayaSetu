@@ -8,8 +8,15 @@ Tests and reports:
 """
 
 import json
+import sys
 import time
+from pathlib import Path
 from typing import Any, Dict, List
+
+# Add rag-service root to pythonpath
+BASE_DIR = Path(__file__).resolve().parent.parent
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
 
 from retrieval.advanced_retriever import AdvancedRetriever
 from retrieval.section_indexer import get_section_indexer

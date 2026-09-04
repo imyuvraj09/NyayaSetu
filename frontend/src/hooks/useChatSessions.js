@@ -26,7 +26,9 @@ export function useChatSessions() {
   const [lastFailedQuery, setLastFailedQuery] = useState(null);
 
   const activeSessionRef = useRef(activeSessionId);
-  activeSessionRef.current = activeSessionId;
+  useEffect(() => {
+    activeSessionRef.current = activeSessionId;
+  }, [activeSessionId]);
 
   // 1. Fetch recent sessions from MongoDB on initial mount
   const refreshSessions = useCallback(async () => {

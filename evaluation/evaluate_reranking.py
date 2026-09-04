@@ -14,6 +14,14 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+# Add repository root and rag-service to sys.path
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+RAG_DIR = REPO_ROOT / "rag-service"
+if str(RAG_DIR) not in sys.path:
+    sys.path.insert(0, str(RAG_DIR))
+
 from retrieval.advanced_retriever import AdvancedRetriever
 from utils.logger import setup_logging
 

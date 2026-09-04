@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 
 export default function ChatPlaceholder({ onBackHome }) {
   const [messages, setMessages] = useState([
@@ -28,7 +28,7 @@ export default function ChatPlaceholder({ onBackHome }) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
 
-  const handleSend = async (queryToSend) => {
+  const handleSend = useCallback(async (queryToSend) => {
     const text = (queryToSend || inputQuery).trim();
     if (!text || loading) return;
 
@@ -99,12 +99,12 @@ export default function ChatPlaceholder({ onBackHome }) {
           sources: [],
         },
       ]);
-    } catch (err) {
+    } catch {
       setErrorMsg('Unable to reach Node.js gateway at http://localhost:3000. Start the backend to execute live queries.');
     } finally {
       setLoading(false);
     }
-  };
+  }, [inputQuery, loading, sessionId]);
 
   const handleClear = () => {
     setMessages([

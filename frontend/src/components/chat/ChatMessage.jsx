@@ -1,7 +1,8 @@
 import React from 'react';
 import LegalMarkdown from './LegalMarkdown';
 import SourceCitation from './SourceCitation';
-import AssistantLegalResponse, { parseStructuredResponse } from './AssistantLegalResponse';
+import AssistantLegalResponse from './AssistantLegalResponse';
+import { parseStructuredResponse } from '../../utils/responseParser';
 
 export default function ChatMessage({ message }) {
   const isUser = message.role === 'user';

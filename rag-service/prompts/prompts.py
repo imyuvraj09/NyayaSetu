@@ -7,7 +7,7 @@ Configured for structured JSON legal responses with domain detection.
 Adheres strictly to NyayaSetu Professional Legal Response Style.
 """
 
-from typing import List, Optional
+from typing import Any, List, Optional
 
 SYSTEM_INSTRUCTION = """You are NyayaSetu, a professional legal research and legal-information assistant that explains Indian law with precision, clarity, and natural professional language.
 

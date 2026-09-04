@@ -51,14 +51,14 @@ function App() {
     if (view === 'about') {
       try {
         window.history.pushState({ view: 'about' }, '', '/about');
-      } catch (_e) {
+      } catch {
         window.location.hash = 'about';
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       try {
         window.history.pushState({ view: 'home' }, '', '/');
-      } catch (_e) {
+      } catch {
         window.location.hash = '';
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -70,7 +70,7 @@ function App() {
     if (window.location.hash.toLowerCase() === '#chat') {
       try {
         window.history.replaceState(null, '', window.location.pathname);
-      } catch (_e) {
+      } catch {
         window.location.hash = '';
       }
     }

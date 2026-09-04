@@ -403,22 +403,9 @@ class GoogleGeminiProvider(BaseLLMProvider):
         err_str = _sanitize_log(str(exc)).lower()
         status_code = getattr(exc, "code", None) or getattr(exc, "status_code", None)
 
-        # 1. Model not found / invalid model (HTTP 404)
-        if (
-            status_code == 404
-            or "not found" in err_str
-            or "is not found for api version" in err_str
-            or "invalid model" in err_str
-            or "models/" in err_str and "not found" in err_str
-        ):
-            return LLMInvalidModelError(
-                message=f"Configured Gemini model '{self._model}' is invalid or not found on Google AI.",
-                status_code=404,
-            )
-
-        # 2. Authentication / Permission errors (HTTP 401/403)
-        if (
-            status_code in (400, 401, 403)
+        # 1. Authentication / Permission errors (HTTP 401/403 or explicit key failure)
+        is_auth_error = (
+            status_code in (401, 403)
             or any(
                 k in err_str
                 for k in (
@@ -431,10 +418,24 @@ class GoogleGeminiProvider(BaseLLMProvider):
                     "api key is invalid",
                 )
             )
-        ):
+        )
+        if is_auth_error:
             return LLMAuthenticationError(
                 message="Google Gemini authentication failed. Please verify your GEMINI_API_KEY.",
                 status_code=status_code or 401,
+            )
+
+        # 2. Model not found / invalid model (HTTP 404)
+        if (
+            status_code == 404
+            or "model not found" in err_str
+            or "is not found for api version" in err_str
+            or "invalid model" in err_str
+            or ("models/" in err_str and "not found" in err_str)
+        ):
+            return LLMInvalidModelError(
+                message=f"Configured Gemini model '{self._model}' is invalid or not found on Google AI.",
+                status_code=404,
             )
 
         # 3. Rate Limit vs Quota Exceeded (HTTP 429 or ResourceExhausted)
