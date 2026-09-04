@@ -160,6 +160,7 @@ class LegalRAGPipeline:
             p_issue = q_analysis.get("primary_issue") if isinstance(q_analysis, dict) else getattr(q_analysis, "primary_issue", None)
             ex_topics = q_analysis.get("excluded_topics") if isinstance(q_analysis, dict) else getattr(q_analysis, "excluded_topics", None)
             try:
+                active_qa = retrieval_result.query_analysis if hasattr(retrieval_result, "query_analysis") else q_analysis
                 case_chunks = self.case_retriever.retrieve(
                     query=query_text,
                     target_sections=target_secs,
@@ -167,6 +168,7 @@ class LegalRAGPipeline:
                     primary_issue=p_issue,
                     excluded_topics=ex_topics,
                     top_k=3,
+                    query_analysis=active_qa,
                 )
                 if case_chunks:
                     case_law_status = CaseLawStatus.FOUND.value

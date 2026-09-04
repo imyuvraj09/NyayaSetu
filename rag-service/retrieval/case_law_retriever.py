@@ -19,6 +19,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 from embeddings.embedding_model import EmbeddingService
 from retrieval.case_law_tree import CaseLawTreeIndex
+from retrieval.evidence_relevance_filter import EvidenceCompatibility, UniversalEvidenceFilter
 from retrieval.reranker import LegalReranker
 from schemas.case_law import CaseLawChunk, CourtLevel, PassageType
 from schemas.retrieval import RerankedChunk, RetrievedChunk
@@ -70,6 +71,7 @@ class CaseLawRetriever:
         excluded_topics: Optional[List[str]] = None,
         top_k: int = 5,
         initial_k: int = 15,
+        query_analysis: Optional[Any] = None,
     ) -> List[RerankedChunk]:
         """Retrieve and rerank most relevant verified case law passages for the query.
 
@@ -146,42 +148,18 @@ class CaseLawRetriever:
                 candidate_chunks[c.chunk_id] = c
                 strategy_scores[c.chunk_id] = 0.5
 
-        # 4B. Topic Incompatibility Filter (Rule 4 & 5)
-        if excluded_topics:
-            retained_candidates: Dict[str, CaseLawChunk] = {}
-            for cid, c in candidate_chunks.items():
-                c_topics_lower = [t.lower() for t in c.topics]
-                c_name_lower = c.case_name.lower()
-                is_excluded = False
-                for ex in excluded_topics:
-                    ex_l = ex.lower()
-                    if any(ex_l in t for t in c_topics_lower):
-                        is_excluded = True
-                        break
-                    if ex_l in ("consent", "promise to marry", "rape"):
-                        if any(k in c_name_lower for k in ["anurag soni", "naim ahamed"]):
-                            is_excluded = True
-                            break
-                    if ex_l in ("circumstantial evidence",):
-                        if any(k in c_name_lower for k in ["sharad birdhichand", "babu v"]):
-                            is_excluded = True
-                            break
-                if not is_excluded:
-                    retained_candidates[cid] = c
-                else:
-                    logger.info("CaseLawRetriever excluded chunk '%s' (%s) due to excluded topic.", cid, c.case_name)
-            candidate_chunks = retained_candidates
-
-        # 4C. Primary Issue Topic Boost
-        if primary_issue == "circumstantial_evidence":
-            for cid, c in candidate_chunks.items():
-                c_text_lower = c.text.lower()
-                c_topics_lower = [t.lower() for t in c.topics]
-                if any(kw in c_text_lower or any(kw in t for t in c_topics_lower) for kw in [
-                    "circumstantial evidence", "chain of circumstances", "panchsheel",
-                    "five golden principles", "standard of proof"
-                ]):
-                    strategy_scores[cid] += 2.0
+        # 4B. Universal Evidence Compatibility & Affinity Evaluation
+        from retrieval.legal_question import LegalQuestionAnalyzer
+        lq = getattr(query_analysis, "legal_question", None) if query_analysis else LegalQuestionAnalyzer().analyze(query)
+        retained_candidates: Dict[str, CaseLawChunk] = {}
+        for cid, c in candidate_chunks.items():
+            eval_res = UniversalEvidenceFilter.evaluate_chunk(c, legal_question=lq, query_analysis=query_analysis)
+            if eval_res.compatibility not in (EvidenceCompatibility.IRRELEVANT, EvidenceCompatibility.CONTRADICTORY):
+                retained_candidates[cid] = c
+                strategy_scores[cid] += (eval_res.affinity_score * 2.5)
+            else:
+                logger.info("CaseLawRetriever excluded chunk '%s' (%s): %s", cid, c.case_name, eval_res.reason)
+        candidate_chunks = retained_candidates
 
         if not candidate_chunks:
             logger.warning("Zero candidate case-law passages found.")

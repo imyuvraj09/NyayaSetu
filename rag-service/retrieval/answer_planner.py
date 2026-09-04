@@ -11,6 +11,7 @@ into a structured AnswerPlan specifying:
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
+from retrieval.legal_question import QuestionType
 from retrieval.query_analyzer import AuthorityRequirement, LegalQueryAnalysis
 from schemas.case_law import EvidenceType
 from utils.logger import get_logger
@@ -78,37 +79,49 @@ class AnswerPlanner:
         req_facets_set = set(requested_facets)
         primary_issue = getattr(query_analysis, "primary_issue", "") or ""
         offence = getattr(query_analysis, "offence", None)
+        lq = getattr(query_analysis, "legal_question", None)
 
         sections: List[AnswerSectionPlan] = []
         planned_facets: List[str] = []
-        authority_required: List[str] = []
+        q_types: set = set(lq.question_types) if lq else set()
 
-        if primary_issue == "circumstantial_evidence":
-            # Specialized structure for circumstantial evidence questions
-            planned_facets = [
-                "circumstantial_evidence",
-                "judicial_test",
-                "standard_of_proof",
-                "application",
-            ]
-            authority_required = ["CASE_LAW"]
+        is_evidential_or_judicial = (
+            QuestionType.EVIDENCE in q_types
+            or QuestionType.JUDICIAL_PRINCIPLES in q_types
+            or (lq and "judicial" in primary_issue.lower())
+            or (lq and "evidence" in primary_issue.lower())
+        )
+        is_scenario = (
+            QuestionType.FACTUAL_SCENARIO in q_types
+            or QuestionType.COMPLEX_SCENARIO in q_types
+            or (lq and lq.factual_scenario is not None)
+        )
+        has_constitutional = (
+            QuestionType.CONSTITUTIONAL in q_types
+            or (lq and bool(lq.constitutional_articles))
+        )
 
+        statutory_title = "Relevant Constitutional Provisions" if (has_constitutional and lq and not lq.statutory_sections) else "Relevant Legal Provisions"
+
+        if is_evidential_or_judicial and is_scenario:
+            # Generic evidential / judicial test inquiry applied to a factual scenario
+            planned_facets = ["answer", "legal_principles", "judicial_principles", "application", "conclusion"]
             sections.append(
                 AnswerSectionPlan(
                     facet="answer",
                     display_title="Answer",
                     required=True,
-                    evidence_types=["CASE_LAW", "STATUTE"],
-                    description="Direct answer stating whether murder conviction can be based solely on circumstantial evidence.",
+                    evidence_types=["CASE_LAW", "STATUTE"] if auth_req == AuthorityRequirement.BOTH else [auth_req.value],
+                    description="Direct answer stating the core legal rule and threshold.",
                 )
             )
             sections.append(
                 AnswerSectionPlan(
                     facet="legal_principles",
-                    display_title="Relevant Legal Principles",
+                    display_title=statutory_title,
                     required=True,
                     evidence_types=["STATUTE", "CASE_LAW"],
-                    description="Substantive criminal provisions defining murder and foundational principles of evidence.",
+                    description="Substantive statutory or constitutional provisions and foundational legal principles.",
                 )
             )
             sections.append(
@@ -117,7 +130,7 @@ class AnswerPlanner:
                     display_title="Judicial Principles",
                     required=True,
                     evidence_types=["CASE_LAW"],
-                    description="Judicial tests and precedents including the five golden principles (Panchsheel) governing circumstantial evidence.",
+                    description="Binding judicial tests, leading precedents, and standards established by superior courts.",
                 )
             )
             sections.append(
@@ -125,8 +138,8 @@ class AnswerPlanner:
                     facet="application",
                     display_title="Application",
                     required=True,
-                    evidence_types=["CASE_LAW"],
-                    description="Evaluation of specific factual circumstances (motive, CCTV, call records, forensic evidence) against judicial tests.",
+                    evidence_types=["CASE_LAW", "STATUTE"],
+                    description="Evaluation of specific factual circumstances and evidence against governing judicial tests.",
                 )
             )
             sections.append(
@@ -134,16 +147,17 @@ class AnswerPlanner:
                     facet="conclusion",
                     display_title="Conclusion",
                     required=True,
-                    evidence_types=["CASE_LAW"],
-                    description="Final summary of the evidentiary threshold required to sustain conviction.",
+                    evidence_types=["CASE_LAW", "STATUTE"],
+                    description="Final summary of the legal determination and evidentiary threshold.",
                 )
             )
+            authority_required = ["CASE_LAW", "STATUTE"] if auth_req == AuthorityRequirement.BOTH else [auth_req.value]
 
             return AnswerPlan(
                 query=query_analysis.original_query,
                 authority_requirement=auth_req,
                 sections=sections,
-                requires_statute=False,
+                requires_statute=auth_req in (AuthorityRequirement.STATUTE, AuthorityRequirement.BOTH),
                 requires_case_law=True,
                 primary_issue=primary_issue,
                 offence=offence,
@@ -151,35 +165,40 @@ class AnswerPlanner:
                 authority_required=authority_required,
             )
 
-        # Standard General Planning
-        # 1. Direct Legal Rule / Answer
+        # Standard Universal Planning
+        # 1. Direct Answer
         sections.append(
             AnswerSectionPlan(
-                facet="legal_rule",
+                facet="answer",
                 display_title="Answer",
                 required=True,
                 evidence_types=["STATUTE", "CASE_LAW"] if auth_req == AuthorityRequirement.BOTH else [auth_req.value],
                 description="Direct, authoritative summary answering the core legal question.",
             )
         )
-        planned_facets.append("legal_rule")
+        planned_facets.append("answer")
 
-        # 2. Statutory Provisions (included if STATUTE or BOTH, or if punishment asked)
-        if auth_req in (AuthorityRequirement.STATUTE, AuthorityRequirement.BOTH):
+        # 2. Statutory / Constitutional Provisions
+        if auth_req in (AuthorityRequirement.STATUTE, AuthorityRequirement.BOTH) or (lq and (lq.statutory_sections or lq.constitutional_articles)):
             sections.append(
                 AnswerSectionPlan(
                     facet="statutory_provisions",
-                    display_title="Relevant Legal Provisions",
+                    display_title=statutory_title,
                     required=True,
                     evidence_types=["STATUTE"],
-                    description="Statutory definitions, essential ingredients, sections, and prescribed penalties.",
+                    description="Statutory definitions, essential ingredients, sections, and prescribed procedures.",
                 )
             )
             planned_facets.append("statutory_provisions")
 
-        # 3. Judicial Principles (included if CASE_LAW or BOTH or if judicial facets requested)
+        # 3. Judicial Principles
         judicial_facets = {"judicial_principles", "precedent", "case_law", "court_interpretation", "judicial_test", "ratio", "holding"}
-        has_judicial_req = (auth_req in (AuthorityRequirement.CASE_LAW, AuthorityRequirement.BOTH)) or bool(req_facets_set & judicial_facets)
+        has_judicial_req = (
+            (auth_req in (AuthorityRequirement.CASE_LAW, AuthorityRequirement.BOTH))
+            or bool(req_facets_set & judicial_facets)
+            or QuestionType.JUDICIAL_PRINCIPLES in q_types
+            or QuestionType.CASE_LAW in q_types
+        )
 
         if has_judicial_req:
             sections.append(
@@ -193,17 +212,30 @@ class AnswerPlanner:
             )
             planned_facets.append("judicial_principles")
 
-        # 4. Legal Application / Practical Context
+        # 4. Application / Context
         sections.append(
             AnswerSectionPlan(
                 facet="application",
                 display_title="Application",
-                required=True,
+                required=is_scenario,
                 evidence_types=["STATUTE", "CASE_LAW"] if auth_req == AuthorityRequirement.BOTH else [auth_req.value],
                 description="Synthesizing rules and principles to state clearly how the law applies.",
             )
         )
         planned_facets.append("application")
+
+        # 5. Conclusion (for scenarios)
+        if is_scenario:
+            sections.append(
+                AnswerSectionPlan(
+                    facet="conclusion",
+                    display_title="Conclusion",
+                    required=True,
+                    evidence_types=["STATUTE", "CASE_LAW"] if auth_req == AuthorityRequirement.BOTH else [auth_req.value],
+                    description="Final summary of the legal outcome and requirements.",
+                )
+            )
+            planned_facets.append("conclusion")
 
         if auth_req == AuthorityRequirement.CASE_LAW:
             authority_required = ["CASE_LAW"]
