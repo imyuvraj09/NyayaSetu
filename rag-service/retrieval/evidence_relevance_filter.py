@@ -145,10 +145,26 @@ class UniversalEvidenceFilter:
             elif any(t in chunk_lower for t in ["consumer", "defective", "goods", "deficiency in service"]):
                 chunk_domain = "Consumer Law"
 
-        # If question is Evidentiary / Standard of Proof, reject matrimonial / promise-to-marry cases
-        if QuestionType.EVIDENCE in q_types or "evidence" in primary_issue or "circumstantial" in primary_issue:
+        # Check if question is explicitly an evidentiary inquiry about circumstantial evidence
+        raw_q = getattr(lq, "raw_query", "") or getattr(lq, "raw_question", "") or getattr(lq, "original_query", "")
+        is_circumstantial_inquiry = any(
+            p in raw_q.lower()
+            for p in ["circumstantial evidence", "chain of circumstances", "panchsheel", "solely on circumstantial", "no eyewitness"]
+        )
+
+        # Reject circumstantial evidence cases if question does NOT ask for circumstantial evidence
+        if is_case_law and not is_circumstantial_inquiry:
+            if any(t in chunk_lower for t in ["circumstantial evidence", "chain of circumstances", "panchsheel"]):
+                if not any(c in chunk_lower for c in concepts):
+                    return EvidenceEvaluationResult(
+                        compatibility=EvidenceCompatibility.IRRELEVANT,
+                        reason=f"Circumstantial evidence case '{case_name}' is not applicable to non-circumstantial inquiry.",
+                        affinity_score=0.0,
+                    )
+
+        # If question is explicitly an inquiry about Circumstantial Evidence or Standard of Proof
+        if is_circumstantial_inquiry:
             if is_case_law:
-                # Check if case discusses evidentiary principles
                 evid_terms = [
                     "circumstantial", "chain of circumstances", "panchsheel", "standard of proof",
                     "conclusive", "burden of proof", "forensic", "eyewitness", "benefit of doubt",
@@ -156,7 +172,7 @@ class UniversalEvidenceFilter:
                 ]
                 has_evid_terms = any(t in chunk_lower for t in evid_terms) or any(any(t in top for t in evid_terms) for top in topics)
                 
-                # If case solely discusses matrimonial promise-to-marry or consent, and question is not about that
+                # Reject consent / promise-to-marry cases
                 is_consent_case = any(t in chunk_lower for t in ["promise to marry", "misconception of fact", "consensual sex"])
                 if is_consent_case and not any(c in ["consent", "promise to marry"] for c in concepts):
                     return EvidenceEvaluationResult(
@@ -186,7 +202,7 @@ class UniversalEvidenceFilter:
         # If the user did NOT ask for punishment, demote pure punishment provisions to BACKGROUND
         if (
             QuestionType.PUNISHMENT not in q_types
-            and not any(w in lq.raw_query.lower() for w in ["punishment", "penalty", "punished with", "prescribed for it"])
+            and not any(w in raw_q.lower() for w in ["punishment", "penalty", "punished with", "prescribed for it"])
         ):
             # Check if chunk is solely a punishment section
             is_pure_punishment = (
@@ -319,6 +335,27 @@ class UniversalEvidenceFilter:
             return (priority_map.get(ev.compatibility, 0), ev.affinity_score, score)
 
         usable.sort(key=_sort_key, reverse=True)
+
+        # Deduplicate chunks by statutory authority (Act, Section) and case authority (Case Name)
+        seen_authorities: Set[str] = set()
+        deduped_usable: List[Tuple[Any, EvidenceEvaluationResult]] = []
+        for ch, ev in usable:
+            sec = str(getattr(ch, "section_number", "") or (ch.metadata.get("section_number") if hasattr(ch, "metadata") and isinstance(ch.metadata, dict) else "")).strip()
+            act = str(getattr(ch, "act", "") or getattr(ch, "act_short_name", "") or (ch.metadata.get("act") if hasattr(ch, "metadata") and isinstance(ch.metadata, dict) else "")).strip()
+            c_name = str(getattr(ch, "case_name", "") or (ch.metadata.get("case_name") if hasattr(ch, "metadata") and isinstance(ch.metadata, dict) else "")).strip()
+            if c_name:
+                key = f"CASE::{c_name.lower()}"
+            elif act and sec:
+                key = f"STATUTE::{act.lower()}::{sec.lower()}"
+            else:
+                key = str(getattr(ch, "chunk_id", "") or id(ch))
+
+            if key in seen_authorities:
+                continue
+            seen_authorities.add(key)
+            deduped_usable.append((ch, ev))
+
+        usable = deduped_usable
 
         direct_count = sum(1 for _, ev in usable if ev.compatibility == EvidenceCompatibility.DIRECT)
         

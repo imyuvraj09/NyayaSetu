@@ -275,11 +275,15 @@ class LegalRAGPipeline:
             }
         else:
             # Step 5: Construct Prompt
+            lq = getattr(active_q_analysis, "legal_question", None) if hasattr(active_q_analysis, "legal_question") else (
+                active_q_analysis.get("legal_question") if isinstance(active_q_analysis, dict) else None
+            )
             prompt = build_rag_prompt(
                 query=retrieval_result.normalized_query,
                 formatted_context=context_result.formatted_context,
                 max_source_index=len(sources),
                 requested_facets=requested_facets,
+                legal_question=lq,
             )
 
             # Step 6: Generate Completion via LLM Provider

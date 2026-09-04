@@ -230,11 +230,14 @@ class LegalQueryAnalyzer:
         return re.sub(r"\s+", " ", text).strip()
 
     def analyze(self, query: str) -> LegalQueryAnalysis:
-        """Perform comprehensive query analysis."""
+        """Perform comprehensive query analysis powered by canonical LegalQuestion."""
         cleaned = self._normalize_text(query)
         lower_query = cleaned.lower()
 
-        # Step 1: Detect Explicit Act Mention
+        # Step 0: Authoritative Canonical Legal Question Analysis (Fact-First)
+        lq = self.legal_question_analyzer.analyze(query)
+
+        # Step 1: Detect Explicit Act Mention in query
         detected_act_entry = None
         for act in KNOWN_ACT_REGISTRY:
             for alias in act["aliases"]:
@@ -245,72 +248,40 @@ class LegalQueryAnalyzer:
             if detected_act_entry:
                 break
 
-        # Step 2: Implicit Act & Domain Routing if no explicit mention
+        # Step 2: Implicit Act Routing driven by canonical primary domain
         if not detected_act_entry:
-            # Check intent-priority routing rules (Procedure -> BNSS, Evidence -> BSA, Substantive -> BNS)
-            if any(w in lower_query for w in [
-                "investigate", "investigated", "investigation", "how is a murder case investigated",
-                "how is a case investigated", "fir", "first information report", "what happens after an fir",
-                "after an fir", "arrest", "arrested", "procedure for arrest", "bail", "anticipatory bail",
-                "charge sheet", "cognizable", "remand", "custody", "warrant", "trial procedure"
-            ]):
+            domain_to_doc_id = {
+                "Cybercrime / Information Technology Law": "it_act",
+                "Cybercrime / Digital Investigation": "it_act",
+                "Cybercrime / Financial Fraud": "it_act",
+                "Criminal Law": "bns_2023",
+                "Criminal Law / Sexual Offences": "bns_2023",
+                "Criminal Law / Child Protection (POCSO)": "pocso_act_2012",
+                "Constitutional Law": "constitution_of_india",
+                "Consumer Law": "consumer",
+                "Corporate Law": "companies_act_2013",
+                "Insolvency Law": "insolvency_bankruptcy_code_2016",
+                "Tax / GST Law": "gst_act_2017",
+                "RTI / Information Law": "right_to_information_act_2005",
+                "Labour Law / Workplace Sexual Harassment (POSH)": "sexual_harassment_workplace_act_2013",
+                "Transport & Motor Vehicles Law": "motor_vehicle_act",
+                "Law of Evidence": "bsa_2023",
+                "Criminal Procedure": "bnss_2023",
+            }
+            target_doc_id = domain_to_doc_id.get(lq.primary_domain)
+            if target_doc_id:
                 for act in KNOWN_ACT_REGISTRY:
-                    if act["document_id"] == "bnss_2023":
+                    if act["document_id"] == target_doc_id:
                         detected_act_entry = act
                         break
 
-            elif any(w in lower_query for w in [
-                "what evidence", "evidence is relevant", "evidentiary value", "admissibility",
-                "admissible", "electronic records", "electronic record", "burden of proof",
-                "dying declaration", "expert opinion", "documentary evidence", "primary evidence",
-                "secondary evidence", "testimony of witness"
-            ]):
-                for act in KNOWN_ACT_REGISTRY:
-                    if act["document_id"] == "bsa_2023":
-                        detected_act_entry = act
-                        break
-
-            elif any(w in lower_query for w in ["article 21", "article 14", "article 19", "article 32", "article 226", "fundamental right", "fundamental rights", "writ"]):
-                for act in KNOWN_ACT_REGISTRY:
-                    if act["document_id"] == "constitution_of_india":
-                        detected_act_entry = act
-                        break
-
-            elif any(w in lower_query for w in ["pocso", "child sexual", "penetrative sexual assault"]):
-                for act in KNOWN_ACT_REGISTRY:
-                    if act["document_id"] == "pocso_act_2012":
-                        detected_act_entry = act
-                        break
-
-            elif any(w in lower_query for w in ["posh", "sexual harassment at workplace", "internal complaints committee", "icc"]):
-                for act in KNOWN_ACT_REGISTRY:
-                    if act["document_id"] == "sexual_harassment_workplace_act_2013":
-                        detected_act_entry = act
-                        break
-
-            elif any(w in lower_query for w in ["rti", "right to information", "public information officer", "pio"]):
-                for act in KNOWN_ACT_REGISTRY:
-                    if act["document_id"] == "right_to_information_act_2005":
-                        detected_act_entry = act
-                        break
-
-            elif any(w in lower_query for w in ["murder", "culpable homicide", "theft", "rape", "assault", "kidnapping", "cheating", "extortion", "defamation"]):
-                for act in KNOWN_ACT_REGISTRY:
-                    if act["document_id"] == "bns_2023":
-                        detected_act_entry = act
-                        break
-
-            # Fallback: Count keyword hits across registries
+            # Fallback for unindexed or specialized domains
             if not detected_act_entry:
-                best_match = None
-                max_hits = 0
                 for act in KNOWN_ACT_REGISTRY:
                     hits = sum(1 for kw in act["keywords"] if re.search(r"\b" + re.escape(kw) + r"\b", lower_query))
-                    if hits > max_hits:
-                        max_hits = hits
-                        best_match = act
-                if best_match and max_hits > 0:
-                    detected_act_entry = best_match
+                    if hits > 0:
+                        detected_act_entry = act
+                        break
 
         # Step 2B: Check for Explicit Mentions of Unindexed Statutes
         unindexed_act_name = None
@@ -323,7 +294,6 @@ class LegalQueryAnalyzer:
             if act_mention_match:
                 candidate_act = act_mention_match.group(1).strip()
                 candidate_act = re.sub(r"^(?:the\s+)", "", candidate_act, flags=re.IGNORECASE).strip()
-                # Check if it matches any known act aliases
                 for act in KNOWN_ACT_REGISTRY:
                     for alias in act["aliases"]:
                         if alias.lower() in candidate_act.lower():
@@ -334,152 +304,76 @@ class LegalQueryAnalyzer:
                 if not detected_act_entry:
                     unindexed_act_name = candidate_act
 
-        # Step 3: Extract Section Numbers if explicitly present
-        section_candidates = []
-        sec_matches = re.findall(r"\b(?:Section|Sec\.|Article|Art\.|u/s)\s*(\d+[A-Z]?)\b", cleaned, re.IGNORECASE)
-        section_candidates.extend(sec_matches)
-
-        sec_context_matches = re.findall(r"\b(\d{1,4})\s*(?:BNS|BNSS|BSA|IPC|CrPC)\b", cleaned, re.IGNORECASE)
-        section_candidates.extend(sec_context_matches)
-
-        section_candidates = list(dict.fromkeys(section_candidates))
+        # Step 3: Extract Section Numbers & Articles
+        section_candidates = list(dict.fromkeys(lq.statutory_sections + lq.constitutional_articles))
 
         # Step 4: Extract Legal Entities
-        entities = []
-        entity_patterns = [
-            "culpable homicide", "murder", "theft", "extortion", "robbery", "dacoity",
-            "rape", "assault", "hurt", "grievous hurt", "cheating", "fraud", "defamation",
-            "electronic record", "electronic records", "digital signature", "fir",
-            "investigation", "arrest", "bail", "anticipatory bail", "charge sheet",
-            "fundamental right", "writ", "internal complaints committee", "public information officer"
-        ]
-        for ent in entity_patterns:
-            if re.search(r"\b" + re.escape(ent) + r"\b", lower_query):
-                entities.append(ent)
+        entities = lq.operative_legal_concepts
 
-        # Step 5: Detect Requested Information Aspects
-        requested_info = []
-        if any(w in lower_query for w in ["what constitutes", "definition", "define", "what is", "elements", "meaning", "ingredients"]):
-            requested_info.append("definition")
-        if any(w in lower_query for w in ["punishment", "penalty", "sentenced", "punished", "imprisonment", "fine", "death penalty", "jail"]):
-            requested_info.append("punishment")
-        if any(w in lower_query for w in ["exception", "exceptions", "when is it not", "defence", "defenses", "difference"]):
-            requested_info.append("exceptions")
-        if any(w in lower_query for w in ["how is", "procedure", "how to", "investigate", "steps", "process", "filing"]):
-            requested_info.append("procedure")
-        if any(w in lower_query for w in ["evidence", "admissible", "admissibility", "prove", "proved", "proof"]):
-            requested_info.append("evidence")
+        # Step 5: Requested Information Aspects
+        requested_info = [f.lower() for f in lq.requested_facets]
         if not requested_info:
             requested_info.append("general_statutory_rule")
 
-        # Step 6: Detect Legal Intent
-        intent = "general_inquiry"
-        if "definition" in requested_info and "punishment" in requested_info:
-            intent = "offence_definition_and_penalty"
-        elif "punishment" in requested_info:
-            intent = "penalty_punishment"
-        elif "definition" in requested_info:
-            intent = "substantive_definition"
-        elif "procedure" in requested_info:
-            intent = "procedural_inquiry"
-        elif "evidence" in requested_info:
-            intent = "evidentiary_rule"
+        # Step 6: Legal Intent
+        intent = "multi_facet_inquiry" if len(lq.requested_facets) > 1 else (lq.requested_facets[0].lower() if lq.requested_facets else "general_inquiry")
 
-        # Step 7: Detect Multi-Part Query & Decompose
+        # Step 7: Facet-Specific Multi-Part Sub-Query Planning
         sub_queries: List[SubQuery] = []
         is_multi_part = False
 
-        act_name_str = detected_act_entry["act_name"] if detected_act_entry else ""
-        act_short_str = detected_act_entry["short_name"] if detected_act_entry else ""
-        act_context = f"under {act_short_str or act_name_str}" if (act_short_str or act_name_str) else ""
-
-        has_def = "definition" in requested_info
-        has_punishment = "punishment" in requested_info
-        has_proc = "procedure" in requested_info
-        has_evid = "evidence" in requested_info
-
-        entity_str = entities[0] if entities else "the offence"
-
-        if has_def and has_punishment:
-            is_multi_part = True
-            sub_queries.append(
-                SubQuery(
-                    aspect="definition",
-                    sub_query_text=f"What constitutes {entity_str} definition elements {act_context}".strip(),
-                    target_act=act_name_str,
-                )
-            )
-            sub_queries.append(
-                SubQuery(
-                    aspect="punishment",
-                    sub_query_text=f"Punishment for {entity_str} prescribed imprisonment fine {act_context}".strip(),
-                    target_act=act_name_str,
-                )
-            )
-        elif len(requested_info) >= 2:
-            is_multi_part = True
-            for req in requested_info:
-                sub_queries.append(
-                    SubQuery(
-                        aspect=req,
-                        sub_query_text=f"{req} of {entity_str} {act_context}".strip(),
-                        target_act=act_name_str,
-                    )
-                )
-
-        # Cross-domain multi-part: e.g. "What is murder, how is it investigated, and what evidence can prove it?"
-        if ("murder" in entities or "offence" in lower_query) and has_proc and has_evid:
-            is_multi_part = True
-            sub_queries = [
-                SubQuery(
-                    aspect="definition",
-                    sub_query_text=f"What constitutes {entity_str} definition Bharatiya Nyaya Sanhita",
-                    target_act="Bharatiya Nyaya Sanhita, 2023",
-                ),
-                SubQuery(
-                    aspect="procedure",
-                    sub_query_text=f"How is {entity_str} investigated procedure FIR investigation Bharatiya Nagarik Suraksha Sanhita",
-                    target_act="Bharatiya Nagarik Suraksha Sanhita, 2023",
-                ),
-                SubQuery(
-                    aspect="evidence",
-                    sub_query_text=f"Evidence relevant to prove {entity_str} admissible Bharatiya Sakshya Adhiniyam",
-                    target_act="Bharatiya Sakshya Adhiniyam, 2023",
-                ),
-            ]
-
-        act_res = detected_act_entry["act_name"] if detected_act_entry else unindexed_act_name
+        act_res = detected_act_entry["act_name"] if detected_act_entry else (unindexed_act_name or (lq.governing_enactments[0] if lq.governing_enactments else None))
         act_short_res = detected_act_entry["short_name"] if detected_act_entry else unindexed_act_name
         act_aliases_res = detected_act_entry["aliases"] if detected_act_entry else ([unindexed_act_name] if unindexed_act_name else [])
         doc_id_res = detected_act_entry["document_id"] if detected_act_entry else None
-        domain_res = detected_act_entry["domain"] if detected_act_entry else ("Unindexed Statutory Law" if unindexed_act_name else "General Legal Information")
+        domain_res = lq.primary_domain or (detected_act_entry["domain"] if detected_act_entry else "Indian Statutory Law")
         is_unindexed = (unindexed_act_name is not None and detected_act_entry is None)
 
-        # Step 8: Universal Legal Question Analysis
-        lq = self.legal_question_analyzer.analyze(query)
+        # Generate facet-targeted sub-queries
+        topic_context = lq.primary_legal_issue.replace("_", " ")
+        if len(lq.requested_facets) >= 2 or lq.is_multi_part:
+            is_multi_part = True
+            for facet in lq.requested_facets:
+                f_lower = facet.lower()
+                if f_lower in ("offence", "offences"):
+                    sq_text = f"Offences applicable {topic_context} {act_short_res or ''}".strip()
+                    sq_act = act_res
+                elif f_lower == "investigation":
+                    sq_text = f"Investigation procedure digital forensics preservation {topic_context}".strip()
+                    sq_act = "Bharatiya Nagarik Suraksha Sanhita, 2023" if "criminal" in domain_res.lower() or "cyber" in domain_res.lower() else act_res
+                elif f_lower == "evidence":
+                    sq_text = f"Evidence relevant to prove {topic_context} records logs".strip()
+                    sq_act = "Bharatiya Sakshya Adhiniyam, 2023" if domain_res == "Law of Evidence" else act_res
+                elif f_lower == "remedy":
+                    sq_text = f"Legal remedies relief compensation {topic_context}".strip()
+                    sq_act = act_res
+                elif f_lower == "appeal":
+                    sq_text = f"Appellate procedure forum limitation {topic_context}".strip()
+                    sq_act = act_res
+                elif f_lower == "rights":
+                    sq_text = f"Statutory and legal rights of party {topic_context}".strip()
+                    sq_act = act_res
+                elif f_lower in ("punishment", "penalty"):
+                    sq_text = f"Prescribed punishment penalties sentence {topic_context}".strip()
+                    sq_act = act_res
+                elif f_lower == "procedure":
+                    sq_text = f"Procedure steps required compliance {topic_context}".strip()
+                    sq_act = act_res
+                else:
+                    sq_text = f"{facet} {topic_context}".strip()
+                    sq_act = act_res
+
+                sub_queries.append(
+                    SubQuery(
+                        aspect=f_lower,
+                        sub_query_text=sq_text,
+                        target_act=sq_act,
+                    )
+                )
 
         primary_issue = lq.primary_legal_issue
         topic_keywords = lq.operative_legal_concepts
         excluded_topics: List[str] = []
-
-        # Populate multi-part sub-queries if present in lq
-        if lq.is_multi_part and lq.sub_questions:
-            is_multi_part = True
-            sub_queries = [
-                SubQuery(
-                    aspect=sq.aspect,
-                    sub_query_text=sq.text,
-                    target_act=sq.target_enactment or act_res,
-                )
-                for sq in lq.sub_questions
-            ]
-
-        # Merge statutory sections and constitutional articles
-        for sec in lq.statutory_sections + lq.constitutional_articles:
-            if sec not in section_candidates:
-                section_candidates.append(sec)
-
-        # Offence / Substantive legal topic
         detected_offence = lq.operative_legal_concepts[0] if lq.operative_legal_concepts else None
 
         # Authority requirement dynamically derived from LegalQuestion
@@ -489,16 +383,6 @@ class LegalQueryAnalyzer:
             auth_req = AuthorityRequirement.CASE_LAW
         else:
             auth_req = AuthorityRequirement.STATUTE
-
-        # Use domain from LegalQuestion if generic
-        if domain_res in ("General Legal Information", "Unindexed Statutory Law") and lq.domain:
-            domain_res = lq.domain
-
-        # Suppress generic punishment from requested_info if unrequested in evidentiary/procedural queries
-        if QuestionType.PUNISHMENT not in lq.question_types and not any(
-            w in lower_query for w in ["punishment", "penalty", "punished with", "prescribed for it"]
-        ):
-            requested_info = [r for r in requested_info if r not in ("punishment", "penalty")]
 
         return LegalQueryAnalysis(
             original_query=query,

@@ -370,12 +370,257 @@ def test_adaptive_professional_legal_response_generation():
     print("-> PASS: Unindexed case-law limitation correctly handled without hallucination!")
 
 
+def test_universal_fact_first_domain_routing_20_categories():
+    print("\n" + "=" * 70)
+    print("TEST 6: Universal Fact-First Domain Routing (20 Core Categories)")
+    print("=" * 70)
+
+    analyzer = LegalQuestionAnalyzer()
+
+    category_tests = [
+        # A. CRIMINAL
+        ("What is the punishment for murder under Indian law?", "Criminal Law", "PUNISHMENT"),
+        ("A person is accused of murder without eyewitnesses. Can circumstantial evidence establish guilt?", "Criminal Law", "EVIDENCE"),
+        ("How is a murder investigation conducted by police?", "Criminal Law", "INVESTIGATION"),
+        ("What evidence can prove theft in a criminal trial?", "Criminal Law", "EVIDENCE"),
+        # B. CYBERCRIME
+        ("A hacker gains unauthorized access to a company's computer system, copies confidential files, and demands ransom. What offences may apply, what investigation procedures are relevant, and what evidence could establish the offence?", "Cybercrime / Information Technology Law", "OFFENCES"),
+        ("A person sends ransomware to a company and demands payment. What offences may apply?", "Cybercrime / Information Technology Law", "OFFENCES"),
+        # C. EVIDENCE LAW
+        ("What evidence is admissible for proving an electronic record in court?", "Law of Evidence", "ADMISSIBILITY"),
+        ("What is the legal test for proving guilt solely through circumstantial evidence?", "Law of Evidence", "EVIDENCE"),
+        # D. CONSTITUTIONAL
+        ("Explain Article 21 of the Constitution of India regarding personal liberty.", "Constitutional Law", "DEFINITION"),
+        ("Explain Article 21 and the Supreme Court principles concerning fair and reasonable procedure.", "Constitutional Law", "PROCEDURE"),
+        # E. CONSUMER
+        ("What remedies are available to a consumer for defective goods?", "Consumer Law", "REMEDY"),
+        ("How to file an appeal against a consumer commission order?", "Consumer Law", "APPEAL"),
+        # F. RTI
+        ("How to file an RTI application before a public authority?", "RTI / Information Law", "PROCEDURE"),
+        ("What is the procedure to appeal an RTI decision by the PIO?", "RTI / Information Law", "APPEAL"),
+        # G. FAMILY LAW
+        ("What is the procedure for divorce under Indian law?", "Family Law", "PROCEDURE"),
+        # H. EMPLOYMENT
+        ("An employee was subjected to wrongful termination. What rights and remedies are available?", "Employment / Labour Law", "REMEDY"),
+        # I. CONTRACT
+        ("What remedies are available for breach of contract?", "Contract Law", "REMEDY"),
+        # J. CORPORATE
+        ("When can a company director be held liable for corporate default?", "Corporate Law", "LIABILITY"),
+        # K. INSOLVENCY
+        ("What is the CIRP process under the Insolvency and Bankruptcy Code?", "Insolvency Law", "PROCEDURE"),
+        # L. TAX
+        ("What is the GST penalty for non-compliance with statutory tax filing?", "Tax / GST Law", "PUNISHMENT"),
+    ]
+
+    for q, expected_domain, expected_facet in category_tests:
+        lq = analyzer.analyze(q)
+        print(f"Query: {q[:60]}...")
+        print(f"  -> Primary Domain: {lq.primary_domain}")
+        print(f"  -> Requested Facets: {lq.requested_facets}")
+
+        assert lq.primary_domain == expected_domain, f"For query '{q}', expected domain '{expected_domain}', got '{lq.primary_domain}'"
+        assert expected_facet in lq.requested_facets or expected_facet.lower() in [f.lower() for f in lq.requested_facets], f"Expected facet '{expected_facet}' in {lq.requested_facets}"
+
+    print("\n-> PASS: All 20 Core Universal Domain Categories correctly classified without keyword hijacking!")
+
+
+def test_cross_domain_negative_tests():
+    print("\n" + "=" * 70)
+    print("TEST 7: Cross-Domain Negative Tests (Wrong-Domain Hijack Prevention)")
+    print("=" * 70)
+
+    analyzer = LegalQuestionAnalyzer()
+
+    # 1. Sexual assault + evidence -> NOT Law of Evidence
+    q1 = "A victim alleges sexual assault. What evidence could establish the offence?"
+    lq1 = analyzer.analyze(q1)
+    print("Q1 Domain:", lq1.primary_domain)
+    assert lq1.primary_domain != "Law of Evidence", "Sexual assault evidence must NOT classify as Law of Evidence!"
+    assert "Criminal Law" in lq1.primary_domain
+
+    # 2. Server hack + evidence -> NOT Law of Evidence
+    q2 = "A company server was hacked. What evidence should investigators preserve?"
+    lq2 = analyzer.analyze(q2)
+    print("Q2 Domain:", lq2.primary_domain)
+    assert lq2.primary_domain != "Law of Evidence", "Hacked server evidence preservation must NOT classify as Law of Evidence!"
+    assert "Cyber" in lq2.primary_domain
+
+    # 3. Consumer defective phone + remedy -> NOT generic remedies, IS Consumer Law
+    q3 = "A consumer purchased a defective phone. What remedy is available?"
+    lq3 = analyzer.analyze(q3)
+    print("Q3 Domain:", lq3.primary_domain)
+    assert lq3.primary_domain == "Consumer Law", "Defective phone remedy must classify as Consumer Law!"
+
+    # 4. State denial of liberty + Article 21 -> NOT Procedural Law, IS Constitutional Law
+    q4 = "A person was denied liberty by state action. Explain Article 21 and the available remedy."
+    lq4 = analyzer.analyze(q4)
+    print("Q4 Domain:", lq4.primary_domain)
+    assert lq4.primary_domain != "Criminal Procedure", "Article 21 state liberty denial must NOT classify as Criminal Procedure!"
+    assert lq4.primary_domain == "Constitutional Law"
+
+    # 5. Unlawful dismissal + remedy -> NOT Evidence Law, IS Employment / Labour Law
+    q5 = "An employee was dismissed unlawfully. What remedy is available?"
+    lq5 = analyzer.analyze(q5)
+    print("Q5 Domain:", lq5.primary_domain)
+    assert lq5.primary_domain != "Law of Evidence", "Unlawful employee dismissal must NOT classify as Law of Evidence!"
+    assert lq5.primary_domain == "Employment / Labour Law"
+
+    print("-> PASS: All 5 Cross-Domain Negative Tests Passed!")
+
+
+def test_required_regression_tests_section_24():
+    print("\n" + "=" * 70)
+    print("TEST 8: Section 24 Regression Tests (8 Mandatory Benchmark Queries)")
+    print("=" * 70)
+
+    analyzer = LegalQuestionAnalyzer()
+
+    # TEST 1: Hacker scenario
+    t1_q = "A hacker gains unauthorized access to a company's computer system, copies confidential files, and demands ransom. What offences may apply, what investigation procedures are relevant, and what evidence could establish the offence?"
+    t1_lq = analyzer.analyze(t1_q)
+    assert t1_lq.primary_domain == "Cybercrime / Information Technology Law", f"Expected Cybercrime domain, got {t1_lq.primary_domain}"
+    assert "OFFENCES" in t1_lq.requested_facets
+    assert "INVESTIGATION" in t1_lq.requested_facets
+    assert "EVIDENCE" in t1_lq.requested_facets
+    assert t1_lq.primary_domain != "Law of Evidence"
+
+    # Verify deterministic answer generation for TEST 1
+    t1_sources = [
+        SourceReference(
+            chunk_id="it_act_43_66",
+            similarity_score=0.95,
+            reranker_score=0.98,
+            source_label="[Source S1]",
+            document_name="Information Technology Act",
+            section_number="66",
+            section_title="Computer related offences",
+            act_short_name="IT Act",
+            text_snippet="If any person, dishonestly or fraudulently, does any act referred to in section 43, he shall be punishable with imprisonment.",
+            evidence_type="STATUTE",
+        ),
+        SourceReference(
+            chunk_id="bnss_176",
+            similarity_score=0.90,
+            reranker_score=0.92,
+            source_label="[Source S2]",
+            document_name="Bharatiya Nagarik Suraksha Sanhita, 2023",
+            section_number="176",
+            section_title="Procedure for investigation",
+            act_short_name="BNSS",
+            text_snippet="Procedure for investigation of cognizable offences including collection of electronic evidence and forensics.",
+            evidence_type="STATUTE",
+        ),
+        SourceReference(
+            chunk_id="bnss_176_dup",
+            similarity_score=0.88,
+            reranker_score=0.89,
+            source_label="[Source S3]",
+            document_name="Bharatiya Nagarik Suraksha Sanhita, 2023",
+            section_number="176",
+            section_title="Procedure for investigation",
+            act_short_name="BNSS",
+            text_snippet="Duplicate chunk of section 176 for testing deduplication.",
+            evidence_type="STATUTE",
+        ),
+    ]
+
+    t1_payload = json.loads(DeterministicAnswerBuilder.build_answer(t1_q, t1_sources))
+    t1_main = t1_payload["mainAnswer"]
+    t1_basis = t1_payload["legalBasis"]
+
+    print("Hacker Query Response Preview:")
+    print(t1_main[:400] + "...\n")
+
+    # Domain label
+    assert t1_payload["legalDomain"] == "Cybercrime / Information Technology Law"
+
+    # Multi-facet sections present
+    assert "Possible Offences" in t1_main
+    assert "Investigation" in t1_main
+    assert "Evidence" in t1_main
+    assert "Application" in t1_main
+    assert "Conclusion" in t1_main
+
+    # Circumstantial evidence lecture ABSENT
+    assert "circumstantial evidence" not in t1_main.lower()
+    assert "unbroken chain" not in t1_main.lower()
+    assert "hypothesis of innocence" not in t1_main.lower()
+    assert "1. A Hacker Gains" not in t1_main
+
+    # Source deduplication: BNSS Section 176 should appear only once in sources
+    sources_section = t1_basis[t1_basis.find("Sources"):]
+    assert sources_section.count("BNSS — Section 176") == 1, f"Expected Section 176 to appear only once, found {sources_section.count('BNSS — Section 176')} times"
+
+    # Strict formatting
+    assert "**" not in t1_main
+    assert "###" not in t1_main
+    assert "---" not in t1_main
+
+    print("-> PASS: TEST 1 (Hacker scenario multi-facet generation) passed!")
+
+    # TEST 2
+    t2_q = "What is the legal test for proving guilt solely through circumstantial evidence?"
+    t2_lq = analyzer.analyze(t2_q)
+    assert t2_lq.primary_domain == "Law of Evidence"
+    t2_payload = json.loads(DeterministicAnswerBuilder.build_answer(t2_q, []))
+    assert "circumstantial" in t2_payload["mainAnswer"].lower()
+    print("-> PASS: TEST 2 (Circumstantial evidence test) passed!")
+
+    # TEST 3
+    t3_q = "What evidence is admissible for proving an electronic record in court?"
+    t3_lq = analyzer.analyze(t3_q)
+    assert t3_lq.primary_domain == "Law of Evidence"
+    t3_payload = json.loads(DeterministicAnswerBuilder.build_answer(t3_q, []))
+    assert "electronic record" in t3_payload["mainAnswer"].lower()
+    assert "circumstantial evidence" not in t3_payload["mainAnswer"].lower()
+    print("-> PASS: TEST 3 (Electronic record admissibility) passed!")
+
+    # TEST 4
+    t4_q = "Someone hacked my company's server and stole customer data. What legal offences may apply?"
+    t4_lq = analyzer.analyze(t4_q)
+    assert t4_lq.primary_domain == "Cybercrime / Information Technology Law"
+    assert "OFFENCES" in t4_lq.requested_facets
+    print("-> PASS: TEST 4 (Server hack stolen customer data offences) passed!")
+
+    # TEST 5
+    t5_q = "My company's server was hacked. What should investigators collect?"
+    t5_lq = analyzer.analyze(t5_q)
+    assert "Cyber" in t5_lq.primary_domain
+    assert "INVESTIGATION" in t5_lq.requested_facets
+    assert "EVIDENCE" in t5_lq.requested_facets
+    print("-> PASS: TEST 5 (Server hack investigators collect) passed!")
+
+    # TEST 6
+    t6_q = "What are the rules for admissibility of electronic evidence under Indian law?"
+    t6_lq = analyzer.analyze(t6_q)
+    assert t6_lq.primary_domain == "Law of Evidence"
+    assert "Cyber" not in t6_lq.primary_domain
+    print("-> PASS: TEST 6 (Rules for admissibility of electronic evidence) passed!")
+
+    # TEST 7
+    t7_q = "A person accesses a computer without authorization and copies files. What offence may be committed?"
+    t7_lq = analyzer.analyze(t7_q)
+    assert t7_lq.primary_domain == "Cybercrime / Information Technology Law"
+    assert "OFFENCES" in t7_lq.requested_facets
+    print("-> PASS: TEST 7 (Unauthorized access and copies files) passed!")
+
+    # TEST 8
+    t8_q = "A person sends ransomware to a company and demands payment. What offences may apply?"
+    t8_lq = analyzer.analyze(t8_q)
+    assert "Cyber" in t8_lq.primary_domain
+    assert "OFFENCES" in t8_lq.requested_facets
+    print("-> PASS: TEST 8 (Ransomware demand payment offences) passed!")
+
+
 if __name__ == "__main__":
     test_universal_question_modeling()
     test_universal_evidence_relevance_filter()
     test_deterministic_answer_builder_style_and_substance()
     test_constitutional_article_distinction()
     test_adaptive_professional_legal_response_generation()
+    test_universal_fact_first_domain_routing_20_categories()
+    test_cross_domain_negative_tests()
+    test_required_regression_tests_section_24()
     print("\n" + "=" * 70)
     print("ALL UNIVERSAL & ADAPTIVE EVALUATION TESTS COMPLETED SUCCESSFULLY!")
     print("=" * 70)

@@ -252,14 +252,16 @@ def build_rag_prompt(
     formatted_context: str,
     max_source_index: int,
     requested_facets: Optional[List[str]] = None,
+    legal_question: Optional[Any] = None,
 ) -> str:
-    """Format the complete prompt with query, grounded context blocks, and requested facets.
+    """Format the complete prompt with query, grounded context blocks, and canonical LegalQuestion context.
 
     Args:
         query: Cleaned user question.
         formatted_context: Context string assembled by LegalContextBuilder.
         max_source_index: Highest source index available (e.g. 5).
         requested_facets: List of facet display names (e.g. ['Definition', 'Punishment']).
+        legal_question: Optional canonical LegalQuestion representation.
 
     Returns:
         Formatted prompt string ready for LLM inference.
@@ -271,18 +273,31 @@ def build_rag_prompt(
     )
     footer = f"\n(Allowed Source Citations: {valid_citations})\n"
 
-    facets_block = ""
-    if requested_facets:
+    directives = []
+    if legal_question:
+        lq = legal_question
+        directives.append(
+            f"PRIMARY LEGAL ISSUE: {getattr(lq, 'primary_legal_issue', '') or getattr(lq, 'primary_issue', '')}\n"
+            f"PRIMARY LEGAL DOMAIN: {getattr(lq, 'primary_domain', '') or getattr(lq, 'legal_domain', '')}\n"
+            f"REQUESTED FACETS: {', '.join(getattr(lq, 'requested_facets', []))}\n\n"
+            f"DIRECTIVES:\n"
+            f"1. Answer the primary legal issue first based on the actual factual conduct.\n"
+            f"2. Use requested facets to determine which specific sections to include (e.g. Possible Offences, Investigation, Evidence, Available Remedies).\n"
+            f"3. Do NOT allow facet terms like 'evidence' or 'investigation' to redefine the legal domain.\n"
+            f"4. Do NOT introduce unrelated doctrines (such as circumstantial evidence, unbroken chain of circumstances, or burden of proof) unless explicitly requested."
+        )
+    elif requested_facets:
         facets_list = ", ".join(requested_facets)
-        facets_block = (
-            f"\nREQUESTED LEGAL FACETS:\n"
-            f"The user query specifically inquires about the following legal facets: {facets_list}.\n"
+        directives.append(
+            f"REQUESTED LEGAL FACETS: {facets_list}\n"
             f"You MUST ensure that your answer comprehensively addresses each requested facet using the provided statutory sources.\n"
-            f"If the provided sources do not establish any requested facet, explicitly state that the provided statutory sources do not establish that facet. NEVER invent provisions.\n"
+            f"Do not introduce unrelated legal doctrines."
         )
 
+    directives_block = ("\n\n" + "\n\n".join(directives)) if directives else ""
+
     return USER_PROMPT_TEMPLATE.format(
-        query=query + facets_block,
+        query=query + directives_block,
         context=formatted_context + footer,
     )
 

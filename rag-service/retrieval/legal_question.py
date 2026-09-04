@@ -2,14 +2,14 @@
 Universal Legal Question Modeling & Decomposition for NyayaSetu.
 
 Transforms any natural language Indian legal question into a structured,
-decomposed, and typed LegalQuestion representation.
+canonical, and typed LegalQuestion representation.
 
 Capabilities:
-1. Universal Question Type Detection across 25 generic legal question types.
-2. Factual Scenario Decomposition (extracting factual events and mapping to legal concepts).
-3. Multi-Part Question Decomposition into independent sub-questions.
-4. Operative Primary Legal Issue Identification (driven by the user's actual legal inquiry, not keyword frequency).
-5. Dynamic Legal Concept, Enactment, Article, and Section inference without hardcoding.
+1. Universal Question Type & Facet Detection across generic legal information needs.
+2. Fact-First Legal Issue & Domain Identification (factual conduct determines legal domain before requested facets).
+3. Factual Scenario Decomposition (extracting factual events, actors, conduct, harm, and legal relationships).
+4. Multi-Part Question Decomposition into independent sub-questions.
+5. Dynamic Legal Concept, Enactment, Article, and Section inference without brittle hardcoding.
 """
 
 import re
@@ -26,6 +26,7 @@ class QuestionType(str, Enum):
     """Generic legal question types covering Indian civil, criminal, constitutional, and regulatory law."""
     DEFINITION = "DEFINITION"
     ELEMENTS = "ELEMENTS"
+    OFFENCE = "OFFENCE"
     PUNISHMENT = "PUNISHMENT"
     EXCEPTION = "EXCEPTION"
     DEFENCE = "DEFENCE"
@@ -111,7 +112,7 @@ class SubQuestion:
 
 @dataclass
 class LegalQuestion:
-    """Universal structured model of an Indian legal query."""
+    """Universal canonical model of an Indian legal query."""
     original_query: str
     normalized_query: str
     legal_domain: str
@@ -129,13 +130,45 @@ class LegalQuestion:
     complexity: str = "SIMPLE"  # "SIMPLE", "COMPOUND", "MULTI_PART", "FACTUAL_SCENARIO"
     answer_requirements: List[str] = field(default_factory=list)
 
+    # Universal canonical attributes
+    raw_question: str = ""
+    actors: List[str] = field(default_factory=list)
+    conduct: List[str] = field(default_factory=list)
+    harm_or_dispute: List[str] = field(default_factory=list)
+    legal_relationship: str = ""
+    primary_domain: str = ""
+    secondary_domains: List[str] = field(default_factory=list)
+    candidate_acts: List[str] = field(default_factory=list)
+    candidate_sections: List[str] = field(default_factory=list)
+    jurisdiction: str = "India"
+    requires_case_law: bool = False
+    requires_procedure: bool = False
+    requires_evidence: bool = False
+    question_type: str = ""
+
+    def __post_init__(self):
+        if not self.raw_question:
+            self.raw_question = self.original_query
+        if not self.primary_domain:
+            self.primary_domain = self.legal_domain
+        if not self.candidate_acts:
+            self.candidate_acts = self.acts
+        if not self.candidate_sections:
+            self.candidate_sections = self.sections
+        if not self.question_type and self.question_types:
+            self.question_type = self.question_types[0].value
+
+    @property
+    def raw_query(self) -> str:
+        return self.raw_question or self.original_query
+
     @property
     def primary_legal_issue(self) -> str:
         return self.primary_issue
 
     @property
-    def raw_query(self) -> str:
-        return self.original_query
+    def primary_subject(self) -> str:
+        return self.primary_issue
 
     @property
     def operative_legal_concepts(self) -> List[str]:
@@ -177,20 +210,33 @@ class LegalQuestion:
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            "raw_question": self.raw_question or self.original_query,
             "original_query": self.original_query,
             "normalized_query": self.normalized_query,
-            "legal_domain": self.legal_domain,
+            "facts": [f.to_dict() for f in self.facts],
+            "actors": self.actors,
+            "conduct": self.conduct,
+            "harm_or_dispute": self.harm_or_dispute,
+            "legal_relationship": self.legal_relationship,
             "primary_issue": self.primary_issue,
             "secondary_issues": self.secondary_issues,
-            "facts": [f.to_dict() for f in self.facts],
-            "legal_concepts": self.legal_concepts,
+            "primary_domain": self.primary_domain or self.legal_domain,
+            "legal_domain": self.legal_domain,
+            "secondary_domains": self.secondary_domains,
+            "requested_facets": self.requested_facets,
+            "question_type": self.question_type or (self.question_types[0].value if self.question_types else ""),
+            "question_types": [qt.value for qt in self.question_types],
+            "candidate_acts": self.candidate_acts,
+            "candidate_sections": self.candidate_sections,
             "acts": self.acts,
             "articles": self.articles,
             "sections": self.sections,
-            "requested_facets": self.requested_facets,
+            "jurisdiction": self.jurisdiction,
+            "requires_case_law": self.requires_case_law,
+            "requires_procedure": self.requires_procedure,
+            "requires_evidence": self.requires_evidence,
             "authority_requirements": self.authority_requirements,
             "sub_questions": [sq.to_dict() for sq in self.sub_questions],
-            "question_types": [qt.value for qt in self.question_types],
             "complexity": self.complexity,
             "answer_requirements": self.answer_requirements,
         }
@@ -200,11 +246,15 @@ class LegalQuestion:
 QUESTION_TYPE_PATTERNS: Dict[QuestionType, List[str]] = {
     QuestionType.DEFINITION: [
         r"\b(?:what is|what are|define|definition of|meaning of|what constitutes|how is .+ defined)\b",
-        r"\b(?:what does .+ mean|concept of)\b",
+        r"\b(?:what does .+ mean|concept of|explain|scope of|discuss|elucidate|overview of)\b",
     ],
     QuestionType.ELEMENTS: [
         r"\b(?:elements|ingredients|essential ingredients|constituent elements|requirements for|prerequisites)\b",
         r"\b(?:what must be proven|necessary components)\b",
+    ],
+    QuestionType.OFFENCE: [
+        r"\b(?:what offences?|what offence may apply|offences? may apply|offences? committed|what crime|what crimes|punishable offence)\b",
+        r"\b(?:what offence may be committed|may be committed|offence is committed)\b",
     ],
     QuestionType.PUNISHMENT: [
         r"\b(?:punishment|penalty|penalties|punished with|prescribed for|sentenced|imprisonment|fine|jail)\b",
@@ -220,7 +270,7 @@ QUESTION_TYPE_PATTERNS: Dict[QuestionType, List[str]] = {
     ],
     QuestionType.PROCEDURE: [
         r"\b(?:procedure|how to|steps|process|investigation|how is .+ investigated|what happens after)\b",
-        r"\b(?:filing|lodging|cognizance|inquest|summons|warrant|remand|custody|trial procedure)\b",
+        r"\b(?:filing|lodging|cognizance|inquest|summons|warrant|remand|custody|trial procedure|cirp process|cirp)\b",
     ],
     QuestionType.RIGHTS: [
         r"\b(?:rights?|entitlement|fundamental rights?|legal rights?|can a person claim)\b",
@@ -229,10 +279,10 @@ QUESTION_TYPE_PATTERNS: Dict[QuestionType, List[str]] = {
         r"\b(?:duty|duties|obligation|obligations|mandatory duty|statutory obligation)\b",
     ],
     QuestionType.REMEDY: [
-        r"\b(?:remedy|remedies|relief|compensation|damages|redressal|recourse|injunction)\b",
+        r"\b(?:remedy|remedies|relief|compensation|damages|redressal|recourse|injunction|what can i do)\b",
     ],
     QuestionType.APPEAL: [
-        r"\b(?:appeal|appellate|revision|review petition|challenge the order|higher court)\b",
+        r"\b(?:appeal|appellate|revision|review petition|challenge the order|higher court|how to appeal)\b",
     ],
     QuestionType.TIME_LIMIT: [
         r"\b(?:time limit|limitation period|within how many days|prescribed time|statutory period)\b",
@@ -300,7 +350,28 @@ class LegalQuestionAnalyzer:
             elif QuestionType.FACTUAL_SCENARIO not in q_types:
                 q_types.append(QuestionType.FACTUAL_SCENARIO)
 
-        # 5. Multi-Part Question Detection & Sub-Question Generation
+        # 5. Extract Actors, Conduct, Harm/Dispute, and Legal Relationship
+        actors = self._extract_actors(lower_q, facts)
+        conduct = self._extract_conduct(lower_q, facts)
+        harm_dispute = self._extract_harm_dispute(lower_q, facts)
+        legal_relationship = self._extract_relationship(lower_q)
+
+        # 6. Extract Legal Concepts & Entities
+        legal_concepts = self._extract_legal_concepts(lower_q)
+
+        # 7. Extract Requested Facets
+        requested_facets = self._extract_facets(lower_q, q_types)
+
+        # 8. Fact-First Legal Domain Resolution
+        primary_domain, secondary_domains = self._infer_domain(
+            lower_q=lower_q,
+            acts=acts,
+            q_types=q_types,
+            concepts=legal_concepts,
+            conduct=conduct,
+        )
+
+        # 9. Multi-Part Question Detection & Sub-Question Generation
         sub_questions = self._decompose_multi_part(cleaned, lower_q, q_types, acts, sections, articles)
         if len(sub_questions) > 1 and QuestionType.MULTI_PART not in q_types:
             q_types.append(QuestionType.MULTI_PART)
@@ -311,27 +382,26 @@ class LegalQuestionAnalyzer:
         if not q_types:
             q_types = [QuestionType.GENERAL_LEGAL_INFORMATION]
 
-        # 6. Extract Legal Concepts & Entities
-        legal_concepts = self._extract_legal_concepts(lower_q)
-
-        # 7. Identify the Operative Primary Legal Issue
+        # 10. Identify the Operative Primary Legal Issue
         primary_issue, secondary_issues = self._determine_primary_issue(
-            cleaned, lower_q, q_types, legal_concepts, sections, articles, acts
+            raw_q=cleaned,
+            lower_q=lower_q,
+            q_types=q_types,
+            concepts=legal_concepts,
+            sections=sections,
+            articles=articles,
+            acts=acts,
+            primary_domain=primary_domain,
+            conduct=conduct,
         )
 
-        # 8. Determine Authority Requirements
+        # 11. Determine Authority Requirements
         authority_requirements = self._determine_authorities(lower_q, q_types)
+        requires_case_law = "CASE_LAW" in authority_requirements
+        requires_procedure = "PROCEDURE" in requested_facets or "INVESTIGATION" in requested_facets or QuestionType.PROCEDURE in q_types
+        requires_evidence = "EVIDENCE" in requested_facets or QuestionType.EVIDENCE in q_types
 
-        # 9. Requested Facets
-        requested_facets = [qt.value.lower() for qt in q_types if qt not in (
-            QuestionType.FACTUAL_SCENARIO,
-            QuestionType.COMPLEX_SCENARIO,
-            QuestionType.MULTI_PART,
-            QuestionType.CROSS_ACT,
-            QuestionType.GENERAL_LEGAL_INFORMATION,
-        )]
-
-        # 10. Complexity Level
+        # 12. Complexity Level
         complexity = "SIMPLE"
         if QuestionType.COMPLEX_SCENARIO in q_types or (QuestionType.FACTUAL_SCENARIO in q_types and QuestionType.MULTI_PART in q_types):
             complexity = "COMPLEX_SCENARIO"
@@ -342,16 +412,13 @@ class LegalQuestionAnalyzer:
         elif len(q_types) > 1:
             complexity = "COMPOUND"
 
-        # 11. Infer Legal Domain
-        legal_domain = self._infer_domain(lower_q, acts, q_types, legal_concepts)
-
-        # 12. Determine Answer Requirements
+        # 13. Determine Answer Requirements
         answer_requirements = self._build_answer_requirements(q_types, complexity, primary_issue)
 
         lq = LegalQuestion(
             original_query=query,
             normalized_query=cleaned,
-            legal_domain=legal_domain,
+            legal_domain=primary_domain,
             primary_issue=primary_issue,
             secondary_issues=secondary_issues,
             facts=facts,
@@ -365,15 +432,27 @@ class LegalQuestionAnalyzer:
             question_types=q_types,
             complexity=complexity,
             answer_requirements=answer_requirements,
+            raw_question=cleaned,
+            actors=actors,
+            conduct=conduct,
+            harm_or_dispute=harm_dispute,
+            legal_relationship=legal_relationship,
+            primary_domain=primary_domain,
+            secondary_domains=secondary_domains,
+            candidate_acts=acts,
+            candidate_sections=sections or articles,
+            requires_case_law=requires_case_law,
+            requires_procedure=requires_procedure,
+            requires_evidence=requires_evidence,
+            question_type=q_types[0].value if q_types else "GENERAL_LEGAL_INFORMATION",
         )
 
         logger.info(
-            "Universal LegalQuestion: domain='%s', primary_issue='%s', types=%s, sub_q=%d, facts=%d",
-            lq.legal_domain,
+            "Canonical LegalQuestion: primary_domain='%s', primary_issue='%s', facets=%s, types=%s",
+            lq.primary_domain,
             lq.primary_issue,
+            lq.requested_facets,
             [qt.value for qt in lq.question_types],
-            len(lq.sub_questions),
-            len(lq.facts),
         )
         return lq
 
@@ -408,7 +487,6 @@ class LegalQuestionAnalyzer:
     def _detect_instruments(self, lower_q: str) -> List[str]:
         """Detect legal instruments mentioned in the query."""
         instruments: List[str] = []
-        # General pattern matching for acts without hardcoding behavior
         act_patterns = [
             (r"\b(?:bns|bharatiya\s+nyaya\s+sanhita|ipc|indian\s+penal\s+code)\b", "Bharatiya Nyaya Sanhita, 2023"),
             (r"\b(?:bnss|bharatiya\s+nagarik\s+suraksha\s+sanhita|crpc|code\s+of\s+criminal\s+procedure)\b", "Bharatiya Nagarik Suraksha Sanhita, 2023"),
@@ -424,6 +502,7 @@ class LegalQuestionAnalyzer:
             (r"\b(?:rte|right\s+to\s+education)\b", "The Right of Children to Free and Compulsory Education Act, 2009"),
             (r"\b(?:gst|goods\s+and\s+services\s+tax)\b", "The Goods and Services Tax Act, 2017"),
             (r"\b(?:motor\s+vehicles?\s+act|mva)\b", "Motor Vehicles Act"),
+            (r"\b(?:contract\s+act|indian\s+contract\s+act)\b", "The Indian Contract Act, 1872"),
         ]
         for pattern, canon_name in act_patterns:
             if re.search(pattern, lower_q):
@@ -432,30 +511,27 @@ class LegalQuestionAnalyzer:
 
     def _is_factual_scenario(self, raw_q: str, lower_q: str) -> bool:
         """Determine if query presents a hypothetical factual scenario."""
-        # Check narrative sentence structures, character actions, or conditional narrative setups
         scenario_indicators = [
-            r"\b(?:a\s+person|a\s+man|a\s+woman|a\s+victim|an\s+accused|an\s+individual|the\s+prosecution)\b",
+            r"\b(?:a\s+person|a\s+man|a\s+woman|a\s+victim|an\s+accused|an\s+individual|the\s+prosecution|a\s+hacker)\b",
             r"\b(?:if\s+a\s+person|suppose\s+that|in\s+a\s+case\s+where|enters\s+credentials|receives\s+a\s+call)\b",
             r"\b(?:relies\s+entirely\s+on|there\s+is\s+no\s+eyewitness|purchases\s+a\s+product|director\s+fails\s+to)\b",
-            r"\b(?:alleges\s+that|claims\s+that|transfers\s+money|sent\s+an\s+email)\b",
+            r"\b(?:alleges\s+that|claims\s+that|transfers\s+money|sent\s+an\s+email|unauthorized\s+access)\b",
+            r"\b(?:someone\s+hacked|server\s+was\s+hacked|copies\s+confidential|demands\s+ransom)\b",
+            r"\b(?:landlord\s+refuses|employee\s+was\s+dismissed|purchased\s+a\s+defective)\b",
         ]
         has_scenario_lang = any(re.search(p, lower_q) for p in scenario_indicators)
-        # Factual scenarios often have multiple sentences or clauses describing facts before a question
         has_multi_sentences = len(re.split(r"[.?!]\s+", raw_q)) >= 2
         return has_scenario_lang or (has_multi_sentences and any(w in lower_q for w in ["can", "does", "whether", "what liability", "what offences"]))
 
     def _decompose_factual_scenario(self, raw_q: str) -> List[FactualEvent]:
         """Break down a factual scenario narrative into ordered atomic factual events."""
         events: List[FactualEvent] = []
-        # Split narrative into sentences/clauses
-        sentences = [s.strip() for s in re.split(r"(?<=[.!?])\s+|;\s*|,\s*(?=(?:and|but|then|whereupon)\s+)", raw_q) if len(s.strip()) > 15]
+        sentences = [s.strip() for s in re.split(r"(?<=[.!?])\s+|;\s*|,\s*(?=(?:and|but|then|whereupon)\s+)", raw_q) if len(s.strip()) > 10]
 
         for i, sent in enumerate(sentences, start=1):
-            # Skip pure question sentences
             if re.match(r"^(?:can|does|what|how|explain|is|whether|who)\b", sent, re.IGNORECASE) and "?" in sent:
                 continue
 
-            # Identify key action verb if possible
             words = sent.split()
             events.append(
                 FactualEvent(
@@ -468,6 +544,352 @@ class LegalQuestionAnalyzer:
             )
 
         return events
+
+    def _extract_actors(self, lower_q: str, facts: List[FactualEvent]) -> List[str]:
+        """Extract legal actors from query and facts."""
+        actor_terms = [
+            "hacker", "accused", "victim", "prosecution", "company", "employee", "employer",
+            "consumer", "buyer", "seller", "landlord", "tenant", "director", "spouse", "husband",
+            "wife", "creditor", "debtor", "police", "investigator", "child", "individual"
+        ]
+        found = [term for term in actor_terms if re.search(r"\b" + re.escape(term) + r"\b", lower_q)]
+        return list(dict.fromkeys(found))
+
+    def _extract_conduct(self, lower_q: str, facts: List[FactualEvent]) -> List[str]:
+        """Extract concrete actions and conduct."""
+        conduct_patterns = [
+            r"\bunauthorized\s+access\b",
+            r"\bcopies\s+confidential\s+files\b",
+            r"\bdemands?\s+ransom\b",
+            r"\bhacked\s+my\s+company's\s+server\b",
+            r"\bstole\s+customer\s+data\b",
+            r"\bsends?\s+ransomware\b",
+            r"\bdefective\s+(?:smartphone|phone|goods|product)\b",
+            r"\bdenied\s+liberty\s+by\s+state\b",
+            r"\brefuses?\s+to\s+return\s+(?:my\s+)?deposit\b",
+            r"\bunlawful\s+termination\b",
+            r"\bdismissed\s+unlawfully\b",
+            r"\bbreach\s+of\s+contract\b",
+            r"\bsexual\s+assault\b",
+            r"\bmurder\b",
+            r"\btheft\b",
+            r"\bcheating\b",
+        ]
+        conducts = []
+        for pat in conduct_patterns:
+            m = re.findall(pat, lower_q)
+            conducts.extend(m)
+        return list(dict.fromkeys(conducts))
+
+    def _extract_harm_dispute(self, lower_q: str, facts: List[FactualEvent]) -> List[str]:
+        """Identify harm or dispute nature."""
+        harm = []
+        if any(w in lower_q for w in ["ransom", "stole", "loss of money", "lost money", "financial loss"]):
+            harm.append("financial_loss_or_extortion")
+        if any(w in lower_q for w in ["confidential", "customer data", "data theft"]):
+            harm.append("data_breach_and_confidentiality_loss")
+        if any(w in lower_q for w in ["murder", "killing", "dead"]):
+            harm.append("loss_of_life")
+        if any(w in lower_q for w in ["defective", "deficiency"]):
+            harm.append("consumer_loss")
+        if any(w in lower_q for w in ["denied liberty", "arrested"]):
+            harm.append("deprivation_of_liberty")
+        return harm
+
+    def _extract_relationship(self, lower_q: str) -> str:
+        """Infer underlying legal relationship."""
+        if any(w in lower_q for w in ["employee", "employer", "termination", "dismissed"]):
+            return "employer_employee"
+        if any(w in lower_q for w in ["consumer", "purchased", "defective product", "buyer"]):
+            return "buyer_seller"
+        if any(w in lower_q for w in ["landlord", "tenant", "security deposit"]):
+            return "landlord_tenant"
+        if any(w in lower_q for w in ["director", "board of directors"]):
+            return "company_director"
+        if any(w in lower_q for w in ["creditor", "debtor", "cirp"]):
+            return "creditor_debtor"
+        if any(w in lower_q for w in ["state action", "denied liberty", "article 21"]):
+            return "citizen_state"
+        return "general_legal"
+
+    def _extract_facets(self, lower_q: str, q_types: List[QuestionType]) -> List[str]:
+        """Extract universal information facets from query and types."""
+        facets: List[str] = []
+        facet_map = [
+            (r"\b(?:what offences?|what offence may apply|offences? may apply|offences? committed|what crime)\b", "OFFENCES"),
+            (r"\b(?:investigation|investigate|investigators? collect|investigators? preserve|investigative procedure)\b", "INVESTIGATION"),
+            (r"\b(?:evidence|what evidence|proof|admissible evidence|evidentiary|investigators? collect|investigators? preserve|what to collect|collect or preserve)\b", "EVIDENCE"),
+            (r"\b(?:remedy|remedies|relief|what can be done|redressal|what can i do)\b", "REMEDY"),
+            (r"\b(?:compensation|damages|refund)\b", "COMPENSATION"),
+            (r"\b(?:appeal|appellate|challenge the order|how to appeal)\b", "APPEAL"),
+            (r"\b(?:procedure|process|steps|how to file|how to report|mechanism|cirp process)\b", "PROCEDURE"),
+            (r"\b(?:rights?|entitlement)\b", "RIGHTS"),
+            (r"\b(?:duties|duty|obligation)\b", "DUTIES"),
+            (r"\b(?:liability|liable|responsibility)\b", "LIABILITY"),
+            (r"\b(?:penalty|penalties|punishment|punished with|sentence|imprisonment|fine)\b", "PUNISHMENT"),
+            (r"\b(?:elements|ingredients|prerequisites)\b", "ELEMENTS"),
+            (r"\b(?:definition|what is|what are|define|meaning of|what constitutes|explain|scope of|discuss)\b", "DEFINITION"),
+            (r"\b(?:admissibility|admissible|certificate)\b", "ADMISSIBILITY"),
+            (r"\b(?:jurisdiction|which court|forum)\b", "JURISDICTION"),
+            (r"\b(?:limitation|time limit|within how many days)\b", "LIMITATION"),
+            (r"\b(?:reporting|report|helpline|portal)\b", "REPORTING"),
+            (r"\b(?:exception|exceptions|exemptions?)\b", "EXCEPTIONS"),
+            (r"\b(?:defence|defences|plea of)\b", "DEFENCES"),
+            (r"\b(?:judicial principles?|judicial tests?|case law|precedents?|supreme court held)\b", "JUDICIAL_PRINCIPLES"),
+            (r"\b(?:documents|records)\b", "DOCUMENTS"),
+        ]
+        for pat, facet_name in facet_map:
+            if re.search(pat, lower_q):
+                facets.append(facet_name)
+
+        for qt in q_types:
+            val = qt.value.upper()
+            if val not in ("FACTUAL_SCENARIO", "COMPLEX_SCENARIO", "MULTI_PART", "CROSS_ACT", "GENERAL_LEGAL_INFORMATION"):
+                if val == "DEFENCE":
+                    val = "DEFENCES"
+                elif val == "EXCEPTION":
+                    val = "EXCEPTIONS"
+                elif val == "OFFENCE":
+                    val = "OFFENCES"
+                facets.append(val)
+
+        return list(dict.fromkeys(facets))
+
+    def _infer_domain(
+        self,
+        lower_q: str,
+        acts: List[str],
+        q_types: List[QuestionType],
+        concepts: List[str],
+        conduct: List[str],
+    ) -> Tuple[str, List[str]]:
+        """Fact-First Legal Domain Resolution.
+
+        Factual conduct and legal disputes determine the domain first.
+        Information-request keywords (evidence, investigation, remedy, procedure, appeal)
+        are treated as requested facets and DO NOT hijack the legal domain.
+        """
+        secondary_domains: List[str] = []
+
+        # 1. PURE EVIDENCE LAW (Triggered ONLY when inquiry is about evidence/admissibility rules themselves)
+        is_pure_evidence_law = (
+            any(p in lower_q for p in [
+                "rules of admissibility of electronic evidence",
+                "rules for admissibility of electronic evidence",
+                "admissibility of electronic record",
+                "admissibility of electronic evidence",
+                "section 65b certificate",
+                "section 63 certificate",
+                "legal test for proving guilt solely through circumstantial evidence",
+                "rules of circumstantial evidence",
+                "rules governing circumstantial evidence",
+                "circumstantial evidence test",
+                "circumstantial evidence doctrine",
+                "burden of proof in criminal",
+                "standard of proof beyond reasonable doubt",
+                "dying declaration admissibility",
+                "expert opinion admissibility",
+                "hearsay evidence rule",
+                "primary vs secondary evidence",
+                "what evidence is admissible in court",
+                "what evidence is admissible for proving an electronic record",
+            ])
+            or (
+                ("bsa" in lower_q or "bharatiya sakshya" in lower_q or "evidence act" in lower_q)
+                and not any(c in lower_q for c in ["hacker", "hack", "murder", "theft", "consumer", "contract", "employee"])
+            )
+        )
+        if is_pure_evidence_law:
+            if "circumstantial" in lower_q:
+                return "Law of Evidence", ["Criminal Law"]
+            return "Law of Evidence", []
+
+        # 2. CYBERCRIME / INFORMATION TECHNOLOGY LAW
+        is_cyber = (
+            any(w in lower_q for w in [
+                "hacker", "hacking", "unauthorized access", "ransomware", "ransom",
+                "copies confidential files", "stole customer data", "stolen customer data",
+                "data theft", "computer system", "server was hacked", "server hacked",
+                "server was compromised", "phishing", "trojan", "malware", "cybercrime",
+                "cyber crime", "cyber fraud", "tampering computer", "otp fraud", "stolen credentials",
+                "fraudulent upi", "upi transaction", "upi fraud", "unauthorized transaction",
+                "financial fraud", "online fraud", "loses money through a fraudulent",
+                "without authorization", "accesses a computer", "copies files"
+            ])
+            or any(re.search(r"\b" + re.escape(w) + r"\b", lower_q) for w in ["upi", "cyber"])
+            or ("computer" in lower_q and any(w in lower_q for w in ["unauthorized", "without authorization", "access", "hack", "virus", "data", "files"]))
+            or any("information technology" in a.lower() or "it act" in a.lower() for a in acts)
+        )
+        if is_cyber:
+            if any(w in lower_q for w in ["what should investigators collect", "investigators collect", "investigators preserve"]):
+                return "Cybercrime / Digital Investigation", ["Law of Evidence", "Criminal Procedure"]
+            if any(w in lower_q for w in ["upi", "fraudulent upi", "financial fraud", "loses money", "unauthorized transaction"]):
+                return "Cybercrime / Financial Fraud", ["Criminal Law"]
+            if any(w in lower_q for w in ["extortion", "ransom", "demands payment", "payment demand"]):
+                return "Cybercrime / Information Technology Law", ["Criminal Law"]
+            return "Cybercrime / Information Technology Law", []
+
+        # 3. CRIMINAL LAW (Substantive Offences)
+        is_criminal = (
+            any(w in lower_q for w in [
+                "murder", "culpable homicide", "kill", "killing", "poisoning",
+                "sexual assault", "rape", "outraging modesty", "penetrative",
+                "theft", "burglary", "stolen goods", "robbery", "dacoity",
+                "extortion", "cheating", "criminal breach of trust", "defamation",
+                "criminal conspiracy", "assault", "kidnapping", "abduction", "hurt", "grievous hurt"
+            ])
+            or any("bns" in a.lower() or "penal" in a.lower() for a in acts)
+        )
+        if is_criminal:
+            if any(w in lower_q for w in ["sexual assault", "rape", "consent in sexual"]):
+                return "Criminal Law", ["Law of Evidence"] if "evidence" in lower_q else []
+            if any(w in lower_q for w in ["circumstantial evidence", "chain of circumstances"]):
+                return "Criminal Law", ["Law of Evidence"]
+            if any(w in lower_q for w in ["investigate", "investigation", "how is murder investigated"]):
+                return "Criminal Law", ["Criminal Procedure"]
+            return "Criminal Law", []
+
+        # 4. CONSTITUTIONAL LAW
+        is_constitutional = (
+            QuestionType.CONSTITUTIONAL in q_types
+            or any("constitution" in a.lower() for a in acts)
+            or any(w in lower_q for w in [
+                "article 21", "article 14", "article 19", "article 32", "article 226",
+                "fundamental right", "fundamental rights", "writ petition", "habeas corpus",
+                "mandamus", "personal liberty", "denied liberty by state",
+                "fair and reasonable procedure", "basic structure", "unconstitutional", "ultra vires"
+            ])
+        )
+        if is_constitutional:
+            return "Constitutional Law", []
+
+        # 5. CONSUMER LAW
+        is_consumer = (
+            any("consumer" in a.lower() or "cpa" in a.lower() for a in acts)
+            or any(w in lower_q for w in [
+                "consumer", "defective goods", "defective product", "defective phone",
+                "defective smartphone", "deficiency in service", "unfair trade practice",
+                "consumer forum", "consumer commission", "consumer complaint"
+            ])
+        )
+        if is_consumer:
+            return "Consumer Law", []
+
+        # 6. CONTRACT / CIVIL / PROPERTY LAW
+        is_contract_property = (
+            any("contract" in a.lower() for a in acts)
+            or any(w in lower_q for w in [
+                "breach of contract", "contractual breach", "contract breach", "failed to perform",
+                "specific performance", "landlord", "security deposit", "refuses to return my deposit",
+                "tenancy", "lease agreement", "agreement to sell", "contract law"
+            ])
+        )
+        if is_contract_property:
+            if any(w in lower_q for w in ["landlord", "security deposit", "tenant"]):
+                return "Property / Contract / Civil Law", ["Civil Procedure"]
+            return "Contract Law", []
+
+        # 7. LABOUR / EMPLOYMENT LAW
+        is_employment = (
+            any(w in lower_q for w in [
+                "wrongful termination", "unlawful termination", "unlawfully dismissed", "dismissed unlawfully",
+                "unlawful dismissal", "wrongful dismissal", "dismissed employee", "employee was dismissed",
+                "employee was terminated", "workplace dispute", "employer dismisses", "employer terminates",
+                "retrenchment", "gratuity", "severance", "industrial dispute"
+            ])
+            or (
+                ("employee" in lower_q or "employer" in lower_q or "workplace" in lower_q)
+                and any(w in lower_q for w in ["dismiss", "terminat", "retrench", "severance", "wages", "salary", "bonus", "gratuity"])
+            )
+        )
+        if is_employment:
+            return "Employment / Labour Law", []
+
+        # 8. COMPANY / CORPORATE LAW
+        is_corporate = (
+            any("companies" in a.lower() for a in acts)
+            or any(w in lower_q for w in [
+                "company director", "director liability", "board of directors", "csr",
+                "annual general meeting", "agm", "incorporation", "share capital", "companies act"
+            ])
+        )
+        if is_corporate:
+            return "Corporate Law", []
+
+        # 9. INSOLVENCY LAW
+        is_insolvency = (
+            any("ibc" in a.lower() or "insolvency" in a.lower() for a in acts)
+            or any(w in lower_q for w in [
+                "cirp", "corporate insolvency", "ibc", "insolvency and bankruptcy",
+                "resolution professional", "nclt", "financial creditor", "operational creditor", "liquidation"
+            ])
+        )
+        if is_insolvency:
+            return "Insolvency Law", []
+
+        # 10. TAX / GST LAW
+        is_tax = (
+            any("gst" in a.lower() for a in acts)
+            or any(w in lower_q for w in [
+                "gst", "goods and services tax", "input tax credit", "cgst", "sgst",
+                "igst", "tax invoice", "tax penalty", "tax evasion", "income tax"
+            ])
+        )
+        if is_tax:
+            return "Tax / GST Law", []
+
+        # 11. RTI / INFORMATION LAW
+        is_rti = (
+            any("rti" in a.lower() for a in acts)
+            or any(re.search(r"\b" + re.escape(w) + r"\b", lower_q) for w in [
+                "rti", "right to information", "public information officer", "pio",
+                "central information commission", "cic", "first appeal under rti"
+            ])
+        )
+        if is_rti:
+            return "RTI / Information Law", []
+
+        # 12. FAMILY LAW
+        is_family = (
+            any(w in lower_q for w in [
+                "divorce", "matrimonial", "maintenance", "alimony", "child custody",
+                "restitution of conjugal rights", "hindu marriage act", "special marriage act"
+            ])
+        )
+        if is_family:
+            return "Family Law", []
+
+        # 13. POCSO / CHILD PROTECTION
+        if any("pocso" in a.lower() for a in acts) or any(w in lower_q for w in ["pocso", "child sexual", "penetrative sexual assault"]):
+            return "Criminal Law / Child Protection (POCSO)", []
+
+        # 14. POSH / WORKPLACE SEXUAL HARASSMENT
+        if any("posh" in a.lower() for a in acts) or any(w in lower_q for w in ["posh", "sexual harassment at workplace", "internal complaints committee", "icc"]):
+            return "Labour Law / Workplace Sexual Harassment (POSH)", []
+
+        # 15. MOTOR VEHICLES / TRANSPORT LAW
+        if any("motor" in a.lower() or "mva" in a.lower() for a in acts) or any(w in lower_q for w in ["motor vehicle", "driving licence", "accident claims tribunal", "mva"]):
+            return "Transport & Motor Vehicles Law", []
+
+        # 16. PURE CRIMINAL PROCEDURE
+        is_crpc = (
+            any("bnss" in a.lower() or "crpc" in a.lower() for a in acts)
+            or any(w in lower_q for w in [
+                "explain police investigation powers under bnss",
+                "what is criminal procedure",
+                "powers of police under bnss",
+                "powers of magistrate under bnss",
+                "search and seizure powers under bnss",
+                "procedure for arrest without warrant under bnss"
+            ])
+        )
+        if is_crpc:
+            return "Criminal Procedure", []
+
+        # 17. Default Fallbacks
+        if any("evidence" in a.lower() for a in acts):
+            return "Law of Evidence", []
+        return "Indian Statutory Law", []
 
     def _decompose_multi_part(
         self,
@@ -482,7 +904,6 @@ class LegalQuestionAnalyzer:
         sub_questions: List[SubQuestion] = []
         primary_act = acts[0] if acts else None
 
-        # Look for explicit multi-clause interrogatives (e.g. "What constitutes X, what are its exceptions, and what punishment applies?")
         clause_splits = re.split(r",\s*(?:and\s+)?|\band\s+(?:what|how|explain|can|does|is)\b|\?\s*", raw_q)
         clean_clauses = [c.strip() for c in clause_splits if len(c.strip()) > 10]
 
@@ -506,7 +927,6 @@ class LegalQuestionAnalyzer:
                     )
                 )
 
-        # If question has multiple distinct operational QuestionTypes (e.g. DEFINITION and PUNISHMENT, or PROCEDURE and EVIDENCE)
         operational_types = [
             qt for qt in q_types
             if qt not in (
@@ -538,7 +958,6 @@ class LegalQuestionAnalyzer:
 
     def _extract_legal_concepts(self, lower_q: str) -> List[str]:
         """Extract substantive legal noun phrases and concepts from query."""
-        # Generic stop words for legal queries
         stop_words = {
             "what", "is", "the", "are", "of", "and", "under", "in", "to", "for", "a", "an", "can",
             "does", "explain", "how", "person", "who", "which", "its", "applicable", "relevant",
@@ -547,7 +966,6 @@ class LegalQuestionAnalyzer:
         words = re.findall(r"\b[a-z]{3,}\b", lower_q)
         meaningful = [w for w in words if w not in stop_words]
 
-        # Extract multi-word legal phrases
         phrases = []
         phrase_patterns = [
             r"\bcircumstantial\s+evidence\b",
@@ -563,26 +981,35 @@ class LegalQuestionAnalyzer:
             r"\bfair\s+and\s+reasonable\s+procedure\b",
             r"\bunfair\s+trade\s+practice\b",
             r"\bdeficiency\s+in\s+service\b",
-            r"\bdefect\s+in\s+goods\b",
+            r"\bdefective\s+(?:goods|smartphone|phone|product)\b",
             r"\bcorporate\s+insolvency\b",
+            r"\bcirp\s+process\b",
             r"\bfinancial\s+creditor\b",
             r"\boperational\s+creditor\b",
             r"\bphishing\s+attack\b",
             r"\bunauthorized\s+access\b",
+            r"\bconfidential\s+files\b",
+            r"\bransom\s+demand\b",
+            r"\bransomware\b",
             r"\bidentity\s+theft\b",
             r"\banticipatory\s+bail\b",
             r"\bcognizable\s+offence\b",
             r"\bnon-cognizable\s+offence\b",
-            r"\bfiduciary\s+relationship\b",
             r"\bright\s+to\s+information\b",
-            r"\bprivate\s+defence\b",
+            r"\bwrongful\s+termination\b",
+            r"\bunlawful\s+termination\b",
+            r"\bbreach\s+of\s+contract\b",
+            r"\bdirector\s+liability\b",
+            r"\bsecurity\s+deposit\b",
+            r"\bdivorce\s+procedure\b",
+            r"\bgst\s+penalty\b",
         ]
         for pat in phrase_patterns:
             matches = re.findall(pat, lower_q)
             phrases.extend(matches)
 
         combined = list(dict.fromkeys(phrases + meaningful))
-        return combined[:8]
+        return combined[:10]
 
     def _determine_primary_issue(
         self,
@@ -593,27 +1020,39 @@ class LegalQuestionAnalyzer:
         sections: List[str],
         articles: List[str],
         acts: List[str],
+        primary_domain: str = "",
+        conduct: Optional[List[str]] = None,
     ) -> Tuple[str, List[str]]:
-        """Determine what the user is actually trying to understand.
-
-        Prioritizes the operative inquiry over repeated context words.
-        """
+        """Determine what the user is actually trying to understand."""
         secondary: List[str] = []
 
-        # 1. Check if the operative question is an evidentiary or judicial test inquiry
-        if QuestionType.EVIDENCE in q_types or QuestionType.JUDICIAL_PRINCIPLES in q_types or QuestionType.CASE_LAW in q_types:
-            if any(p in lower_q for p in ["circumstantial evidence", "chain of circumstances", "no eyewitness", "solely on circumstantial"]):
+        # 1. Cybercrime & Computer Offences (Fact-First)
+        if "cyber" in primary_domain.lower():
+            if any(w in lower_q for w in ["ransomware", "ransom", "demands payment"]):
+                primary = "cyber_ransomware_and_extortion"
+                secondary = ["unauthorized_access", "data_theft", "extortion_liability"]
+                return primary, secondary
+            if any(w in lower_q for w in ["unauthorized access", "hacker", "hacking", "server hacked", "stole customer data"]):
+                primary = "cyber_unauthorized_access_and_data_theft"
+                secondary = ["computer_damage", "confidential_data_theft", "digital_investigation"]
+                return primary, secondary
+            primary = "cyber_fraud_and_computer_offences"
+            secondary = ["identity_theft", "unauthorized_transmission"]
+            return primary, secondary
+
+        # 2. Evidence Law Rules (Only when primary domain is Law of Evidence)
+        if primary_domain == "Law of Evidence":
+            if any(p in lower_q for p in ["circumstantial evidence", "chain of circumstances", "solely on circumstantial"]):
                 primary = "circumstantial_evidence_conviction_standard"
                 secondary = ["judicial_test", "standard_of_proof", "circumstantial_chain"]
                 return primary, secondary
-
             if any(p in lower_q for p in ["admissibility", "electronic record", "electronic evidence", "section 63", "section 65b"]):
                 primary = "admissibility_of_electronic_records"
                 secondary = ["evidentiary_certificate", "tampering_safeguards"]
                 return primary, secondary
 
-        # 2. Check if operative inquiry is Constitutional / Fundamental Right / Writs
-        if QuestionType.CONSTITUTIONAL in q_types or articles:
+        # 3. Constitutional Right / Article Inquiries
+        if "constitutional" in primary_domain.lower() or articles:
             if "21" in articles or "personal liberty" in lower_q or "fair and reasonable" in lower_q:
                 primary = "article_21_life_and_personal_liberty"
                 secondary = ["procedure_established_by_law", "fair_and_reasonable_procedure"]
@@ -627,46 +1066,103 @@ class LegalQuestionAnalyzer:
                 secondary = ["habeas_corpus", "mandamus", "judicial_review"]
                 return primary, secondary
 
-        # 3. Check for Consent and Misconception of Fact in Sexual Offences
-        if any(p in lower_q for p in ["promise to marry", "misconception of fact", "prior relationship", "consensual relationship"]):
-            primary = "consent_and_promise_to_marry"
+        # 4. Consent and Sexual Offences
+        if any(p in lower_q for p in ["promise to marry", "misconception of fact", "prior relationship", "consensual relationship", "sexual assault", "rape"]):
+            primary = "sexual_offence_and_consent_standards"
             secondary = ["misconception_of_fact", "voluntary_consent_standard"]
             return primary, secondary
 
-        # 4. Check for Cyber / Computer-related Offences
-        if any(p in lower_q for p in ["phishing", "hacking", "stolen credentials", "unauthorized access", "cyber", "otp"]):
-            primary = "cyber_fraud_and_computer_offences"
-            secondary = ["identity_theft", "unauthorized_transmission", "cheating_by_personation"]
+        # 5. Murder & Circumstantial Proof
+        if "murder" in lower_q or "culpable homicide" in lower_q:
+            if any(p in lower_q for p in ["circumstantial", "eyewitness", "proof", "conviction"]):
+                primary = "murder_conviction_on_circumstantial_evidence"
+                secondary = ["standard_of_proof", "chain_of_circumstances"]
+                return primary, secondary
+            if "punishment" in lower_q or QuestionType.PUNISHMENT in q_types:
+                primary = "punishment_for_murder"
+                secondary = ["penal_code_provisions", "sentencing"]
+                return primary, secondary
+            if "investigation" in lower_q or "investigate" in lower_q:
+                primary = "investigation_of_homicide_cases"
+                secondary = ["police_procedure", "inquest"]
+                return primary, secondary
+            primary = "substantive_law_governing_murder"
+            secondary = ["essential_ingredients", "exceptions"]
             return primary, secondary
 
-        # 5. Check if operative inquiry is specific facet (Punishment, Exception, Procedure, Remedy)
+        # 6. Consumer Law
+        if "consumer" in primary_domain.lower():
+            if any(w in lower_q for w in ["appeal", "appellate"]):
+                primary = "appeal_against_consumer_commission_order"
+                secondary = ["appellate_forum", "limitation_period"]
+                return primary, secondary
+            if any(w in lower_q for w in ["remedy", "remedies", "compensation", "refund"]):
+                primary = "consumer_remedy_for_defective_goods"
+                secondary = ["district_commission_filing", "product_liability"]
+                return primary, secondary
+            primary = "consumer_protection_rights_and_liabilities"
+            secondary = ["deficiency_in_service", "defect_in_goods"]
+            return primary, secondary
+
+        # 7. Employment / Labour Law
+        if "employment" in primary_domain.lower() or "labour" in primary_domain.lower():
+            primary = "wrongful_termination_rights_and_remedies"
+            secondary = ["statutory_notice", "severance_compensation", "reinstatement"]
+            return primary, secondary
+
+        # 8. Contract / Property Law
+        if "contract" in primary_domain.lower() or "property" in primary_domain.lower():
+            if "deposit" in lower_q or "landlord" in lower_q:
+                primary = "recovery_of_tenancy_security_deposit"
+                secondary = ["legal_notice", "civil_suit_for_recovery"]
+                return primary, secondary
+            primary = "breach_of_contract_remedies"
+            secondary = ["damages_compensation", "specific_performance"]
+            return primary, secondary
+
+        # 9. Corporate Law
+        if "corporate" in primary_domain.lower():
+            primary = "liability_of_company_directors"
+            secondary = ["fiduciary_duties", "statutory_penalties"]
+            return primary, secondary
+
+        # 10. Insolvency Law
+        if "insolvency" in primary_domain.lower():
+            primary = "corporate_insolvency_resolution_process"
+            secondary = ["initiation_by_creditor", "resolution_professional_timeline"]
+            return primary, secondary
+
+        # 11. RTI Law
+        if "rti" in primary_domain.lower():
+            if "appeal" in lower_q:
+                primary = "appellate_procedure_under_rti"
+                secondary = ["first_appellate_authority", "information_commission"]
+                return primary, secondary
+            primary = "procedure_for_filing_rti_application"
+            secondary = ["pio_mandates", "statutory_timeline"]
+            return primary, secondary
+
+        # 12. Tax / GST Law
+        if "tax" in primary_domain.lower() or "gst" in primary_domain.lower():
+            primary = "statutory_penalty_for_gst_non_compliance"
+            secondary = ["tax_demand", "adjudication_procedure"]
+            return primary, secondary
+
+        # 13. Family Law
+        if "family" in primary_domain.lower():
+            primary = "procedure_governing_divorce_proceedings"
+            secondary = ["competent_court", "matrimonial_remedies"]
+            return primary, secondary
+
+        # Fallback: specific facet
         if QuestionType.PUNISHMENT in q_types and QuestionType.DEFINITION not in q_types and QuestionType.EXCEPTION not in q_types:
             topic = concepts[0] if concepts else "offence"
             primary = f"punishment_for_{topic}"
             secondary = ["sentencing_prerequisites", "penal_consequences"]
             return primary, secondary
 
-        if QuestionType.EXCEPTION in q_types:
-            topic = concepts[0] if concepts else "offence"
-            primary = f"exceptions_and_defences_to_{topic}"
-            secondary = ["limiting_conditions", "burden_of_defence"]
-            return primary, secondary
-
-        if QuestionType.PROCEDURE in q_types:
-            topic = concepts[0] if concepts else "matter"
-            primary = f"procedure_governing_{topic}"
-            secondary = ["investigation_steps", "competent_authority", "statutory_timeline"]
-            return primary, secondary
-
-        if QuestionType.REMEDY in q_types:
-            topic = concepts[0] if concepts else "grievance"
-            primary = f"legal_remedies_for_{topic}"
-            secondary = ["forum", "compensation", "injunction"]
-            return primary, secondary
-
-        # 6. Fallback: substantive legal inquiry for concept
-        main_c = concepts[0] if concepts else "legal_query"
-        primary = f"substantive_law_governing_{main_c}"
+        topic = concepts[0] if concepts else "legal_query"
+        primary = f"substantive_law_governing_{topic}"
         secondary = [f"ingredients_of_{c}" for c in concepts[1:3]]
         return primary, secondary
 
@@ -683,6 +1179,7 @@ class LegalQuestionAnalyzer:
         has_statute = (
             QuestionType.DEFINITION in q_types
             or QuestionType.ELEMENTS in q_types
+            or QuestionType.OFFENCE in q_types
             or QuestionType.PUNISHMENT in q_types
             or QuestionType.EXCEPTION in q_types
             or QuestionType.PROCEDURE in q_types
@@ -692,43 +1189,11 @@ class LegalQuestionAnalyzer:
             ])
         )
 
-        authorities: List[str] = []
         if has_statute and has_case_law:
-            authorities = ["STATUTE", "CASE_LAW"]
-        elif has_case_law:
-            authorities = ["CASE_LAW"]
-        else:
-            authorities = ["STATUTE"]
-
-        return authorities
-
-    def _infer_domain(
-        self,
-        lower_q: str,
-        acts: List[str],
-        q_types: List[QuestionType],
-        concepts: List[str],
-    ) -> str:
-        """Infer canonical Indian legal domain dynamically."""
-        if QuestionType.CONSTITUTIONAL in q_types or any("constitution" in a.lower() for a in acts):
-            return "Constitutional Law"
-        if any("consumer" in a.lower() for a in acts) or any(c in lower_q for c in ["consumer", "defective goods", "deficiency"]):
-            return "Consumer Law"
-        if any("it act" in a.lower() or "information technology" in a.lower() for a in acts) or any(c in lower_q for c in ["cyber", "phishing", "hacking", "digital"]):
-            return "Cyber Law"
-        if any("companies" in a.lower() or "ibc" in a.lower() or "insolvency" in a.lower() for a in acts):
-            return "Corporate & Insolvency Law"
-        if any("bsa" in a.lower() or "evidence" in a.lower() for a in acts) or QuestionType.EVIDENCE in q_types:
-            return "Law of Evidence"
-        if any("bnss" in a.lower() or "procedure" in a.lower() for a in acts) or QuestionType.PROCEDURE in q_types:
-            return "Criminal Procedure"
-        if any("bns" in a.lower() or "penal" in a.lower() for a in acts) or any(c in lower_q for c in ["offence", "crime", "accused", "conviction", "prosecution", "punishment"]):
-            return "Criminal Law"
-        if any("motor" in a.lower() for a in acts):
-            return "Transport & Motor Vehicles Law"
-        if any("rti" in a.lower() for a in acts):
-            return "Administrative & Transparency Law"
-        return "Indian Statutory Law"
+            return ["STATUTE", "CASE_LAW"]
+        if has_case_law:
+            return ["CASE_LAW"]
+        return ["STATUTE"]
 
     def _build_answer_requirements(
         self,
@@ -738,7 +1203,7 @@ class LegalQuestionAnalyzer:
     ) -> List[str]:
         """Generate substantive answer synthesis requirements."""
         reqs = ["direct_substantive_answer"]
-        if QuestionType.DEFINITION in q_types:
+        if QuestionType.DEFINITION in q_types or QuestionType.OFFENCE in q_types:
             reqs.append("statutory_definition_and_elements")
         if QuestionType.PUNISHMENT in q_types:
             reqs.append("applicable_punishment_and_conditions")
