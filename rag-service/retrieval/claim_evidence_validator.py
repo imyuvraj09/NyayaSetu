@@ -253,6 +253,7 @@ class ClaimEvidenceValidator:
         sources: List[Any],
         facet_coverage: Dict[str, Any],
         target_act: Optional[str] = None,
+        query_analysis: Optional[Any] = None,
     ) -> Tuple[List[ClaimValidationResult], Dict[str, Any]]:
         """Validate each claim against retrieved sources and corpus facet evidence.
 
@@ -261,6 +262,7 @@ class ClaimEvidenceValidator:
             sources: List of SourceReference objects passed in the LLM prompt.
             facet_coverage: Dict mapping facet names to coverage info (including evidence_status).
             target_act: Optional expected primary statute name.
+            query_analysis: Optional query analysis containing primary_issue and excluded_topics.
 
         Returns:
             Tuple of (List[ClaimValidationResult], Summary Metrics Dict).
@@ -290,6 +292,36 @@ class ClaimEvidenceValidator:
         false_negative_count = 0
 
         for claim in claims:
+            # Rule 8: Claim-Level Topic Check
+            if query_analysis:
+                excluded = getattr(query_analysis, "excluded_topics", []) or []
+                p_issue = getattr(query_analysis, "primary_issue", "") or ""
+                claim_lower = claim.claim_text.lower()
+                is_out_of_scope = False
+                out_of_scope_topic = ""
+                for ex in excluded:
+                    if ex.lower() in claim_lower:
+                        is_out_of_scope = True
+                        out_of_scope_topic = ex
+                        break
+                if is_out_of_scope:
+                    unsupported_count += 1
+                    results.append(
+                        ClaimValidationResult(
+                            claim=claim.claim_text,
+                            facet=claim.facet,
+                            supported=False,
+                            source=None,
+                            citation_valid=False if claim.citation_label else True,
+                            is_negative_claim=False,
+                            negative_claim_valid=True,
+                            reason=f"OUT OF SCOPE TOPIC: Claim introduces topic '{out_of_scope_topic}' which is excluded for primary issue '{p_issue}'.",
+                            evidence_type=claim.evidence_type,
+                            is_judicial_claim=claim.is_judicial_claim,
+                        )
+                    )
+                    continue
+
             # Case 1: Negative Claim Validation (Evidence-First Policy)
             if claim.is_negative_claim:
                 f_name = claim.facet

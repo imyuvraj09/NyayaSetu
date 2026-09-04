@@ -66,6 +66,8 @@ class CaseLawRetriever:
         query: str,
         target_sections: Optional[List[str]] = None,
         target_topics: Optional[List[str]] = None,
+        primary_issue: Optional[str] = None,
+        excluded_topics: Optional[List[str]] = None,
         top_k: int = 5,
         initial_k: int = 15,
     ) -> List[RerankedChunk]:
@@ -75,13 +77,15 @@ class CaseLawRetriever:
             query: User's legal question or case-law subquery.
             target_sections: Optional list of statutory sections to correlate (e.g. ['63', '375']).
             target_topics: Optional list of topics (e.g. ['consent', 'sexual offences']).
+            primary_issue: Primary legal issue identified by query analyzer.
+            excluded_topics: Topics that must be excluded from results.
             top_k: Final number of ranked case-law passages to return.
             initial_k: Number of dense/lexical candidates to evaluate.
 
         Returns:
             List of RerankedChunk objects populated with CaseLaw metadata and evidence_type="CASE_LAW".
         """
-        logger.info("Executing Case-Law Retrieval for query: '%s'", query)
+        logger.info("Executing Case-Law Retrieval for query: '%s' [primary_issue=%s]", query, primary_issue)
 
         candidate_chunks: Dict[str, CaseLawChunk] = {}
         strategy_scores: Dict[str, float] = defaultdict(float)
@@ -96,7 +100,6 @@ class CaseLawRetriever:
 
         # 2. Section-Reference Search (if target sections given or extracted from query)
         sections_to_check = set(target_sections or [])
-        # Extract any numeric sections from query like "section 63" or "sec 375"
         import re
         sec_matches = re.findall(r"\b(?:section|sec\.?)\s*([0-9]{1,4}[a-z]?)\b", query, re.IGNORECASE)
         sections_to_check.update(sec_matches)
@@ -110,9 +113,15 @@ class CaseLawRetriever:
 
         # 3. Topic Search
         topics_to_check = set(target_topics or [])
-        for kw in ["consent", "murder", "culpable homicide", "promise to marry", "rti", "due process", "liberty"]:
-            if kw in query.lower():
-                topics_to_check.add(kw)
+        # If primary issue is circumstantial evidence, strictly search circumstantial evidence topics
+        if primary_issue == "circumstantial_evidence":
+            topics_to_check.update(["circumstantial evidence", "standard of proof", "homicide"])
+        elif primary_issue == "consent_and_promise_to_marry":
+            topics_to_check.update(["consent", "promise to marry", "sexual offences"])
+        else:
+            for kw in ["consent", "murder", "culpable homicide", "promise to marry", "rti", "due process", "liberty"]:
+                if kw in query.lower():
+                    topics_to_check.add(kw)
 
         for top in topics_to_check:
             case_ids = self.tree_index.find_cases_for_topic(top)
@@ -136,6 +145,43 @@ class CaseLawRetriever:
             for c in all_chunks:
                 candidate_chunks[c.chunk_id] = c
                 strategy_scores[c.chunk_id] = 0.5
+
+        # 4B. Topic Incompatibility Filter (Rule 4 & 5)
+        if excluded_topics:
+            retained_candidates: Dict[str, CaseLawChunk] = {}
+            for cid, c in candidate_chunks.items():
+                c_topics_lower = [t.lower() for t in c.topics]
+                c_name_lower = c.case_name.lower()
+                is_excluded = False
+                for ex in excluded_topics:
+                    ex_l = ex.lower()
+                    if any(ex_l in t for t in c_topics_lower):
+                        is_excluded = True
+                        break
+                    if ex_l in ("consent", "promise to marry", "rape"):
+                        if any(k in c_name_lower for k in ["anurag soni", "naim ahamed"]):
+                            is_excluded = True
+                            break
+                    if ex_l in ("circumstantial evidence",):
+                        if any(k in c_name_lower for k in ["sharad birdhichand", "babu v"]):
+                            is_excluded = True
+                            break
+                if not is_excluded:
+                    retained_candidates[cid] = c
+                else:
+                    logger.info("CaseLawRetriever excluded chunk '%s' (%s) due to excluded topic.", cid, c.case_name)
+            candidate_chunks = retained_candidates
+
+        # 4C. Primary Issue Topic Boost
+        if primary_issue == "circumstantial_evidence":
+            for cid, c in candidate_chunks.items():
+                c_text_lower = c.text.lower()
+                c_topics_lower = [t.lower() for t in c.topics]
+                if any(kw in c_text_lower or any(kw in t for t in c_topics_lower) for kw in [
+                    "circumstantial evidence", "chain of circumstances", "panchsheel",
+                    "five golden principles", "standard of proof"
+                ]):
+                    strategy_scores[cid] += 2.0
 
         if not candidate_chunks:
             logger.warning("Zero candidate case-law passages found.")
@@ -210,6 +256,7 @@ class CaseLawRetriever:
                 judgment_date=c.judgment_date,
                 paragraph_number=c.paragraph_number,
                 is_holding_or_ratio=c.is_holding_or_ratio,
+                topic_compatibility="DIRECT",
             )
             results.append(rc)
 

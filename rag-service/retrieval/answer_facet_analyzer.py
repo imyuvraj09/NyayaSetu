@@ -296,6 +296,20 @@ LEGAL_FACET_DEFINITIONS: Dict[str, Dict[str, Any]] = {
         ],
         "keywords": ["distinction between", "distinguished from", "clear distinction", "contrast"],
     },
+    "circumstantial_evidence": {
+        "display_name": "Circumstantial Evidence",
+        "patterns": [
+            r"\b(?:circumstantial\s+evidence|circumstances|chain\s+of\s+circumstances|no\s+eyewitness|solely\s+on\s+circumstantial)\b",
+        ],
+        "keywords": ["circumstantial evidence", "chain of circumstances", "circumstances", "inference of guilt"],
+    },
+    "standard_of_proof": {
+        "display_name": "Standard of Proof & Evidentiary Sufficiency",
+        "patterns": [
+            r"\b(?:standard\s+of\s+proof|burden\s+of\s+proof|beyond\s+reasonable\s+doubt|conviction\s+based\s+solely|evidentiary\s+sufficiency)\b",
+        ],
+        "keywords": ["standard of proof", "beyond reasonable doubt", "solely on", "conviction based on", "evidentiary standard"],
+    },
 }
 
 

@@ -27,6 +27,7 @@ from retrieval.case_law_retriever import CaseLawRetriever
 from retrieval.evidence_graph import LegalEvidenceGraph
 from retrieval.facet_evidence_models import CaseLawStatus
 from retrieval.judicial_principle_extractor import JudicialPrincipleExtractor
+from retrieval.topic_compatibility import TopicCompatibilityEngine
 from schemas.generation import RAGResponse, SourceReference
 from utils.logger import get_logger
 
@@ -156,11 +157,15 @@ class LegalRAGPipeline:
         if requires_case_law:
             target_secs = q_analysis.get("section_candidates", []) if isinstance(q_analysis, dict) else getattr(q_analysis, "section_candidates", [])
             target_topics = q_analysis.get("entities", []) if isinstance(q_analysis, dict) else getattr(q_analysis, "entities", [])
+            p_issue = q_analysis.get("primary_issue") if isinstance(q_analysis, dict) else getattr(q_analysis, "primary_issue", None)
+            ex_topics = q_analysis.get("excluded_topics") if isinstance(q_analysis, dict) else getattr(q_analysis, "excluded_topics", None)
             try:
                 case_chunks = self.case_retriever.retrieve(
                     query=query_text,
                     target_sections=target_secs,
                     target_topics=target_topics,
+                    primary_issue=p_issue,
+                    excluded_topics=ex_topics,
                     top_k=3,
                 )
                 if case_chunks:
@@ -173,8 +178,15 @@ class LegalRAGPipeline:
                 case_law_status = CaseLawStatus.CORPUS_UNAVAILABLE.value
                 case_warnings.append("The current indexed corpus does not contain verified judicial decisions sufficient to substantiate judicial principles on this issue.")
 
-        # Combine Chunks
-        ranked_chunks = statutory_chunks + case_chunks
+        # Combine & Enforce Evidence Topic Compatibility and Budget (Rule 7 & 9: 2–5 sources)
+        active_q_analysis = retrieval_result.query_analysis if hasattr(retrieval_result, "query_analysis") else q_analysis
+        ranked_chunks = TopicCompatibilityEngine().filter_and_budget(
+            statutory_chunks=statutory_chunks,
+            case_chunks=case_chunks,
+            query_analysis=active_q_analysis,
+            min_sources=2,
+            max_sources=5,
+        )
 
         # In-Memory Evidence Graph (Phase 12)
         evidence_graph = LegalEvidenceGraph().build_from_retrieval(
@@ -358,6 +370,7 @@ class LegalRAGPipeline:
                 facet_coverage=facet_coverage,
                 sources=sources,
                 target_act=target_act_name,
+                query_analysis=active_q_analysis,
             )
             logger.info(
                 "Facet & Claim Validation: complete=%s, status=%s, missing=%s, supported_claims=%d/%d",
@@ -408,6 +421,7 @@ class LegalRAGPipeline:
                         facet_coverage=facet_coverage,
                         sources=sources,
                         target_act=target_act_name,
+                        query_analysis=active_q_analysis,
                     )
                     logger.info(
                         "Post-recovery validation check: complete=%s, status=%s, missing=%s, supported_claims=%d/%d",

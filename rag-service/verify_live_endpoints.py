@@ -74,4 +74,30 @@ try:
 except Exception:
     print(murder_resp['answer'][:600])
 
+print("\n=== 5. Testing Circumstantial Evidence Murder Query ===")
+ce_query = (
+    "A person is accused of murder, but there is no eyewitness. The prosecution "
+    "relies entirely on circumstances such as motive, CCTV footage, call records, "
+    "and forensic evidence. Can a murder conviction be based solely on "
+    "circumstantial evidence? Explain the legal principles and judicial tests."
+)
+ce_resp = post("/api/v1/query", {"query": ce_query})
+print(f"Status: {ce_resp.get('status')}")
+print(f"Generation Status: {ce_resp.get('generation_status')}")
+print(f"Retrieval Status: {ce_resp.get('retrieval_status')}")
+print(f"Validation Status: {ce_resp.get('validation_status')}")
+print(f"Sources Count: {len(ce_resp.get('sources', []))}")
+print("Sources:")
+for s in ce_resp.get('sources', []):
+    print(f"  - {s.get('source_label')}: {s.get('case_name') or s.get('document_name')} ({s.get('citation') or s.get('section_number')}) [Type: {s.get('evidence_type')}]")
+
+print("\n--- Answer Payload ---")
+try:
+    parsed_ans = json.loads(ce_resp['answer'])
+    print("Legal Domain:", parsed_ans.get("legalDomain"))
+    print("\nMain Answer:\n", parsed_ans.get("mainAnswer"), "\n")
+    print("\nLegal Basis:\n", parsed_ans.get("legalBasis"), "\n")
+except Exception:
+    print(ce_resp['answer'])
+
 print("\n=== VERIFICATION COMPLETE ===")

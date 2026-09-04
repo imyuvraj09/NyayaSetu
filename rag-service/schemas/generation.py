@@ -96,6 +96,10 @@ class SourceReference(BaseModel):
         default="",
         description="Numbered paragraph or passage in judgment",
     )
+    topic_compatibility: str = Field(
+        default="DIRECT",
+        description="Topic compatibility: DIRECT, RELATED, BACKGROUND, IRRELEVANT",
+    )
 
 
 class RAGResponse(BaseModel):

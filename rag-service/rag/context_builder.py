@@ -157,6 +157,7 @@ class LegalContextBuilder:
                     citation=getattr(chunk, "citation", ""),
                     judgment_date=getattr(chunk, "judgment_date", ""),
                     paragraph_number=str(getattr(chunk, "paragraph_number", "")),
+                    topic_compatibility=getattr(chunk, "topic_compatibility", "DIRECT"),
                 )
             )
 

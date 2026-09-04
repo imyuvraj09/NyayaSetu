@@ -48,11 +48,19 @@ class LegalQueryAnalysis:
     sub_queries: List[SubQuery] = field(default_factory=list)
     is_unindexed_statute: bool = False
     authority_requirement: AuthorityRequirement = AuthorityRequirement.STATUTE
+    primary_issue: str = "general_legal_inquiry"
+    offence: Optional[str] = None
+    topic_keywords: List[str] = field(default_factory=list)
+    excluded_topics: List[str] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation."""
         return {
             "authority_requirement": self.authority_requirement.value,
+            "primary_issue": self.primary_issue,
+            "offence": self.offence,
+            "topic_keywords": self.topic_keywords,
+            "excluded_topics": self.excluded_topics,
             "act": self.act,
             "act_short_name": self.act_short_name,
             "act_aliases": self.act_aliases,
@@ -438,7 +446,97 @@ class LegalQueryAnalyzer:
         domain_res = detected_act_entry["domain"] if detected_act_entry else ("Unindexed Statutory Law" if unindexed_act_name else "General Legal Information")
         is_unindexed = (unindexed_act_name is not None and detected_act_entry is None)
 
-        # Authority Requirement Detection (Phase 9: STATUTE, CASE_LAW, BOTH)
+        # Step 8: Detect Primary Legal Issue, Offence, and Topic Prioritization
+        primary_issue = "general_legal_inquiry"
+        detected_offence = None
+        topic_keywords: List[str] = []
+        excluded_topics: List[str] = []
+
+        # Check for substantive offence mentions
+        offence_candidates = [
+            ("murder", ["murder", "culpable homicide"]),
+            ("rape", ["rape", "sexual assault", "consensual relationship", "promise to marry"]),
+            ("theft", ["theft", "stolen"]),
+            ("cheating", ["cheating", "fraud"]),
+            ("extortion", ["extortion"]),
+            ("defamation", ["defamation"]),
+            ("abetment_of_suicide", ["abetment of suicide", "suicide"]),
+        ]
+        for off_name, off_patterns in offence_candidates:
+            if any(re.search(r"\b" + re.escape(p) + r"\b", lower_query) for p in off_patterns):
+                detected_offence = off_name
+                break
+
+        has_case_law_req = False
+
+        # Priority 1: Circumstantial Evidence & Evidentiary Standard (Dominates over generic murder keyword)
+        if any(re.search(pat, lower_query) for pat in [
+            r"\bcircumstantial\s+evidence\b",
+            r"\bchain\s+of\s+circumstances\b",
+            r"\bsolely\s+on\s+circumstantial\b",
+            r"\bno\s+eyewitness\b",
+            r"\bconviction\s+based\s+(?:solely\s+)?on\s+circumstances\b",
+        ]):
+            primary_issue = "circumstantial_evidence"
+            topic_keywords = [
+                "circumstantial evidence", "chain of circumstances", "standard of proof",
+                "judicial test", "forensic evidence", "conviction standard", "panchsheel"
+            ]
+            excluded_topics = [
+                "consent", "promise to marry", "rape", "sexual offences",
+                "misconception of fact", "abetment of suicide", "dowry death", "fiduciary"
+            ]
+            # When asking for judicial tests on circumstantial evidence, case law is the primary authority
+            has_case_law_req = True
+            # Suppress generic punishment if not explicitly inquired
+            if not any(w in lower_query for w in ["what is the punishment", "punished with", "prescribed for it", "penalty for"]):
+                requested_info = [r for r in requested_info if r not in ("punishment", "penalty")]
+
+        # Priority 2: Consent & Promise to Marry / Sexual Offences
+        elif any(re.search(pat, lower_query) for pat in [
+            r"\bpromise\s+to\s+marry\b",
+            r"\bconsensual\s+relationship\b",
+            r"\bprior\s+(?:consensual\s+)?relationship\b",
+            r"\bmisconception\s+of\s+fact\b",
+            r"\bconsent\s+in\s+sexual\s+offences\b",
+            r"\bconsent\s+vs\s+submission\b",
+        ]):
+            primary_issue = "consent_and_promise_to_marry"
+            topic_keywords = [
+                "consent", "promise to marry", "misconception of fact",
+                "prior relationship", "sexual offences", "voluntary agency"
+            ]
+            excluded_topics = [
+                "circumstantial evidence", "theft", "murder conviction standard",
+                "corporate", "rti", "cyber crime"
+            ]
+            has_case_law_req = True
+
+        # Priority 3: General Homicide & Murder (Definition, Exceptions, Punishment)
+        elif detected_offence == "murder":
+            primary_issue = "murder_definition_and_punishment"
+            topic_keywords = ["murder", "culpable homicide", "intention", "knowledge", "exceptions", "punishment"]
+            excluded_topics = ["promise to marry", "rape", "sexual offences", "theft", "rti"]
+
+        # Priority 4: Criminal Procedure (Arrest, Bail, FIR, Investigation)
+        elif any(w in lower_query for w in ["investigate", "fir", "arrest", "bail", "anticipatory bail", "custody"]):
+            primary_issue = "criminal_procedure"
+            topic_keywords = ["procedure", "investigation", "arrest", "bail"]
+            excluded_topics = ["promise to marry", "circumstantial evidence"]
+
+        # Priority 5: RTI and Fiduciary Duty
+        elif any(w in lower_query for w in ["rti", "right to information", "fiduciary"]):
+            primary_issue = "right_to_information"
+            topic_keywords = ["rti", "information", "fiduciary duty", "exemption"]
+            excluded_topics = ["murder", "rape", "consent", "circumstantial evidence"]
+
+        # Priority 6: Constitutional Rights & Due Process
+        elif any(w in lower_query for w in ["article 21", "due process", "personal liberty", "procedure established by law"]):
+            primary_issue = "constitutional_rights"
+            topic_keywords = ["article 21", "due process", "personal liberty", "fair procedure"]
+            excluded_topics = ["theft", "rape", "cheating"]
+
+        # Authority Requirement Detection
         case_law_patterns = [
             r"\b(?:court|courts|supreme\s+court|high\s+court|judgment|judgments|precedent|precedents|case\s+law|caselaw)\b",
             r"\b(?:judicial\s+principles?|judicial\s+precedents?|judicial\s+tests?|court\s+interpretations?)\b",
@@ -451,15 +549,24 @@ class LegalQueryAnalyzer:
             r"\b(?:procedure|time\s+limit|limitation\s+period|eligibility|remedies|grounds)\b",
         ]
 
-        has_case_law_req = any(re.search(pat, lower_query) for pat in case_law_patterns)
-        has_statute_req = any(re.search(pat, lower_query) for pat in statute_patterns) or bool(detected_act_entry) or bool(unindexed_act_name) or bool(section_candidates)
+        if not has_case_law_req:
+            has_case_law_req = any(re.search(pat, lower_query) for pat in case_law_patterns)
 
-        if has_case_law_req and has_statute_req:
-            auth_req = AuthorityRequirement.BOTH
-        elif has_case_law_req:
-            auth_req = AuthorityRequirement.CASE_LAW
+        # For circumstantial evidence, statutory provisions are optional / secondary unless explicitly asked
+        if primary_issue == "circumstantial_evidence":
+            has_statute_req = any(re.search(pat, lower_query) for pat in [
+                r"\b(?:section|sections|sec\.?|bns|bsa|statutory|statute)\b",
+                r"\b(?:punishment|penalty)\b"
+            ])
+            auth_req = AuthorityRequirement.BOTH if has_statute_req else AuthorityRequirement.CASE_LAW
         else:
-            auth_req = AuthorityRequirement.STATUTE
+            has_statute_req = any(re.search(pat, lower_query) for pat in statute_patterns) or bool(detected_act_entry) or bool(unindexed_act_name) or bool(section_candidates)
+            if has_case_law_req and has_statute_req:
+                auth_req = AuthorityRequirement.BOTH
+            elif has_case_law_req:
+                auth_req = AuthorityRequirement.CASE_LAW
+            else:
+                auth_req = AuthorityRequirement.STATUTE
 
         return LegalQueryAnalysis(
             original_query=query,
@@ -477,6 +584,10 @@ class LegalQueryAnalyzer:
             sub_queries=sub_queries,
             is_unindexed_statute=is_unindexed,
             authority_requirement=auth_req,
+            primary_issue=primary_issue,
+            offence=detected_offence,
+            topic_keywords=topic_keywords,
+            excluded_topics=excluded_topics,
         )
 
 

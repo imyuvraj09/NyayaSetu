@@ -124,6 +124,7 @@ class AnswerFacetValidator:
         retrieval_facet_coverage: Optional[Dict[str, Any]] = None,
         sources: Optional[List[Any]] = None,
         target_act: Optional[str] = None,
+        query_analysis: Optional[Any] = None,
     ) -> AnswerFacetValidationResult:
         """Inspect generated answer text against requested facets and validate substantive legal claims.
 
@@ -134,6 +135,7 @@ class AnswerFacetValidator:
             retrieval_facet_coverage: Alias for facet_coverage.
             sources: Optional list of SourceReference objects passed in prompt context.
             target_act: Optional primary statute name.
+            query_analysis: Optional query analysis containing primary_issue and excluded_topics.
 
         Returns:
             AnswerFacetValidationResult detailing multi-level status, claim support, and diagnostics.
@@ -148,6 +150,7 @@ class AnswerFacetValidator:
             sources=sources_list,
             facet_coverage=retrieval_coverage,
             target_act=target_act,
+            query_analysis=query_analysis,
         )
 
         claims_by_facet: Dict[str, List[ClaimValidationResult]] = {}

@@ -378,8 +378,8 @@ class TestLLMResilienceSuite(unittest.TestCase):
         basis = data["legalBasis"]
 
         # Assert segregation between statutory provisions and judicial principles
-        self.assertIn("Relevant legal provisions", basis)
-        self.assertIn("Judicial principles", basis)
+        self.assertIn("Relevant Legal Provisions", basis)
+        self.assertIn("Judicial Principles", basis)
 
         # Assert case law citations are included
         self.assertIn("State of Uttar Pradesh v. Chhotey Lal", basis)

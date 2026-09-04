@@ -579,6 +579,33 @@ class AdvancedRetriever:
 
         adjusted_scored_pairs.sort(key=lambda x: x[1], reverse=True)
 
+        # Topic Compatibility & Out-of-Scope Section Filtering
+        clean_scored_pairs = []
+        for chunk, adj_score, raw_score in adjusted_scored_pairs:
+            idx_info = self.section_indexer.chunks_by_id.get(chunk.chunk_id)
+            sec_num = str(idx_info.primary_section if idx_info else "").strip()
+            sec_title = str(idx_info.primary_title if idx_info else "").lower()
+            text_lower = chunk.text.lower()
+
+            # Exclude Section 108 (Abetment of suicide) for murder / circumstantial evidence queries
+            if "108" in sec_num or "abetment of suicide" in sec_title or "abetment of suicide" in text_lower[:100]:
+                if getattr(analysis, "offence", None) == "murder" or getattr(analysis, "primary_issue", None) == "circumstantial_evidence":
+                    logger.info("Filtered out Section 108 (Abetment of suicide) for murder/circumstantial evidence query.")
+                    continue
+
+            # Check query excluded topics
+            is_excluded = False
+            for ex in getattr(analysis, "excluded_topics", []):
+                if ex.lower() in sec_title:
+                    is_excluded = True
+                    break
+            if is_excluded:
+                logger.info("Filtered out statutory section '%s' (%s) due to excluded topic.", sec_num, sec_title)
+                continue
+
+            clean_scored_pairs.append((chunk, adj_score, raw_score))
+
+        adjusted_scored_pairs = clean_scored_pairs
         selected_pairs = adjusted_scored_pairs[:fk]
 
         # Generalized Facet Representation Guarantee:

@@ -145,6 +145,10 @@ class RerankedChunk(BaseModel):
         default=False,
         description="Whether passage contains holding or ratio decidendi",
     )
+    topic_compatibility: str = Field(
+        default="DIRECT",
+        description="Topic compatibility: DIRECT, RELATED, BACKGROUND, IRRELEVANT",
+    )
 
 
 class RetrievalResult(BaseModel):
