@@ -36,7 +36,6 @@ npm-debug.log*
 docker-compose.override.yml
 
 # RAG Service data (large files)
-rag-service/data/raw/*.pdf
 rag-service/data/raw/*.txt
 rag-service/vectorstore/chroma_db/
 rag-service/vector_store/
