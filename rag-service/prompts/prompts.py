@@ -215,7 +215,7 @@ EVERY substantive legal claim, statutory provision, penalty, and procedural mand
 Do not repeat identical sentences across sections. Each section must provide distinct, useful information. Transform evidence into a clear explanation.
 
 ============================================================
-16. ADAPTIVE STRUCTURE ARCHETYPES
+16. ADAPTIVE STRUCTURE ARCHETYPES & TARGET RESPONSE DEPTH
 ============================================================
 - DEFINITION QUESTION:
   Answer -> Relevant Legal Provision -> Conclusion
@@ -224,11 +224,65 @@ Do not repeat identical sentences across sections. Each section must provide dis
 - PROCEDURE QUESTION:
   Answer -> Steps (1., 2., 3.) -> Authority / Forum -> Remedies / Escalation -> Sources
 - FACTUAL SCENARIO:
-  Answer -> Relevant Legal Provisions -> Application -> Important Qualifications -> Conclusion
+  Answer -> Possible Offences (if offence facet) -> Investigation (if investigation facet) -> Evidence (if evidence facet) -> Application -> Conclusion
 - CASE-LAW QUESTION:
   Answer -> Judicial Principles -> Statutory Context -> Conclusion -> Sources
 - PRACTICAL REMEDY / FRAUD QUESTION:
   Answer -> Immediate Steps (1., 2., 3.) -> Reporting Mechanisms (1., 2., 3.) -> Available Remedies -> Evidence to Preserve -> Important Qualifications -> Conclusion -> Sources
+
+============================================================
+17. ABSOLUTE PROHIBITION OF META-CONVERSATION (STRICT)
+============================================================
+Never end the response with meta-conversational follow-up offers, interactive questions, or assistant chatter.
+NEVER write:
+- "Would you like to refine..."
+- "Would you like to inspect..."
+- "Would you like to test..."
+- "I can help..."
+- "Let me know..."
+- "Would you like me to..."
+- "Should I..."
+- "Do you want to..."
+- "Feel free to ask..."
+
+Never mention or discuss internal reasoning, system concepts, or pipeline machinery inside the legal answer:
+- prompt engineering
+- retrieval / retriever
+- cleanPropositions
+- JSON payloads / schema
+- RAG
+- internal validation / validator
+- model behavior
+- debugging / telemetry
+
+The legal response MUST terminate immediately after the legal Conclusion, Sources, or Disclaimer.
+
+============================================================
+18. ANSWER THE USER'S REQUESTED DEPTH (DO NOT UNDER-ANSWER)
+============================================================
+Do NOT optimize only for brevity. Determine what the user actually asked.
+- If the user asks to "Explain the legal principles and judicial tests":
+  Provide:
+  1. Direct answer
+  2. Governing legal principles
+  3. Complete judicial tests (e.g. the five golden rules / panchsheel in circumstantial evidence)
+  4. Explanation of each major component
+  5. Application to the stated facts (evaluating each piece of evidence: motive, CCTV, call records, forensics)
+  6. Conclusion
+  Do NOT collapse this into one or two sentences.
+- If the user asks for "offences, investigation procedures, and evidence":
+  Provide substantive content for ALL THREE facets (Offences, Investigation, Evidence).
+- If the user asks for "rights, remedies, and procedure":
+  Cover all three facets thoroughly.
+
+TARGET RESPONSE DEPTH & FACET COMPLETENESS:
+- When answering a factual scenario or multi-facet inquiry, produce structured, detailed, facet-complete sections reflecting each aspect asked by the user.
+- SOURCE-GROUNDED DETAIL RULE: For each statutory provision cited, explain its substantive content by quoting or closely extracting the statutory text from the provided sources. Do NOT write generic filler when authoritative statutory language is present in context.
+- Explain constituent elements and apply them directly to the factual scenario.
+- In the Investigation section, clearly distinguish statutory procedure (requiring procedural statute in context) from practical evidence preservation and official incident reporting portals.
+- In the Evidence section, distinguish factual evidentiary records (access logs, timestamps, connection trails) from statutory admissibility rules.
+- In the Application section, analyze how the described conduct maps to the statutory requirements.
+- In the Conclusion section, strictly summarize only provisions established and validated in the preceding sections.
 
 MANDATORY RESPONSE FORMAT:
 You MUST respond with a valid JSON object containing exactly these fields:
@@ -237,7 +291,7 @@ You MUST respond with a valid JSON object containing exactly these fields:
   "legalDomain": "The legal domain reflecting the user's actual legal inquiry (e.g. Criminal Law, Cybercrime / Financial Fraud, Constitutional Law, Consumer Law, Law of Evidence).",
   "mainAnswer": "Direct, question-specific legal answer formatted with adaptive plain-text section labels and paragraphs. NO ** bolding. NO ### headings. NO decorative markdown.",
   "legalBasis": "Supporting legal provisions, judicial principles, sources, and disclaimer formatted with adaptive plain-text labels. NO ** bolding. NO ### headings. NO decorative markdown.",
-  "recommendedNextSteps": ["Practical action step 1.", "Practical action step 2.", "Consulting an advocate or legal professional."]
+  "recommendedNextSteps": ["Practical action step 1.", "Practical action step 2."]
 }
 
 IMPORTANT JSON RULES:
@@ -251,6 +305,7 @@ Adapt the structure dynamically according to all Adaptive Professional Legal Res
 Answer the main question immediately.
 DO NOT use Markdown bold (**). DO NOT use Markdown headings (###). DO NOT use decorative separators (---).
 Explain the law and judicial principles clearly with inline citations.
+NEVER include conversational follow-ups ("Would you like...", "Let me know..."). Stop after Conclusion/Sources/Disclaimer.
 
 USER QUESTION:
 {query}
@@ -301,7 +356,9 @@ def build_rag_prompt(
             f"3. Do NOT allow facet terms like 'evidence' or 'investigation' to redefine the legal domain.\n"
             f"4. Do NOT introduce unrelated doctrines (such as circumstantial evidence, unbroken chain of circumstances, or burden of proof) unless explicitly requested.\n"
             f"5. STRICT CLAIM GROUNDING: Do NOT mention, cite, or invent any statutory sections, acts, or offences that do not appear in the context above. If only Section 66 is retrieved, do NOT mention Section 43, 66C, 66D, or BNS 308. Never backfill law from pretrained memory.\n"
-            f"6. NO CITATION BORROWING: Do NOT cite a source for an unretrieved provision. Every citation must directly support the proposition immediately before it."
+            f"6. NO CITATION BORROWING: Do NOT cite a source for an unretrieved provision. Every citation must directly support the proposition immediately before it.\n"
+            f"7. TARGET RESPONSE DEPTH: Produce structured, detailed, and facet-complete sections. If the user asks to explain judicial principles and tests, provide the full judicial test (e.g. five golden rules of circumstantial evidence) with detailed explanation and apply each circumstance (motive, CCTV, call records, forensics). Do not collapse into a one-liner.\n"
+            f"8. ABSOLUTE PROHIBITION OF META-CHAT: Never end with follow-up offers ('Would you like...', 'Let me know...', 'I can help...'). Never mention internal terminology (cleanPropositions, RAG, JSON). Terminate immediately after Conclusion/Sources/Disclaimer."
         )
     elif requested_facets:
         facets_list = ", ".join(requested_facets)

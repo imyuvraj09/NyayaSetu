@@ -52,6 +52,67 @@ class QuestionType(str, Enum):
     GENERAL_LEGAL_INFORMATION = "GENERAL_LEGAL_INFORMATION"
 
 
+class PrimaryTask(str, Enum):
+    """Authoritative legal task that the user wants performed."""
+    SUBSTANTIVE_OFFENCE = "SUBSTANTIVE_OFFENCE"
+    SUBSTANTIVE_RIGHT = "SUBSTANTIVE_RIGHT"
+    LEGAL_DEFINITION = "LEGAL_DEFINITION"
+    LEGAL_INTERPRETATION = "LEGAL_INTERPRETATION"
+    SEARCH_SEIZURE = "SEARCH_SEIZURE"
+    ARREST = "ARREST"
+    BAIL = "BAIL"
+    INVESTIGATION = "INVESTIGATION"
+    TRIAL = "TRIAL"
+    EVIDENCE_OF_CONDUCT = "EVIDENCE_OF_CONDUCT"
+    EVIDENCE_ADMISSIBILITY = "EVIDENCE_ADMISSIBILITY"
+    REMEDY = "REMEDY"
+    APPEAL = "APPEAL"
+    REVISION = "REVISION"
+    COMPLAINT = "COMPLAINT"
+    RTI_APPLICATION = "RTI_APPLICATION"
+    RTI_APPEAL = "RTI_APPEAL"
+    CONSUMER_REMEDY = "CONSUMER_REMEDY"
+    CONTRACT_REMEDY = "CONTRACT_REMEDY"
+    EMPLOYMENT_REMEDY = "EMPLOYMENT_REMEDY"
+    INSOLVENCY_PROCEDURE = "INSOLVENCY_PROCEDURE"
+    DIVORCE_PROCEDURE = "DIVORCE_PROCEDURE"
+    REGULATORY_COMPLIANCE = "REGULATORY_COMPLIANCE"
+    LIABILITY = "LIABILITY"
+    PENALTY = "PENALTY"
+    CASE_LAW = "CASE_LAW"
+    CONSTITUTIONAL_INTERPRETATION = "CONSTITUTIONAL_INTERPRETATION"
+    OTHER = "OTHER"
+
+
+@dataclass
+class CleanProposition:
+    """A clean, normalized legal proposition extracted from an authority."""
+    authority_name: str
+    act: str
+    section: str
+    title: str
+    clean_proposition: str
+    support_span: str = ""
+    facet: str = "GENERAL"
+    source_id: str = ""
+    authority_type: str = "STATUTE"
+    status: str = "ANSWERED_SUPPORTED"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "authority_name": self.authority_name,
+            "act": self.act,
+            "section": self.section,
+            "title": self.title,
+            "clean_proposition": self.clean_proposition,
+            "support_span": self.support_span,
+            "facet": self.facet,
+            "source_id": self.source_id,
+            "authority_type": self.authority_type,
+            "status": self.status,
+        }
+
+
 @dataclass
 class FactualEvent:
     """An atomic factual occurrence extracted from a factual scenario query."""
@@ -134,16 +195,24 @@ class LegalQuestion:
     raw_question: str = ""
     actors: List[str] = field(default_factory=list)
     conduct: List[str] = field(default_factory=list)
+    object: List[str] = field(default_factory=list)
     harm_or_dispute: List[str] = field(default_factory=list)
     legal_relationship: str = ""
+    primary_task: str = "OTHER"
+    background_offence: Optional[str] = None
+    contextual_issues: List[str] = field(default_factory=list)
     primary_domain: str = ""
     secondary_domains: List[str] = field(default_factory=list)
     candidate_acts: List[str] = field(default_factory=list)
     candidate_sections: List[str] = field(default_factory=list)
+    candidate_cases: List[str] = field(default_factory=list)
     jurisdiction: str = "India"
+    requires_statute: bool = True
     requires_case_law: bool = False
     requires_procedure: bool = False
     requires_evidence: bool = False
+    requires_admissibility: bool = False
+    confidence: float = 1.0
     question_type: str = ""
 
     def __post_init__(self):
@@ -151,12 +220,16 @@ class LegalQuestion:
             self.raw_question = self.original_query
         if not self.primary_domain:
             self.primary_domain = self.legal_domain
+        if not self.acts and (self.primary_task in ("SEARCH_SEIZURE", "BAIL", "ARREST") or self.primary_domain == "Criminal Procedure"):
+            self.acts = ["Bharatiya Nagarik Suraksha Sanhita, 2023"]
         if not self.candidate_acts:
             self.candidate_acts = self.acts
         if not self.candidate_sections:
             self.candidate_sections = self.sections
         if not self.question_type and self.question_types:
             self.question_type = self.question_types[0].value
+        if not self.candidate_cases and self.requires_case_law:
+            self.candidate_cases = []
 
     @property
     def raw_query(self) -> str:
@@ -176,7 +249,11 @@ class LegalQuestion:
 
     @property
     def governing_enactments(self) -> List[str]:
-        return self.acts
+        if self.acts:
+            return self.acts
+        if self.primary_task in ("SEARCH_SEIZURE", "BAIL", "ARREST") or self.primary_domain == "Criminal Procedure":
+            return ["Bharatiya Nagarik Suraksha Sanhita, 2023"]
+        return []
 
     @property
     def constitutional_articles(self) -> List[str]:
@@ -216,8 +293,12 @@ class LegalQuestion:
             "facts": [f.to_dict() for f in self.facts],
             "actors": self.actors,
             "conduct": self.conduct,
+            "object": self.object,
             "harm_or_dispute": self.harm_or_dispute,
             "legal_relationship": self.legal_relationship,
+            "primary_task": self.primary_task,
+            "background_offence": self.background_offence,
+            "contextual_issues": self.contextual_issues,
             "primary_issue": self.primary_issue,
             "secondary_issues": self.secondary_issues,
             "primary_domain": self.primary_domain or self.legal_domain,
@@ -228,13 +309,17 @@ class LegalQuestion:
             "question_types": [qt.value for qt in self.question_types],
             "candidate_acts": self.candidate_acts,
             "candidate_sections": self.candidate_sections,
+            "candidate_cases": self.candidate_cases,
             "acts": self.acts,
             "articles": self.articles,
             "sections": self.sections,
             "jurisdiction": self.jurisdiction,
+            "requires_statute": self.requires_statute,
             "requires_case_law": self.requires_case_law,
             "requires_procedure": self.requires_procedure,
             "requires_evidence": self.requires_evidence,
+            "requires_admissibility": self.requires_admissibility,
+            "confidence": self.confidence,
             "authority_requirements": self.authority_requirements,
             "sub_questions": [sq.to_dict() for sq in self.sub_questions],
             "complexity": self.complexity,
@@ -350,9 +435,10 @@ class LegalQuestionAnalyzer:
             elif QuestionType.FACTUAL_SCENARIO not in q_types:
                 q_types.append(QuestionType.FACTUAL_SCENARIO)
 
-        # 5. Extract Actors, Conduct, Harm/Dispute, and Legal Relationship
+        # 5. Extract Actors, Conduct, Objects, Harm/Dispute, and Legal Relationship
         actors = self._extract_actors(lower_q, facts)
         conduct = self._extract_conduct(lower_q, facts)
+        objects = self._extract_object(lower_q)
         harm_dispute = self._extract_harm_dispute(lower_q, facts)
         legal_relationship = self._extract_relationship(lower_q)
 
@@ -362,13 +448,19 @@ class LegalQuestionAnalyzer:
         # 7. Extract Requested Facets
         requested_facets = self._extract_facets(lower_q, q_types)
 
-        # 8. Fact-First Legal Domain Resolution
+        # 7.5 Detect Explicit Primary Task & Background Offence Separation
+        primary_task = self._detect_primary_task(lower_q, q_types, requested_facets)
+        background_offence, contextual_issues = self._extract_background_offence(lower_q, primary_task)
+
+        # 8. Fact-First Legal Domain Resolution (with Procedure Priority)
         primary_domain, secondary_domains = self._infer_domain(
             lower_q=lower_q,
             acts=acts,
             q_types=q_types,
             concepts=legal_concepts,
             conduct=conduct,
+            primary_task=primary_task,
+            background_offence=background_offence,
         )
 
         # 9. Multi-Part Question Detection & Sub-Question Generation
@@ -393,13 +485,20 @@ class LegalQuestionAnalyzer:
             acts=acts,
             primary_domain=primary_domain,
             conduct=conduct,
+            primary_task=primary_task,
+            background_offence=background_offence,
         )
 
         # 11. Determine Authority Requirements
         authority_requirements = self._determine_authorities(lower_q, q_types)
         requires_case_law = "CASE_LAW" in authority_requirements
-        requires_procedure = "PROCEDURE" in requested_facets or "INVESTIGATION" in requested_facets or QuestionType.PROCEDURE in q_types
-        requires_evidence = "EVIDENCE" in requested_facets or QuestionType.EVIDENCE in q_types
+        requires_procedure = "PROCEDURE" in requested_facets or "INVESTIGATION" in requested_facets or QuestionType.PROCEDURE in q_types or primary_task in (PrimaryTask.SEARCH_SEIZURE, PrimaryTask.BAIL, PrimaryTask.ARREST)
+        requires_evidence = "EVIDENCE" in requested_facets or QuestionType.EVIDENCE in q_types or primary_task in (PrimaryTask.EVIDENCE_OF_CONDUCT, PrimaryTask.EVIDENCE_ADMISSIBILITY)
+        requires_admissibility = (
+            primary_task == PrimaryTask.EVIDENCE_ADMISSIBILITY
+            or "ADMISSIBILITY" in requested_facets
+            or any(w in lower_q for w in ["admissibility", "admissible in court", "section 65b", "section 63"])
+        )
 
         # 12. Complexity Level
         complexity = "SIMPLE"
@@ -435,24 +534,32 @@ class LegalQuestionAnalyzer:
             raw_question=cleaned,
             actors=actors,
             conduct=conduct,
+            object=objects,
             harm_or_dispute=harm_dispute,
             legal_relationship=legal_relationship,
+            primary_task=primary_task.value,
+            background_offence=background_offence,
+            contextual_issues=contextual_issues,
             primary_domain=primary_domain,
             secondary_domains=secondary_domains,
             candidate_acts=acts,
             candidate_sections=sections or articles,
+            requires_statute=True,
             requires_case_law=requires_case_law,
             requires_procedure=requires_procedure,
             requires_evidence=requires_evidence,
+            requires_admissibility=requires_admissibility,
+            confidence=1.0,
             question_type=q_types[0].value if q_types else "GENERAL_LEGAL_INFORMATION",
         )
 
         logger.info(
-            "Canonical LegalQuestion: primary_domain='%s', primary_issue='%s', facets=%s, types=%s",
+            "Canonical LegalQuestion: primary_domain='%s', primary_task='%s', primary_issue='%s', facets=%s, bg_offence='%s'",
             lq.primary_domain,
+            lq.primary_task,
             lq.primary_issue,
             lq.requested_facets,
-            [qt.value for qt in lq.question_types],
+            lq.background_offence,
         )
         return lq
 
@@ -637,6 +744,12 @@ class LegalQuestionAnalyzer:
             (r"\b(?:defence|defences|plea of)\b", "DEFENCES"),
             (r"\b(?:judicial principles?|judicial tests?|case law|precedents?|supreme court held)\b", "JUDICIAL_PRINCIPLES"),
             (r"\b(?:documents|records)\b", "DOCUMENTS"),
+            (r"\b(?:enforcement|enforce|execution of order)\b", "ENFORCEMENT"),
+            (r"\b(?:recovery|recover|recovery of deposit|recovery of money)\b", "RECOVERY"),
+            (r"\b(?:next steps|recommended steps|what should i do)\b", "NEXT_STEPS"),
+            (r"\b(?:requirements|conditions)\b", "REQUIREMENTS"),
+            (r"\b(?:eligibility|eligible|who can apply)\b", "ELIGIBILITY"),
+            (r"\b(?:legal position|legal status|current law)\b", "LEGAL_POSITION"),
         ]
         for pat, facet_name in facet_map:
             if re.search(pat, lower_q):
@@ -655,6 +768,169 @@ class LegalQuestionAnalyzer:
 
         return list(dict.fromkeys(facets))
 
+    def _extract_object(self, lower_q: str) -> List[str]:
+        """Extract material objects or targets from query."""
+        target_patterns = [
+            (r"\b(?:mobile\s+phone|mobile|smartphone|phone)\b", "mobile_phone"),
+            (r"\b(?:computer\s+system|computer|server|laptop)\b", "computer_system"),
+            (r"\b(?:confidential\s+files|customer\s+data|files|data)\b", "confidential_files"),
+            (r"\b(?:ransom|money|deposit|security\s+deposit|funds)\b", "funds_or_deposit"),
+            (r"\b(?:product|goods|device)\b", "consumer_goods"),
+            (r"\b(?:electronic\s+records?|electronic\s+evidence)\b", "electronic_records"),
+        ]
+        objects = []
+        for pat, canon in target_patterns:
+            if re.search(pat, lower_q):
+                objects.append(canon)
+        return list(dict.fromkeys(objects))
+
+    def _detect_primary_task(
+        self,
+        lower_q: str,
+        q_types: List[QuestionType],
+        facets: List[str],
+    ) -> PrimaryTask:
+        """Explicitly classify what substantive or procedural legal task the user wants performed."""
+        # 1. SEARCH_SEIZURE
+        if any(re.search(pat, lower_q) for pat in [
+            r"\b(?:search\s+(?:his|a|the)?\s*(?:mobile|phone|device|computer|premises|house))\b",
+            r"\b(?:police\s+want\s+to\s+search)\b",
+            r"\b(?:search\s+and\s+seizure)\b",
+            r"\b(?:procedure\s+governs?\s+the\s+search)\b",
+            r"\b(?:seizure\s+of\s+(?:mobile|phone|electronic|device))\b",
+            r"\b(?:examination\s+of\s+(?:mobile|phone|device))\b",
+        ]):
+            return PrimaryTask.SEARCH_SEIZURE
+
+        # 2. BAIL
+        if any(re.search(pat, lower_q) for pat in [
+            r"\b(?:bail\s+application|apply\s+for\s+bail|grant\s+of\s+bail|anticipatory\s+bail|regular\s+bail|default\s+bail)\b",
+            r"\b(?:procedure\s+governs?\s+(?:his\s+)?bail)\b",
+        ]):
+            return PrimaryTask.BAIL
+
+        # 3. ARREST
+        if any(re.search(pat, lower_q) for pat in [
+            r"\b(?:procedure\s+for\s+arrest|arrest\s+without\s+warrant|grounds\s+of\s+arrest|powers\s+of\s+arrest)\b",
+            r"\b(?:procedure\s+governing\s+arrest)\b",
+        ]):
+            return PrimaryTask.ARREST
+
+        # 4. EVIDENCE ADMISSIBILITY (Doctrine / Rules of Evidence)
+        if any(re.search(pat, lower_q) for pat in [
+            r"\b(?:admissibility\s+requirements?|rules\s+(?:for|of)\s+admissibility)\b",
+            r"\b(?:how\s+is\s+electronic\s+evidence\s+admissible|admissibility\s+of\s+electronic)\b",
+            r"\b(?:section\s+65b\s+certificate|section\s+63\s+certificate)\b",
+            r"\b(?:is\s+this\s+electronic\s+record\s+admissible|admissible\s+in\s+court)\b",
+            r"\b(?:burden\s+of\s+proof|standard\s+of\s+proof)\b",
+            r"\b(?:test\s+for\s+circumstantial\s+evidence|circumstantial\s+evidence\s+test)\b",
+        ]):
+            return PrimaryTask.EVIDENCE_ADMISSIBILITY
+
+        # 5. RTI APPEAL / APPLICATION
+        if re.search(r"\b(?:rti|right\s+to\s+information)\b", lower_q):
+            if any(w in lower_q for w in ["appeal", "first appeal", "rejected", "rejection", "cic", "appellate"]):
+                return PrimaryTask.RTI_APPEAL
+            return PrimaryTask.RTI_APPLICATION
+
+        # 6. CONSUMER REMEDY / PROCEDURE
+        if any(w in lower_q for w in ["consumer", "defective phone", "defective smartphone", "defective goods", "defective product"]) or re.search(r"\bcpa\b", lower_q):
+            if any(w in lower_q for w in ["remedy", "remedies", "compensation", "relief", "what can i do", "what remedies"]):
+                return PrimaryTask.CONSUMER_REMEDY
+
+        # 7. EMPLOYMENT REMEDY
+        if any(w in lower_q for w in ["employee", "employer", "dismissed", "termination", "retrenchment", "workplace"]):
+            if any(w in lower_q for w in ["rights", "remedy", "remedies", "compensation", "recourse"]):
+                return PrimaryTask.EMPLOYMENT_REMEDY
+
+        # 8. CONTRACT REMEDY
+        if any(w in lower_q for w in ["breach of contract", "contractual breach", "breached a contract", "deposit", "agreement to sell"]):
+            if any(w in lower_q for w in ["remedy", "remedies", "damages", "compensation"]):
+                return PrimaryTask.CONTRACT_REMEDY
+
+        # 9. INSOLVENCY PROCEDURE
+        if any(w in lower_q for w in ["cirp", "corporate insolvency", "resolution professional", "creditor"]) or re.search(r"\bibc\b", lower_q):
+            if any(w in lower_q for w in ["process", "procedure", "initiate", "timeline"]):
+                return PrimaryTask.INSOLVENCY_PROCEDURE
+
+        # 10. DIVORCE PROCEDURE
+        if any(w in lower_q for w in ["divorce", "matrimonial"]) and any(w in lower_q for w in ["procedure", "file", "proceedings"]):
+            return PrimaryTask.DIVORCE_PROCEDURE
+
+        # 11. CONSTITUTIONAL INTERPRETATION
+        if any(w in lower_q for w in ["article 21", "article 14", "article 19", "article 32", "article 226", "constitution"]) and any(w in lower_q for w in ["explain", "interpretation", "supreme court's", "principles", "fair and reasonable", "personal liberty"]):
+            return PrimaryTask.CONSTITUTIONAL_INTERPRETATION
+
+        # 12. SUBSTANTIVE OFFENCE
+        if any(re.search(pat, lower_q) for pat in [
+            r"\b(?:what\s+offences?\s+may\s+apply|what\s+offence\s+may\s+apply|what\s+offences?|what\s+crime)\b",
+            r"\b(?:what\s+legal\s+offence|offence\s+is\s+committed|may\s+be\s+committed)\b",
+            r"\b(?:punishable\s+offence)\b",
+        ]):
+            return PrimaryTask.SUBSTANTIVE_OFFENCE
+
+        # 13. EVIDENCE OF CONDUCT
+        if any(re.search(pat, lower_q) for pat in [
+            r"\b(?:what\s+evidence\s+(?:could|can|may)\s+(?:establish|prove))\b",
+            r"\b(?:evidence\s+that\s+could\s+establish)\b",
+            r"\b(?:what\s+evidence\s+is\s+relevant)\b",
+        ]):
+            return PrimaryTask.EVIDENCE_OF_CONDUCT
+
+        # 14. INVESTIGATION
+        if any(w in lower_q for w in ["investigation procedure", "investigation procedures", "investigation steps", "how is .+ investigated", "investigators collect"]):
+            return PrimaryTask.INVESTIGATION
+
+        # 15. PENALTY / PUNISHMENT
+        if any(w in lower_q for w in ["what punishment", "what penalty", "punishment for", "penalty for", "what is the sentence"]):
+            return PrimaryTask.PENALTY
+
+        # 16. CASE LAW / JUDICIAL PRINCIPLES
+        if any(w in lower_q for w in ["case law", "precedents", "landmark judgment", "judicial principles"]):
+            return PrimaryTask.CASE_LAW
+
+        # 17. LEGAL DEFINITION
+        if QuestionType.DEFINITION in q_types:
+            return PrimaryTask.LEGAL_DEFINITION
+
+        return PrimaryTask.OTHER
+
+    def _extract_background_offence(
+        self,
+        lower_q: str,
+        primary_task: PrimaryTask,
+    ) -> Tuple[Optional[str], List[str]]:
+        """Identify if an underlying criminal offence serves as background context rather than the operative inquiry."""
+        bg_offence = None
+        contextual_issues: List[str] = []
+
+        is_procedural_or_evidence = primary_task in (
+            PrimaryTask.SEARCH_SEIZURE,
+            PrimaryTask.BAIL,
+            PrimaryTask.ARREST,
+            PrimaryTask.INVESTIGATION,
+            PrimaryTask.EVIDENCE_OF_CONDUCT,
+        )
+
+        if is_procedural_or_evidence:
+            if re.search(r"\b(?:theft|stole|steals|stolen)\b", lower_q):
+                bg_offence = "theft"
+                contextual_issues.append("theft_investigation")
+            elif re.search(r"\b(?:murder|culpable\s+homicide|killing|killed)\b", lower_q):
+                bg_offence = "murder"
+                contextual_issues.append("homicide_investigation")
+            elif re.search(r"\b(?:rape|sexual\s+assault)\b", lower_q):
+                bg_offence = "sexual_offence"
+                contextual_issues.append("sexual_offence_investigation")
+            elif re.search(r"\b(?:cyber|hacker|hacking|ransomware)\b", lower_q):
+                bg_offence = "cybercrime"
+                contextual_issues.append("cyber_incident")
+            elif re.search(r"\b(?:fraud|cheating)\b", lower_q):
+                bg_offence = "fraud"
+                contextual_issues.append("fraud_investigation")
+
+        return bg_offence, contextual_issues
+
     def _infer_domain(
         self,
         lower_q: str,
@@ -662,13 +938,49 @@ class LegalQuestionAnalyzer:
         q_types: List[QuestionType],
         concepts: List[str],
         conduct: List[str],
+        primary_task: Optional[PrimaryTask] = None,
+        background_offence: Optional[str] = None,
     ) -> Tuple[str, List[str]]:
-        """Fact-First Legal Domain Resolution.
+        """Fact-First Legal Domain Resolution with Procedure Priority.
 
-        Factual conduct and legal disputes determine the domain first.
+        Factual conduct and legal tasks determine the domain first.
         Information-request keywords (evidence, investigation, remedy, procedure, appeal)
         are treated as requested facets and DO NOT hijack the legal domain.
         """
+        secondary_domains: List[str] = []
+
+        # 0. PROCEDURE PRIORITY (Procedural Tasks take precedence over background offence)
+        if primary_task == PrimaryTask.SEARCH_SEIZURE:
+            sec_domains = ["Law of Evidence"]
+            if background_offence:
+                sec_domains.append("Criminal Law")
+            return "Criminal Procedure", sec_domains
+
+        if primary_task == PrimaryTask.BAIL:
+            sec_domains = ["Criminal Law"] if background_offence else []
+            return "Criminal Procedure", sec_domains
+
+        if primary_task == PrimaryTask.ARREST:
+            sec_domains = ["Criminal Law"] if background_offence else []
+            return "Criminal Procedure", sec_domains
+
+        if primary_task in (PrimaryTask.RTI_APPLICATION, PrimaryTask.RTI_APPEAL):
+            return "RTI / Information Law", []
+
+        if primary_task == PrimaryTask.CONSUMER_REMEDY:
+            return "Consumer Law", []
+
+        if primary_task == PrimaryTask.EMPLOYMENT_REMEDY:
+            return "Employment / Labour Law", []
+
+        if primary_task == PrimaryTask.CONTRACT_REMEDY:
+            return "Contract Law", []
+
+        if primary_task == PrimaryTask.INSOLVENCY_PROCEDURE:
+            return "Insolvency Law", []
+
+        if primary_task == PrimaryTask.DIVORCE_PROCEDURE:
+            return "Family Law", []
         secondary_domains: List[str] = []
 
         # 1. PURE EVIDENCE LAW (Triggered ONLY when inquiry is about evidence/admissibility rules themselves)
@@ -1022,9 +1334,34 @@ class LegalQuestionAnalyzer:
         acts: List[str],
         primary_domain: str = "",
         conduct: Optional[List[str]] = None,
+        primary_task: Optional[PrimaryTask] = None,
+        background_offence: Optional[str] = None,
     ) -> Tuple[str, List[str]]:
         """Determine what the user is actually trying to understand."""
         secondary: List[str] = []
+
+        # 0. PROCEDURAL / PRIMARY TASK PRIORITY
+        if primary_task == PrimaryTask.SEARCH_SEIZURE:
+            target = "mobile_device" if any(w in lower_q for w in ["phone", "mobile", "device"]) else "electronic_records_or_premises"
+            primary = f"search_seizure_examination_of_{target}"
+            secondary = ["digital_evidence_extraction", "police_search_procedure"]
+            if background_offence:
+                secondary.append(f"{background_offence}_investigation_context")
+            return primary, secondary
+
+        if primary_task == PrimaryTask.BAIL:
+            primary = "bail_application_procedure"
+            secondary = ["anticipatory_or_regular_bail", "grounds_for_bail"]
+            if background_offence:
+                secondary.append(f"{background_offence}_investigation_context")
+            return primary, secondary
+
+        if primary_task == PrimaryTask.ARREST:
+            primary = "procedure_for_arrest_and_safeguards"
+            secondary = ["grounds_of_arrest", "remand_procedure"]
+            if background_offence:
+                secondary.append(f"{background_offence}_context")
+            return primary, secondary
 
         # 1. Cybercrime & Computer Offences (Fact-First)
         if "cyber" in primary_domain.lower():

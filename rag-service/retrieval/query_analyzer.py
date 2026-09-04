@@ -283,6 +283,14 @@ class LegalQueryAnalyzer:
                         detected_act_entry = act
                         break
 
+        # Override for procedural inquiries: if query is a procedural task (SEARCH_SEIZURE, BAIL, ARREST)
+        # or domain is Criminal Procedure, ensure primary procedural enactment is BNSS (not substantive penal code)
+        primary_task = getattr(lq, "primary_task", "")
+        if primary_task in ("SEARCH_SEIZURE", "BAIL", "ARREST") or lq.primary_domain == "Criminal Procedure":
+            bnss_entry = next((a for a in KNOWN_ACT_REGISTRY if a["document_id"] == "bnss_2023"), None)
+            if bnss_entry:
+                detected_act_entry = bnss_entry
+
         # Step 2B: Check for Explicit Mentions of Unindexed Statutes
         unindexed_act_name = None
         if not detected_act_entry:
@@ -335,7 +343,31 @@ class LegalQueryAnalyzer:
             is_multi_part = True
             for facet in lq.requested_facets:
                 f_lower = facet.lower()
-                if f_lower in ("offence", "offences"):
+                if primary_task == "SEARCH_SEIZURE":
+                    if f_lower in ("procedure", "investigation"):
+                        sq_text = f"Search and seizure procedure mobile phone device summons warrant BNSS {topic_context}".strip()
+                        sq_act = "Bharatiya Nagarik Suraksha Sanhita, 2023"
+                    elif f_lower == "evidence":
+                        sq_text = f"Electronic evidence digital records mobile phone call logs chat messages {topic_context}".strip()
+                        sq_act = "Bharatiya Nagarik Suraksha Sanhita, 2023"
+                    else:
+                        sq_text = f"{facet} {topic_context}".strip()
+                        sq_act = act_res
+                elif primary_task == "BAIL":
+                    if f_lower in ("procedure", "investigation"):
+                        sq_text = f"Bail application procedure grounds cancellation anticipatory regular bail BNSS {topic_context}".strip()
+                        sq_act = "Bharatiya Nagarik Suraksha Sanhita, 2023"
+                    else:
+                        sq_text = f"{facet} {topic_context}".strip()
+                        sq_act = act_res
+                elif primary_task == "ARREST":
+                    if f_lower in ("procedure", "investigation", "rights"):
+                        sq_text = f"Arrest without warrant grounds of arrest procedural safeguards memo BNSS {topic_context}".strip()
+                        sq_act = "Bharatiya Nagarik Suraksha Sanhita, 2023"
+                    else:
+                        sq_text = f"{facet} {topic_context}".strip()
+                        sq_act = act_res
+                elif f_lower in ("offence", "offences"):
                     sq_text = f"Offences applicable {topic_context} {act_short_res or ''}".strip()
                     sq_act = act_res
                 elif f_lower == "investigation":
@@ -374,6 +406,10 @@ class LegalQueryAnalyzer:
         primary_issue = lq.primary_legal_issue
         topic_keywords = lq.operative_legal_concepts
         excluded_topics: List[str] = []
+        if "circumstantial" in lower_query or "panchsheel" in lower_query:
+            excluded_topics = ["consent", "promise to marry", "rape", "sexual offences", "misconception of fact", "abetment of suicide"]
+        elif lq.primary_task == "SEARCH_SEIZURE" and lq.background_offence:
+            excluded_topics = [f"punishment for {lq.background_offence}", f"sentencing for {lq.background_offence}"]
         detected_offence = lq.operative_legal_concepts[0] if lq.operative_legal_concepts else None
 
         # Authority requirement dynamically derived from LegalQuestion

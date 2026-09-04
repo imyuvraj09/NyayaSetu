@@ -127,6 +127,59 @@ class UniversalEvidenceFilter:
                 )
 
         # =====================================================================
+        # 1B. BACKGROUND OFFENCE DOWNGRADE & PROCEDURAL DIRECT UPGRADE
+        # =====================================================================
+        bg_offence = getattr(lq, "background_offence", None)
+        primary_task = getattr(lq, "primary_task", "")
+        is_procedural_task = (
+            primary_task in ("SEARCH_SEIZURE", "BAIL", "ARREST", "INVESTIGATION")
+            or lq.primary_domain == "Criminal Procedure"
+        )
+
+        if is_procedural_task and bg_offence:
+            # Check if this chunk is for the background substantive offence (e.g. theft in BNS, murder in BNS)
+            is_substantive_penal = (
+                "nyaya sanhita" in chunk_act.lower()
+                or "penal code" in chunk_act.lower()
+                or "bns" in chunk_act.lower()
+                or meta.get("document_id") == "bns_2023"
+            )
+            bg_offence_lower = bg_offence.lower()
+            is_bg_offence_chunk = (
+                bg_offence_lower in sec_title
+                or bg_offence_lower in chunk_lower[:120]
+                or any(bg_offence_lower in t for t in topics)
+            )
+            if is_substantive_penal and is_bg_offence_chunk:
+                return EvidenceEvaluationResult(
+                    compatibility=EvidenceCompatibility.BACKGROUND,
+                    reason=f"Inquiry is procedural ({primary_task or 'Criminal Procedure'}); substantive offence '{bg_offence}' is background context.",
+                    affinity_score=0.25,
+                    matched_concepts=[bg_offence_lower],
+                )
+
+        if primary_task == "SEARCH_SEIZURE":
+            is_proc_act = (
+                "nagarik suraksha" in chunk_act.lower()
+                or "bnss" in chunk_act.lower()
+                or "crpc" in chunk_act.lower()
+                or "sakshya" in chunk_act.lower()
+                or "bsa" in chunk_act.lower()
+                or meta.get("document_id") in ("bnss_2023", "bsa_2023")
+            )
+            is_search_seizure_chunk = any(w in sec_title or w in chunk_lower[:180] for w in [
+                "search", "seizure", "seize", "production of document", "summons to produce",
+                "electronic communication", "electronic record", "digital evidence", "warrant"
+            ])
+            if is_proc_act and is_search_seizure_chunk:
+                return EvidenceEvaluationResult(
+                    compatibility=EvidenceCompatibility.DIRECT,
+                    reason=f"Provision directly governs search, seizure, or evidentiary examination for '{primary_task}'.",
+                    affinity_score=0.95,
+                    matched_concepts=["search_seizure", "electronic_evidence"],
+                )
+
+        # =====================================================================
         # 2. DYNAMIC DOMAIN ORTHOGONALITY CHECK (REJECT TOPIC MISMATCHES)
         # =====================================================================
         # Identify legal concepts present in the chunk

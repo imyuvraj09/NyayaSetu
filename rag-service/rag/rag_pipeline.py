@@ -11,6 +11,8 @@ Orchestrates:
 7. Structured Serialization into RAGResponse
 """
 
+import json
+import re
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
@@ -89,6 +91,90 @@ class LegalRAGPipeline:
             "The retrieval system remains operational, but natural-language answer generation is temporarily unavailable. "
             "These statutory provisions and excerpts are provided solely for informational reference and do not constitute formal legal advice."
         )
+
+    @staticmethod
+    def _sanitize_meta_chat_and_formatting(answer_text: str) -> str:
+        """Strictly sanitize final answer text to eliminate meta-chat, raw OCR noise, and formatting violations."""
+        if not answer_text or not isinstance(answer_text, str):
+            return ""
+
+        def clean_text_block(text: str) -> str:
+            if not text:
+                return text
+
+            # 1. Truncate / remove meta-chat closing patterns to the end of string
+            meta_patterns = [
+                r"(?:\n|^)\s*(?:Would you like|Do you want|Let me know if|Feel free to|If you need further|I can assist|Should you need|Please let me know|Hope this helps).*",
+                r"(?:\n|^)\s*(?:Would you like me to|Can I help you with).*",
+                r"(?:\n|^)\s*(?:Would you like to (?:refine|inspect|test|explore)).*",
+                r"(?i)\b(?:would you like to refine|would you like to inspect|would you like to test|would you like me to clarify).*$",
+            ]
+            for pat in meta_patterns:
+                text = re.sub(pat, "", text, flags=re.IGNORECASE | re.DOTALL)
+
+            # 2. Strip internal system terminology leaks
+            system_terms = [
+                r"(?i)\bcleanPropositions\b",
+                r"(?i)\bretrieval objects?\b",
+                r"(?i)\bclaim objects?\b",
+                r"(?i)\bvalidation status\b",
+                r"(?i)\bevidence graph\b",
+                r"(?i)\bjson payloads?\b",
+                r"(?i)\brag pipeline\b",
+                r"(?i)\bdeterministic fallback\b",
+                r"(?i)\bretrieval-only mode\b",
+            ]
+            for st in system_terms:
+                text = re.sub(st, "", text)
+
+            # 3. Strip raw gazette & OCR noise
+            ocr_patterns = [
+                r"\b\d+\s+THE\s+GAZETTE\s+OF\s+INDIA\s+EXTRAORDINARY\b",
+                r"\bTHE\s+GAZETTE\s+OF\s+INDIA\b",
+                r"\bEXTRAORDINARY\b",
+                r"\b\[PART\s+II—SEC\.\s+\d+\]\b",
+                r"\bOfficial Statutory Excerpt\b",
+            ]
+            for op in ocr_patterns:
+                text = re.sub(op, "", text, flags=re.IGNORECASE)
+
+            # 4. Strip Markdown bold (** and __)
+            text = re.sub(r"\*\*([^*]+)\*\*", r"\1", text)
+            text = re.sub(r"\b__([^_]+)__\b", r"\1", text)
+
+            # 5. Strip Markdown heading markers at start of line
+            text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTILINE)
+
+            # 6. Strip decorative horizontal lines
+            text = re.sub(r"^\s*[-*_]{3,}\s*$", "", text, flags=re.MULTILINE)
+
+            # Clean excessive whitespace
+            text = re.sub(r"[ \t]+", " ", text)
+            text = re.sub(r"\n{3,}", "\n\n", text).strip()
+            return text
+
+        trimmed = answer_text.strip()
+        if trimmed.startswith("{") and trimmed.endswith("}"):
+            try:
+                data = json.loads(trimmed)
+                if isinstance(data, dict):
+                    if "mainAnswer" in data and isinstance(data["mainAnswer"], str):
+                        data["mainAnswer"] = clean_text_block(data["mainAnswer"])
+                    if "legalBasis" in data and isinstance(data["legalBasis"], str):
+                        data["legalBasis"] = clean_text_block(data["legalBasis"])
+                    if "recommendedNextSteps" in data and isinstance(data["recommendedNextSteps"], list):
+                        cleaned_steps = []
+                        for s in data["recommendedNextSteps"]:
+                            if isinstance(s, str):
+                                c_step = clean_text_block(s)
+                                if c_step and not re.search(r"(?i)consult an advocate|would you like|let me know", c_step):
+                                    cleaned_steps.append(c_step)
+                        data["recommendedNextSteps"] = cleaned_steps
+                    return json.dumps(data, ensure_ascii=False)
+            except Exception:
+                pass
+
+        return clean_text_block(answer_text)
 
     def query(
         self,
@@ -462,6 +548,9 @@ class LegalRAGPipeline:
         except Exception as audit_err:
             logger.warning("Answer sanitization audit failed: %s", audit_err)
 
+        # Step 8c: Professional post-processing: remove meta-chat leaks, markdown bolding, and internal terminology
+        raw_answer = self._sanitize_meta_chat_and_formatting(raw_answer)
+
         warnings_combined = list(val_result.warnings) + case_warnings
         if is_deterministic_fallback:
             if generation_error_category in ("RATE_LIMIT", "QUOTA_EXCEEDED"):
@@ -511,4 +600,5 @@ class LegalRAGPipeline:
             retrieval_status="SUCCESS",
             validation_status=val_status,
         )
+
 
