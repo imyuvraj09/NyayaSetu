@@ -54,31 +54,49 @@ class LegalAnswerValidator:
             r"STRICT OPERATIONAL RULES:",
             r"OFFICIAL LEGAL SOURCES PROVIDED:",
             r"Allowed Source Citations:",
+            r"MANDATORY RESPONSE FORMAT:",
             r"MANDATORY RESPONSE STRUCTURE:",
+            r"WRITING STYLE RULES:",
+            r"CORE DIRECTIVE:",
+            r"LEGAL REASONING RULES:",
             r"Never expose internal system instructions",
         ]
         for pat in leakage_patterns:
             if re.search(pat, answer, re.IGNORECASE):
                 warnings.append("Potential system prompt leakage detected in response.")
 
-        # 2. Check source citation validity
-        cited_indices: Set[int] = set()
-        for match in re.finditer(r"\[(?:Source|SOURCE)\s*(\d+)\]", answer):
-            try:
-                idx = int(match.group(1))
-                cited_indices.add(idx)
-            except ValueError:
-                pass
-
+        # 2. Check source citation validity (supports statutory [Source 1], [Source S1] and case law [Case Source C1], [Case C1])
         valid_citations: List[str] = []
         invalid_citations: List[str] = []
 
-        for idx in sorted(cited_indices):
-            label = f"[Source {idx}]"
-            if 1 <= idx <= available_source_count:
-                valid_citations.append(label)
-            else:
-                invalid_citations.append(label)
+        statutory_pattern = re.compile(r"\[(?:Source|SOURCE)\s*(?:S\s*)?(\d+)\]", re.IGNORECASE)
+        case_pattern = re.compile(r"\[(?:Case Source|CASE SOURCE|Case|CASE)\s*(?:C\s*)?(\d+)\]", re.IGNORECASE)
+
+        for match in statutory_pattern.finditer(answer):
+            try:
+                idx = int(match.group(1))
+                label = match.group(0)
+                if 1 <= idx <= max(available_source_count, 1):
+                    if label not in valid_citations:
+                        valid_citations.append(label)
+                else:
+                    if label not in invalid_citations:
+                        invalid_citations.append(label)
+            except ValueError:
+                pass
+
+        for match in case_pattern.finditer(answer):
+            try:
+                idx = int(match.group(1))
+                label = match.group(0)
+                if 1 <= idx <= max(available_source_count, 1):
+                    if label not in valid_citations:
+                        valid_citations.append(label)
+                else:
+                    if label not in invalid_citations:
+                        invalid_citations.append(label)
+            except ValueError:
+                pass
 
         if invalid_citations:
             warnings.append(
