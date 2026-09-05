@@ -1,0 +1,36 @@
+# Baseline B: Clean Dense RAG
+experiment_id: baseline_dense_rag
+description: "Dense semantic retrieval using BAAI/bge-small-en-v1.5 and ChromaDB without BM25, reranking, or routing."
+
+# Pipeline Switches (Strictly Isolated)
+pipeline:
+  use_retrieval: true
+  use_dense_retrieval: true
+  use_bm25: false
+  use_hybrid_fusion: false
+  use_reranker: false
+  use_fact_routing: false
+  use_compatibility_filter: false
+  use_claim_repair: false
+
+# Retrieval Parameters
+retrieval:
+  top_k: 5
+  initial_k: 5
+  embedding_model: "BAAI/bge-small-en-v1.5"
+  similarity_metric: "cosine"
+  max_per_document: null
+
+# LLM Generation Parameters
+llm:
+  model: "google-gemini"
+  temperature: 0.0
+  max_output_tokens: 1024
+  random_seed: 42
+  fallback_allowed: true
+
+# Benchmark & Execution
+benchmark:
+  file: "evaluation/development/existing_questions.json"
+  eval_retrieval_metrics: true
+  eval_generation_metrics: true

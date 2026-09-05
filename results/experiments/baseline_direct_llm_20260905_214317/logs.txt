@@ -1,0 +1,11 @@
+
+===========================================================================
+EXPERIMENT EXECUTION: baseline_direct_llm
+Benchmark File: evaluation\development\existing_questions.json | Queries: 2
+Pipeline Config: {'use_retrieval': False, 'use_dense_retrieval': False, 'use_bm25': False, 'use_hybrid_fusion': False, 'use_reranker': False, 'use_fact_routing': False, 'use_compatibility_filter': False, 'use_claim_repair': False}
+===========================================================================
+
+    [NOTICE] LLM Quota exceeded: Engaging deterministic MockLLM fallback for query constitution_001
+  [01/02] constitution_001  : MISS         (RR=0.00, Lat=0.00s) | What fundamental rights are guaranteed by the...
+    [NOTICE] LLM Quota exceeded: Engaging deterministic MockLLM fallback for query constitution_002
+  [02/02] constitution_002  : MISS         (RR=0.00, Lat=0.00s) | What rights are guaranteed by the Constitutio...

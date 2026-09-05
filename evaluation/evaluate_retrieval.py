@@ -26,6 +26,7 @@ if str(RAG_DIR) not in sys.path:
 from evaluation.metrics import (
     calculate_hit_at_k,
     calculate_keyword_coverage,
+    calculate_ndcg_at_k,
     calculate_precision_at_k,
     calculate_recall_at_k,
     calculate_reciprocal_rank,
@@ -79,6 +80,7 @@ def evaluate_dense_retrieval(
         rr = calculate_reciprocal_rank(retrieved_docs, expected_doc)
         p5 = calculate_precision_at_k(retrieved_docs, expected_doc, 5)
         r5 = calculate_recall_at_k(retrieved_docs, expected_doc, 5)
+        ndcg_5 = calculate_ndcg_at_k(retrieved_docs, [expected_doc] if expected_doc else [], 5)
         kw_cov = calculate_keyword_coverage(combined_text, expected_kws)
 
         items.append({
@@ -93,6 +95,7 @@ def evaluate_dense_retrieval(
             "reciprocal_rank": round(rr, 4),
             "precision_at_5": round(p5, 4),
             "recall_at_5": round(r5, 4),
+            "ndcg_at_5": round(ndcg_5, 4),
             "keyword_coverage": kw_cov,
             "latency_seconds": round(elapsed, 4),
             "top_chunk_id": result.results[0].chunk_id if result.results else None,
@@ -111,6 +114,8 @@ def evaluate_dense_retrieval(
     hit5_rate = sum(1 for it in evaluable if it["hit_at_5"]) / n_eval if n_eval else 0.0
     mean_rr = sum(it["reciprocal_rank"] for it in evaluable) / n_eval if n_eval else 0.0
     avg_p5 = sum(it["precision_at_5"] for it in evaluable) / n_eval if n_eval else 0.0
+    avg_r5 = sum(it["recall_at_5"] for it in evaluable) / n_eval if n_eval else 0.0
+    avg_ndcg5 = sum(it["ndcg_at_5"] for it in evaluable) / n_eval if n_eval else 0.0
     avg_kw = sum(it["keyword_coverage"] for it in evaluable) / n_eval if n_eval else 0.0
     avg_lat = sum(durations) / len(durations) if durations else 0.0
 
@@ -124,6 +129,8 @@ def evaluate_dense_retrieval(
         "document_hit_at_5": round(hit5_rate, 4),
         "mean_reciprocal_rank": round(mean_rr, 4),
         "average_precision_at_5": round(avg_p5, 4),
+        "average_recall_at_5": round(avg_r5, 4),
+        "mean_ndcg_at_5": round(avg_ndcg5, 4),
         "average_keyword_coverage": round(avg_kw, 4),
         "average_latency_seconds": round(avg_lat, 4),
     }

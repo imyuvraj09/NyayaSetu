@@ -1,0 +1,28 @@
+{
+  "experiment_id": "baseline_reranked_rag",
+  "timestamp": "20260905_213743",
+  "git_commit": "008de31e7a243522cf88f7ad4c95b9eee0d175e4",
+  "benchmark_file": "evaluation\\development\\existing_questions.json",
+  "benchmark_hash": "e6e7923a570b55cd4179eae53510b1a8efd21c56d8d3c6cf0188cc3d33120208",
+  "configuration_hash": "7e1196d4454cb10f79210ba0591c1d46d3b6a73d182e913dad728302db17430a",
+  "queries_evaluated_count": 3,
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "reranker_model": "BAAI/bge-reranker-base",
+  "top_k": 5,
+  "summary_metrics": {
+    "experiment_id": "baseline_reranked_rag",
+    "total_queries": 3,
+    "statutory_evaluable_queries": 3,
+    "out_of_scope_or_negative_queries": 0,
+    "document_hit_at_1": 1.0,
+    "document_hit_at_3": 1.0,
+    "document_hit_at_5": 1.0,
+    "mean_reciprocal_rank": 1.0,
+    "average_precision_at_5": 0.9333,
+    "average_recall_at_5": 1.0,
+    "mean_ndcg_at_5": 1.0,
+    "average_keyword_coverage": 1.0,
+    "average_retrieval_latency_sec": 25.3416,
+    "average_total_latency_sec": 25.342
+  }
+}

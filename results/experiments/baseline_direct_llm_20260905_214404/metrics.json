@@ -1,0 +1,16 @@
+{
+  "experiment_id": "baseline_direct_llm",
+  "total_queries": 43,
+  "statutory_evaluable_queries": 39,
+  "out_of_scope_or_negative_queries": 4,
+  "document_hit_at_1": 0.0,
+  "document_hit_at_3": 0.0,
+  "document_hit_at_5": 0.0,
+  "mean_reciprocal_rank": 0.0,
+  "average_precision_at_5": 0.0,
+  "average_recall_at_5": 0.0,
+  "mean_ndcg_at_5": 0.0,
+  "average_keyword_coverage": 1.0,
+  "average_retrieval_latency_sec": 0.0,
+  "average_total_latency_sec": 0.0531
+}

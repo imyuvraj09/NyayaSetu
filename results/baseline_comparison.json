@@ -1,0 +1,54 @@
+[
+  {
+    "Configuration": "baseline_direct_llm",
+    "Number of Questions": 43,
+    "Hit@1": 0.0,
+    "Hit@3": 0.0,
+    "Hit@5": 0.0,
+    "Precision@5": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "nDCG@5": 0.0,
+    "Average Retrieval Latency (s)": 0.0,
+    "Average Total Latency (s)": 0.0531
+  },
+  {
+    "Configuration": "baseline_dense_rag",
+    "Number of Questions": 43,
+    "Hit@1": 0.8974,
+    "Hit@3": 0.9744,
+    "Hit@5": 0.9744,
+    "Precision@5": 0.8051,
+    "Recall@5": 0.9744,
+    "MRR": 0.9359,
+    "nDCG@5": 0.9649,
+    "Average Retrieval Latency (s)": 1.8361,
+    "Average Total Latency (s)": 1.8819
+  },
+  {
+    "Configuration": "baseline_hybrid_rag",
+    "Number of Questions": 43,
+    "Hit@1": 0.9231,
+    "Hit@3": 1.0,
+    "Hit@5": 1.0,
+    "Precision@5": 0.8462,
+    "Recall@5": 1.0,
+    "MRR": 0.9573,
+    "nDCG@5": 0.9872,
+    "Average Retrieval Latency (s)": 0.3792,
+    "Average Total Latency (s)": 0.4133
+  },
+  {
+    "Configuration": "baseline_reranked_rag",
+    "Number of Questions": 43,
+    "Hit@1": 0.8974,
+    "Hit@3": 0.9487,
+    "Hit@5": 0.9744,
+    "Precision@5": 0.8359,
+    "Recall@5": 0.9744,
+    "MRR": 0.9295,
+    "nDCG@5": 0.9697,
+    "Average Retrieval Latency (s)": 13.0859,
+    "Average Total Latency (s)": 13.1362
+  }
+]

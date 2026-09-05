@@ -1,0 +1,1441 @@
+{
+  "metadata": {
+    "name": "NyayaSetu Development Benchmark (Legacy 43-Question Corpus)",
+    "version": "2.1.0-dev",
+    "classification": "DEVELOPMENT / LEGACY BENCHMARK",
+    "total_queries": 43,
+    "note": "Preserved from legacy test_questions.json. For development and regression checking only; not claimed as an independent expert-annotated test set."
+  },
+  "queries": [
+    {
+      "query_id": "constitution_001",
+      "question": "What fundamental rights are guaranteed by the Constitution of India?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Constitution of India"
+      ],
+      "legal_domain": [
+        "Constitutional Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Part III"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Core fundamental rights query across Part III.",
+      "legacy_fields": {
+        "original_id": "constitution_001",
+        "category": "constitutional_law",
+        "expected_document": "Constitution of India",
+        "expected_section": "Part III",
+        "expected_keywords": [
+          "Fundamental Rights",
+          "Part III",
+          "Article",
+          "freedom"
+        ]
+      }
+    },
+    {
+      "query_id": "constitution_002",
+      "question": "What rights are guaranteed by the Constitution?",
+      "query_type": "direct_statutory",
+      "difficulty": "hard",
+      "statute": [
+        "Constitution of India"
+      ],
+      "legal_domain": [
+        "Constitutional Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Part III"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Colloquial query to investigate potential candidate competition with criminal penal codes.",
+      "legacy_fields": {
+        "original_id": "constitution_002",
+        "category": "constitutional_law",
+        "expected_document": "Constitution of India",
+        "expected_section": "Part III",
+        "expected_keywords": [
+          "rights",
+          "Constitution",
+          "citizen",
+          "State"
+        ]
+      }
+    },
+    {
+      "query_id": "constitution_003",
+      "question": "What is guaranteed under Article 14 regarding equality before law?",
+      "query_type": "section_identification",
+      "difficulty": "easy",
+      "statute": [
+        "Constitution of India"
+      ],
+      "legal_domain": [
+        "Constitutional Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Article 14"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Direct factual query on Article 14.",
+      "legacy_fields": {
+        "original_id": "constitution_003",
+        "category": "constitutional_law",
+        "expected_document": "Constitution of India",
+        "expected_section": "Article 14",
+        "expected_keywords": [
+          "equality",
+          "law",
+          "equal protection",
+          "discrimination"
+        ]
+      }
+    },
+    {
+      "query_id": "constitution_004",
+      "question": "What rights regarding freedom of speech and expression are provided in Article 19?",
+      "query_type": "direct_statutory",
+      "difficulty": "easy",
+      "statute": [
+        "Constitution of India"
+      ],
+      "legal_domain": [
+        "Constitutional Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Article 19"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Direct factual query on Article 19 freedoms.",
+      "legacy_fields": {
+        "original_id": "constitution_004",
+        "category": "constitutional_law",
+        "expected_document": "Constitution of India",
+        "expected_section": "Article 19",
+        "expected_keywords": [
+          "freedom of speech",
+          "expression",
+          "assemble",
+          "association"
+        ]
+      }
+    },
+    {
+      "query_id": "constitution_005",
+      "question": "What is the procedure to move the Supreme Court under Article 32 for constitutional remedies?",
+      "query_type": "section_identification",
+      "difficulty": "medium",
+      "statute": [
+        "Constitution of India"
+      ],
+      "legal_domain": [
+        "Constitutional Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Article 32"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Procedural constitutional remedies under Article 32.",
+      "legacy_fields": {
+        "original_id": "constitution_005",
+        "category": "constitutional_law",
+        "expected_document": "Constitution of India",
+        "expected_section": "Article 32",
+        "expected_keywords": [
+          "remedies",
+          "Supreme Court",
+          "writs",
+          "enforcement"
+        ]
+      }
+    },
+    {
+      "query_id": "constitution_006",
+      "question": "What does the Constitution provide regarding the Right to Education under Article 21A?",
+      "query_type": "section_identification",
+      "difficulty": "medium",
+      "statute": [
+        "Constitution of India"
+      ],
+      "legal_domain": [
+        "Constitutional Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Article 21A"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Specific fundamental right under Article 21A.",
+      "legacy_fields": {
+        "original_id": "constitution_006",
+        "category": "constitutional_law",
+        "expected_document": "Constitution of India",
+        "expected_section": "Article 21A",
+        "expected_keywords": [
+          "education",
+          "children",
+          "six to fourteen",
+          "free and compulsory"
+        ]
+      }
+    },
+    {
+      "query_id": "bns_001",
+      "question": "What is the punishment for committing theft under the Bharatiya Nyaya Sanhita?",
+      "query_type": "direct_statutory",
+      "difficulty": "easy",
+      "statute": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "legal_domain": [
+        "Criminal Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 303"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Direct penal query on Section 303 BNS.",
+      "legacy_fields": {
+        "original_id": "bns_001",
+        "category": "criminal_law",
+        "expected_document": "Bharatiya Nyaya Sanhita, 2023",
+        "expected_section": "Section 303",
+        "expected_keywords": [
+          "theft",
+          "punished",
+          "imprisonment",
+          "three years"
+        ]
+      }
+    },
+    {
+      "query_id": "bns_002",
+      "question": "What are the legal consequences and penalties for causing death by negligence?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "legal_domain": [
+        "Criminal Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 106"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Direct penal query on rash or negligent acts causing death under Section 106 BNS.",
+      "legacy_fields": {
+        "original_id": "bns_002",
+        "category": "criminal_law",
+        "expected_document": "Bharatiya Nyaya Sanhita, 2023",
+        "expected_section": "Section 106",
+        "expected_keywords": [
+          "death",
+          "negligence",
+          "rash",
+          "culpable homicide"
+        ]
+      }
+    },
+    {
+      "query_id": "bns_003",
+      "question": "How is snatching defined and punished under Section 304 of BNS?",
+      "query_type": "direct_statutory",
+      "difficulty": "easy",
+      "statute": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "legal_domain": [
+        "Criminal Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 304"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Newly introduced statutory offence of snatching under BNS.",
+      "legacy_fields": {
+        "original_id": "bns_003",
+        "category": "criminal_law",
+        "expected_document": "Bharatiya Nyaya Sanhita, 2023",
+        "expected_section": "Section 304",
+        "expected_keywords": [
+          "snatching",
+          "theft",
+          "sudden",
+          "imprisonment"
+        ]
+      }
+    },
+    {
+      "query_id": "bns_004",
+      "question": "What constitutes the offense of extortion and how is it penalised?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "legal_domain": [
+        "Criminal Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 308"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Conceptual definition of extortion under Section 308 BNS.",
+      "legacy_fields": {
+        "original_id": "bns_004",
+        "category": "criminal_law",
+        "expected_document": "Bharatiya Nyaya Sanhita, 2023",
+        "expected_section": "Section 308",
+        "expected_keywords": [
+          "extortion",
+          "fear",
+          "injury",
+          "dishonestly"
+        ]
+      }
+    },
+    {
+      "query_id": "bns_005",
+      "question": "What constitutes criminal conspiracy and what is the punishment under the Bharatiya Nyaya Sanhita?",
+      "query_type": "direct_statutory",
+      "difficulty": "hard",
+      "statute": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "legal_domain": [
+        "Criminal Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 61"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Inchoate crime definition under Section 61 BNS.",
+      "legacy_fields": {
+        "original_id": "bns_005",
+        "category": "criminal_law",
+        "expected_document": "Bharatiya Nyaya Sanhita, 2023",
+        "expected_section": "Section 61",
+        "expected_keywords": [
+          "conspiracy",
+          "agreement",
+          "illegal act",
+          "punishment"
+        ]
+      }
+    },
+    {
+      "query_id": "bns_006",
+      "question": "What is the punishment for organized crime under the Bharatiya Nyaya Sanhita?",
+      "query_type": "direct_statutory",
+      "difficulty": "hard",
+      "statute": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "legal_domain": [
+        "Criminal Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 111"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Organized crime provisions under Section 111 BNS.",
+      "legacy_fields": {
+        "original_id": "bns_006",
+        "category": "criminal_law",
+        "expected_document": "Bharatiya Nyaya Sanhita, 2023",
+        "expected_section": "Section 111",
+        "expected_keywords": [
+          "organized crime",
+          "syndicate",
+          "kidnapping",
+          "extortion"
+        ]
+      }
+    },
+    {
+      "query_id": "bnss_001",
+      "question": "What is the procedure for recording an arrest and rights of the arrested person under BNSS?",
+      "query_type": "direct_statutory",
+      "difficulty": "easy",
+      "statute": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "legal_domain": [
+        "Criminal Procedure"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 35"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "General procedure and rights upon arrest under BNSS.",
+      "legacy_fields": {
+        "original_id": "bnss_001",
+        "category": "criminal_procedure",
+        "expected_document": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+        "expected_section": "Section 35",
+        "expected_keywords": [
+          "arrest",
+          "police",
+          "custody",
+          "magistrate"
+        ]
+      }
+    },
+    {
+      "query_id": "bnss_002",
+      "question": "How is information in cognizable cases or First Information Report recorded under Section 173 of BNSS?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "legal_domain": [
+        "Criminal Procedure"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 173"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Statutory FIR recording procedure under Section 173 BNSS.",
+      "legacy_fields": {
+        "original_id": "bnss_002",
+        "category": "criminal_procedure",
+        "expected_document": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+        "expected_section": "Section 173",
+        "expected_keywords": [
+          "cognizable",
+          "information",
+          "police station",
+          "officer in charge"
+        ]
+      }
+    },
+    {
+      "query_id": "bnss_003",
+      "question": "What are the powers of police to arrest any person without warrant under BNSS?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "legal_domain": [
+        "Criminal Procedure"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 35"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Arrest without warrant powers under Section 35 BNSS.",
+      "legacy_fields": {
+        "original_id": "bnss_003",
+        "category": "criminal_procedure",
+        "expected_document": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+        "expected_section": "Section 35",
+        "expected_keywords": [
+          "arrest",
+          "warrant",
+          "police officer",
+          "cognizable offence"
+        ]
+      }
+    },
+    {
+      "query_id": "bnss_004",
+      "question": "What are the statutory provisions regarding the grant of bail in non-bailable offences?",
+      "query_type": "direct_statutory",
+      "difficulty": "hard",
+      "statute": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "legal_domain": [
+        "Criminal Procedure"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 480"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Discretionary bail rules under Section 480 BNSS.",
+      "legacy_fields": {
+        "original_id": "bnss_004",
+        "category": "criminal_procedure",
+        "expected_document": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+        "expected_section": "Section 480",
+        "expected_keywords": [
+          "bail",
+          "non-bailable",
+          "court",
+          "custody"
+        ]
+      }
+    },
+    {
+      "query_id": "bnss_005",
+      "question": "What is the procedure for zero FIR registration under the Bharatiya Nagarik Suraksha Sanhita?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "legal_domain": [
+        "Criminal Procedure"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 173"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Zero FIR and electronic FIR provisions under BNSS.",
+      "legacy_fields": {
+        "original_id": "bnss_005",
+        "category": "criminal_procedure",
+        "expected_document": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+        "expected_section": "Section 173",
+        "expected_keywords": [
+          "information",
+          "cognizable",
+          "jurisdiction",
+          "electronic"
+        ]
+      }
+    },
+    {
+      "query_id": "bnss_006",
+      "question": "What are the provisions for anticipatory bail under the Bharatiya Nagarik Suraksha Sanhita?",
+      "query_type": "direct_statutory",
+      "difficulty": "hard",
+      "statute": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "legal_domain": [
+        "Criminal Procedure"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 482"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Anticipatory bail direction under Section 482 BNSS.",
+      "legacy_fields": {
+        "original_id": "bnss_006",
+        "category": "criminal_procedure",
+        "expected_document": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+        "expected_section": "Section 482",
+        "expected_keywords": [
+          "anticipatory bail",
+          "High Court",
+          "Court of Session",
+          "arrest"
+        ]
+      }
+    },
+    {
+      "query_id": "bsa_001",
+      "question": "What is the distinction between primary evidence and secondary evidence under Bharatiya Sakshya Adhiniyam?",
+      "query_type": "direct_statutory",
+      "difficulty": "easy",
+      "statute": [
+        "Bharatiya Sakshya Adhiniyam, 2023"
+      ],
+      "legal_domain": [
+        "Evidence Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 57"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Documentary evidence categories under BSA.",
+      "legacy_fields": {
+        "original_id": "bsa_001",
+        "category": "evidence_law",
+        "expected_document": "Bharatiya Sakshya Adhiniyam, 2023",
+        "expected_section": "Section 57",
+        "expected_keywords": [
+          "primary evidence",
+          "secondary evidence",
+          "document",
+          "court"
+        ]
+      }
+    },
+    {
+      "query_id": "bsa_002",
+      "question": "What are the conditions for admissibility of electronic records under Section 63 of BSA?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Bharatiya Sakshya Adhiniyam, 2023"
+      ],
+      "legal_domain": [
+        "Evidence Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 63"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Electronic record certificate and admissibility conditions under BSA Section 63.",
+      "legacy_fields": {
+        "original_id": "bsa_002",
+        "category": "evidence_law",
+        "expected_document": "Bharatiya Sakshya Adhiniyam, 2023",
+        "expected_section": "Section 63",
+        "expected_keywords": [
+          "electronic record",
+          "admissibility",
+          "computer",
+          "certificate"
+        ]
+      }
+    },
+    {
+      "query_id": "bsa_003",
+      "question": "When are admissions and confessions made to a police officer inadmissible in court?",
+      "query_type": "fact_pattern",
+      "difficulty": "medium",
+      "statute": [
+        "Bharatiya Sakshya Adhiniyam, 2023"
+      ],
+      "legal_domain": [
+        "Evidence Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 23"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Exclusion of confessions made to police under Section 23 BSA.",
+      "legacy_fields": {
+        "original_id": "bsa_003",
+        "category": "evidence_law",
+        "expected_document": "Bharatiya Sakshya Adhiniyam, 2023",
+        "expected_section": "Section 23",
+        "expected_keywords": [
+          "confession",
+          "police officer",
+          "proved",
+          "accused"
+        ]
+      }
+    },
+    {
+      "query_id": "bsa_004",
+      "question": "What is the rule of burden of proof and who bears it in a legal proceeding?",
+      "query_type": "direct_statutory",
+      "difficulty": "hard",
+      "statute": [
+        "Bharatiya Sakshya Adhiniyam, 2023"
+      ],
+      "legal_domain": [
+        "Evidence Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 104"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "General burden of proof rule under Section 104 BSA.",
+      "legacy_fields": {
+        "original_id": "bsa_004",
+        "category": "evidence_law",
+        "expected_document": "Bharatiya Sakshya Adhiniyam, 2023",
+        "expected_section": "Section 104",
+        "expected_keywords": [
+          "burden of proof",
+          "fact",
+          "court",
+          "evidence"
+        ]
+      }
+    },
+    {
+      "query_id": "bsa_005",
+      "question": "What are the rules regarding electronic evidence?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Bharatiya Sakshya Adhiniyam, 2023"
+      ],
+      "legal_domain": [
+        "Evidence Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 63"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "General electronic evidence query to benchmark BSA retrieval.",
+      "legacy_fields": {
+        "original_id": "bsa_005",
+        "category": "evidence_law",
+        "expected_document": "Bharatiya Sakshya Adhiniyam, 2023",
+        "expected_section": "Section 63",
+        "expected_keywords": [
+          "electronic evidence",
+          "record",
+          "admissibility",
+          "certificate"
+        ]
+      }
+    },
+    {
+      "query_id": "bsa_006",
+      "question": "Under what circumstances can dying declarations be admitted as evidence?",
+      "query_type": "direct_statutory",
+      "difficulty": "hard",
+      "statute": [
+        "Bharatiya Sakshya Adhiniyam, 2023"
+      ],
+      "legal_domain": [
+        "Evidence Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 26"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Statements by persons who cannot be called as witnesses under Section 26 BSA.",
+      "legacy_fields": {
+        "original_id": "bsa_006",
+        "category": "evidence_law",
+        "expected_document": "Bharatiya Sakshya Adhiniyam, 2023",
+        "expected_section": "Section 26",
+        "expected_keywords": [
+          "cause of death",
+          "statement",
+          "deceased",
+          "admissible"
+        ]
+      }
+    },
+    {
+      "query_id": "consumer_001",
+      "question": "How is a consumer defined under the Consumer Protection Act?",
+      "query_type": "direct_statutory",
+      "difficulty": "easy",
+      "statute": [
+        "Consumer Protection Act"
+      ],
+      "legal_domain": [
+        "Consumer Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 2"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Statutory definition of consumer under Section 2(7) of CPA.",
+      "legacy_fields": {
+        "original_id": "consumer_001",
+        "category": "consumer_law",
+        "expected_document": "Consumer Protection Act",
+        "expected_section": "Section 2",
+        "expected_keywords": [
+          "consumer",
+          "goods",
+          "services",
+          "consideration"
+        ]
+      }
+    },
+    {
+      "query_id": "consumer_002",
+      "question": "What should a consumer do when a product is defective?",
+      "query_type": "fact_pattern",
+      "difficulty": "easy",
+      "statute": [
+        "Consumer Protection Act"
+      ],
+      "legal_domain": [
+        "Consumer Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 35"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Consumer dispute redressal procedural complaint.",
+      "legacy_fields": {
+        "original_id": "consumer_002",
+        "category": "consumer_law",
+        "expected_document": "Consumer Protection Act",
+        "expected_section": "Section 35",
+        "expected_keywords": [
+          "complaint",
+          "defect",
+          "District Commission",
+          "consumer"
+        ]
+      }
+    },
+    {
+      "query_id": "consumer_003",
+      "question": "What is the procedure for filing a complaint before the District Consumer Disputes Redressal Commission?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Consumer Protection Act"
+      ],
+      "legal_domain": [
+        "Consumer Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 35"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Procedural filing steps before District Commission under Section 35 CPA.",
+      "legacy_fields": {
+        "original_id": "consumer_003",
+        "category": "consumer_law",
+        "expected_document": "Consumer Protection Act",
+        "expected_section": "Section 35",
+        "expected_keywords": [
+          "complaint",
+          "District Commission",
+          "consumer",
+          "defective"
+        ]
+      }
+    },
+    {
+      "query_id": "consumer_004",
+      "question": "What reliefs or orders can the District Commission pass if goods suffer from defects?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Consumer Protection Act"
+      ],
+      "legal_domain": [
+        "Consumer Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 39"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Remedial orders by District Commission under Section 39 CPA.",
+      "legacy_fields": {
+        "original_id": "consumer_004",
+        "category": "consumer_law",
+        "expected_document": "Consumer Protection Act",
+        "expected_section": "Section 39",
+        "expected_keywords": [
+          "District Commission",
+          "defects",
+          "remove",
+          "replacement",
+          "refund"
+        ]
+      }
+    },
+    {
+      "query_id": "consumer_005",
+      "question": "What are the rules and liabilities governing product manufacturers under product liability?",
+      "query_type": "direct_statutory",
+      "difficulty": "hard",
+      "statute": [
+        "Consumer Protection Act"
+      ],
+      "legal_domain": [
+        "Consumer Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 84"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Product liability action against manufacturer under Section 84 CPA.",
+      "legacy_fields": {
+        "original_id": "consumer_005",
+        "category": "consumer_law",
+        "expected_document": "Consumer Protection Act",
+        "expected_section": "Section 84",
+        "expected_keywords": [
+          "product liability",
+          "manufacturer",
+          "defective",
+          "harm",
+          "compensation"
+        ]
+      }
+    },
+    {
+      "query_id": "it_001",
+      "question": "What constitutes legal recognition of electronic records and digital signatures under the IT Act?",
+      "query_type": "direct_statutory",
+      "difficulty": "easy",
+      "statute": [
+        "Information Technology Act"
+      ],
+      "legal_domain": [
+        "Cyber Law / Information Technology"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 4"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Legal validity of electronic records under Section 4 IT Act.",
+      "legacy_fields": {
+        "original_id": "it_001",
+        "category": "cyber_law",
+        "expected_document": "Information Technology Act",
+        "expected_section": "Section 4",
+        "expected_keywords": [
+          "electronic record",
+          "digital signature",
+          "legal recognition"
+        ]
+      }
+    },
+    {
+      "query_id": "it_002",
+      "question": "What are the penalties for unauthorized access to computer systems or hacking under the IT Act?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Information Technology Act"
+      ],
+      "legal_domain": [
+        "Cyber Law / Information Technology"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 43"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Penalty for damage to computer systems under Section 43 IT Act.",
+      "legacy_fields": {
+        "original_id": "it_002",
+        "category": "cyber_law",
+        "expected_document": "Information Technology Act",
+        "expected_section": "Section 43",
+        "expected_keywords": [
+          "computer system",
+          "unauthorized",
+          "damage",
+          "penalty",
+          "compensation"
+        ]
+      }
+    },
+    {
+      "query_id": "it_003",
+      "question": "What is the punishment for identity theft and cheating by personation using a computer resource?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Information Technology Act"
+      ],
+      "legal_domain": [
+        "Cyber Law / Information Technology"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 66C"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Identity theft provisions under Section 66C & 66D IT Act.",
+      "legacy_fields": {
+        "original_id": "it_003",
+        "category": "cyber_law",
+        "expected_document": "Information Technology Act",
+        "expected_section": "Section 66C",
+        "expected_keywords": [
+          "identity theft",
+          "electronic signature",
+          "password",
+          "punishment"
+        ]
+      }
+    },
+    {
+      "query_id": "it_004",
+      "question": "What is the liability of network service providers and intermediaries under Section 79 of the IT Act?",
+      "query_type": "section_identification",
+      "difficulty": "hard",
+      "statute": [
+        "Information Technology Act"
+      ],
+      "legal_domain": [
+        "Cyber Law / Information Technology"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 79"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Safe harbor and intermediary immunity conditions under Section 79 IT Act.",
+      "legacy_fields": {
+        "original_id": "it_004",
+        "category": "cyber_law",
+        "expected_document": "Information Technology Act",
+        "expected_section": "Section 79",
+        "expected_keywords": [
+          "intermediary",
+          "liability",
+          "third party",
+          "due diligence"
+        ]
+      }
+    },
+    {
+      "query_id": "it_005",
+      "question": "What are the powers of the Controller of Certifying Authorities under the Information Technology Act?",
+      "query_type": "direct_statutory",
+      "difficulty": "hard",
+      "statute": [
+        "Information Technology Act"
+      ],
+      "legal_domain": [
+        "Cyber Law / Information Technology"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 18"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Regulatory powers of Controller under Section 18 IT Act.",
+      "legacy_fields": {
+        "original_id": "it_005",
+        "category": "cyber_law",
+        "expected_document": "Information Technology Act",
+        "expected_section": "Section 18",
+        "expected_keywords": [
+          "Controller",
+          "Certifying Authorities",
+          "licence",
+          "digital signature"
+        ]
+      }
+    },
+    {
+      "query_id": "mv_001",
+      "question": "What are the licensing requirements to drive a motor vehicle under the Motor Vehicles Act?",
+      "query_type": "direct_statutory",
+      "difficulty": "easy",
+      "statute": [
+        "Motor Vehicles Act"
+      ],
+      "legal_domain": [
+        "Motor Vehicles Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 3"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Necessity for driving licence under Section 3 MV Act.",
+      "legacy_fields": {
+        "original_id": "mv_001",
+        "category": "transport_law",
+        "expected_document": "Motor Vehicles Act",
+        "expected_section": "Section 3",
+        "expected_keywords": [
+          "driving licence",
+          "motor vehicle",
+          "public place"
+        ]
+      }
+    },
+    {
+      "query_id": "mv_002",
+      "question": "What are the penalties and fines for driving under the influence of alcohol or drugs?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Motor Vehicles Act"
+      ],
+      "legal_domain": [
+        "Motor Vehicles Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 185"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Drunk driving penalties under Section 185 MV Act.",
+      "legacy_fields": {
+        "original_id": "mv_002",
+        "category": "transport_law",
+        "expected_document": "Motor Vehicles Act",
+        "expected_section": "Section 185",
+        "expected_keywords": [
+          "intoxicated",
+          "alcohol",
+          "breath analyser",
+          "punishment",
+          "fine"
+        ]
+      }
+    },
+    {
+      "query_id": "mv_003",
+      "question": "What are the requirements for mandatory insurance of motor vehicles against third party risk?",
+      "query_type": "direct_statutory",
+      "difficulty": "medium",
+      "statute": [
+        "Motor Vehicles Act"
+      ],
+      "legal_domain": [
+        "Motor Vehicles Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 146"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Mandatory third party vehicle insurance under Section 146 MV Act.",
+      "legacy_fields": {
+        "original_id": "mv_003",
+        "category": "transport_law",
+        "expected_document": "Motor Vehicles Act",
+        "expected_section": "Section 146",
+        "expected_keywords": [
+          "insurance",
+          "third party risk",
+          "policy",
+          "liability"
+        ]
+      }
+    },
+    {
+      "query_id": "mv_004",
+      "question": "What is the procedure for claiming compensation before a Motor Accidents Claims Tribunal?",
+      "query_type": "direct_statutory",
+      "difficulty": "hard",
+      "statute": [
+        "Motor Vehicles Act"
+      ],
+      "legal_domain": [
+        "Motor Vehicles Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 166"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Compensation claim filing under Section 166 MV Act.",
+      "legacy_fields": {
+        "original_id": "mv_004",
+        "category": "transport_law",
+        "expected_document": "Motor Vehicles Act",
+        "expected_section": "Section 166",
+        "expected_keywords": [
+          "Claims Tribunal",
+          "compensation",
+          "accident",
+          "application"
+        ]
+      }
+    },
+    {
+      "query_id": "mv_005",
+      "question": "What is the penalty for driving an uninsured vehicle under the Motor Vehicles Act?",
+      "query_type": "direct_statutory",
+      "difficulty": "easy",
+      "statute": [
+        "Motor Vehicles Act"
+      ],
+      "legal_domain": [
+        "Motor Vehicles Law"
+      ],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [
+        "Section 196"
+      ],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": false,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Driving uninsured vehicle penalties under Section 196 MV Act.",
+      "legacy_fields": {
+        "original_id": "mv_005",
+        "category": "transport_law",
+        "expected_document": "Motor Vehicles Act",
+        "expected_section": "Section 196",
+        "expected_keywords": [
+          "uninsured",
+          "motor vehicle",
+          "punishment",
+          "imprisonment",
+          "fine"
+        ]
+      }
+    },
+    {
+      "query_id": "out_of_scope_001",
+      "question": "What is the capital of France?",
+      "query_type": "negative_or_out_of_scope",
+      "difficulty": "easy",
+      "statute": [],
+      "legal_domain": [],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": true,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Non-legal general knowledge question to evaluate out-of-scope handling.",
+      "legacy_fields": {
+        "original_id": "out_of_scope_001",
+        "category": "out_of_scope",
+        "expected_document": "None",
+        "expected_section": null,
+        "expected_keywords": []
+      }
+    },
+    {
+      "query_id": "out_of_scope_002",
+      "question": "What is Newton's third law of motion?",
+      "query_type": "negative_or_out_of_scope",
+      "difficulty": "easy",
+      "statute": [],
+      "legal_domain": [],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": true,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Physics question to verify no hallucinated legal citations are invented.",
+      "legacy_fields": {
+        "original_id": "out_of_scope_002",
+        "category": "out_of_scope",
+        "expected_document": "None",
+        "expected_section": null,
+        "expected_keywords": []
+      }
+    },
+    {
+      "query_id": "ambiguous_001",
+      "question": "Can I sue someone?",
+      "query_type": "ambiguous",
+      "difficulty": "hard",
+      "statute": [],
+      "legal_domain": [],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": true,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Extremely broad, ambiguous legal query lacking factual context.",
+      "legacy_fields": {
+        "original_id": "ambiguous_001",
+        "category": "ambiguous",
+        "expected_document": "None",
+        "expected_section": null,
+        "expected_keywords": [
+          "cause of action",
+          "civil",
+          "remedy"
+        ]
+      }
+    },
+    {
+      "query_id": "ambiguous_002",
+      "question": "What is the limitation period?",
+      "query_type": "ambiguous",
+      "difficulty": "hard",
+      "statute": [],
+      "legal_domain": [],
+      "facts": null,
+      "legal_issue": null,
+      "relevant_sections": [],
+      "relevant_chunk_ids": [],
+      "negative_or_ambiguous": true,
+      "annotation_source": "legacy_development_corpus",
+      "review_status": "legacy_development",
+      "notes": "Ambiguous query where specific cause of action or enactment is unspecified.",
+      "legacy_fields": {
+        "original_id": "ambiguous_002",
+        "category": "ambiguous",
+        "expected_document": "None",
+        "expected_section": null,
+        "expected_keywords": [
+          "limitation",
+          "period",
+          "suit",
+          "appeal"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NyayaSetuBenchmarkQuerySchema",
+  "description": "Standardized schema for NyayaSetu legal retrieval and RAG benchmark queries.",
+  "type": "object",
+  "required": [
+    "query_id",
+    "question",
+    "query_type",
+    "difficulty",
+    "statute",
+    "legal_domain",
+    "negative_or_ambiguous",
+    "annotation_source",
+    "review_status"
+  ],
+  "properties": {
+    "query_id": {
+      "type": "string",
+      "description": "Unique identifier for the benchmark query (e.g. DEV_Q001, VAL_Q001, TEST_Q001)"
+    },
+    "question": {
+      "type": "string",
+      "minLength": 5,
+      "description": "The natural language legal question"
+    },
+    "query_type": {
+      "type": "string",
+      "enum": [
+        "direct_statutory",
+        "section_identification",
+        "fact_pattern",
+        "multi_part",
+        "cross_section",
+        "ambiguous",
+        "negative_or_out_of_scope"
+      ],
+      "description": "Taxonomy of the query structure and reasoning requirement"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["easy", "medium", "hard"],
+      "description": "Assessed complexity of retrieval and legal reasoning"
+    },
+    "statute": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of canonical statute names relevant to this query. Empty if out-of-scope."
+    },
+    "legal_domain": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Relevant areas of Indian law (e.g., Criminal Law, Constitutional Law)"
+    },
+    "facts": {
+      "type": ["object", "null"],
+      "description": "Structured facts extracted or specified in query. Null or empty if no fact-pattern is present.",
+      "properties": {
+        "actors": { "type": "array", "items": { "type": "string" } },
+        "actions": { "type": "array", "items": { "type": "string" } },
+        "events": { "type": "array", "items": { "type": "string" } },
+        "objects": { "type": "array", "items": { "type": "string" } },
+        "time_context": { "type": "array", "items": { "type": "string" } },
+        "location_context": { "type": "array", "items": { "type": "string" } },
+        "relationships": { "type": "array", "items": { "type": "string" } },
+        "explicit_legal_terms": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "legal_issue": {
+      "type": ["string", "null"],
+      "description": "The operative core legal question or issue framed in formal legal terms."
+    },
+    "relevant_sections": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Canonical section or article identifiers relevant to resolving the query."
+    },
+    "relevant_chunk_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Known relevant chunk IDs in the corpus, if validated by judicial benchmark."
+    },
+    "negative_or_ambiguous": {
+      "type": "boolean",
+      "description": "True if the query is deliberately unanswerable, out-of-corpus, or legally ambiguous."
+    },
+    "annotation_source": {
+      "type": "string",
+      "description": "Provenance of the question and ground truth (e.g., 'legacy_dev_corpus', 'bar_council_exam', 'manual_annotator_1')"
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["draft", "unreviewed", "peer_reviewed", "expert_verified", "legacy_development"],
+      "description": "Current quality assurance and peer review validation status"
+    },
+    "notes": {
+      "type": ["string", "null"],
+      "description": "Qualitative commentary or retrieval caveats"
+    }
+  },
+  "additionalProperties": true
+}
