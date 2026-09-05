@@ -68,6 +68,7 @@ async def query(request: QueryRequest):
     5. Deterministic citation validation and safety checks
     """
     session_id = request.session_id or str(uuid.uuid4())
+    request_id = getattr(request, "request_id", None) or str(uuid.uuid4())
 
     if not request.query or not request.query.strip():
         raise HTTPException(
@@ -76,14 +77,15 @@ async def query(request: QueryRequest):
         )
 
     logger.info(
-        "API Query received | session=%s | length=%d",
+        "API Query received | session=%s | request_id=%s | length=%d",
         session_id,
+        request_id,
         len(request.query),
     )
 
     try:
         pipeline = get_pipeline()
-        rag_result = pipeline.query(request.query)
+        rag_result = pipeline.query(request.query, request_id=request_id)
 
         # Convert SourceReference list to SourceDocument list for response
         mapped_sources = [
@@ -128,6 +130,8 @@ async def query(request: QueryRequest):
             generation_status=getattr(rag_result, "generation_status", "SUCCESS"),
             retrieval_status=getattr(rag_result, "retrieval_status", "SUCCESS"),
             validation_status=getattr(rag_result, "validation_status", "PASSED"),
+            request_id=request_id,
+            intent_coverage=getattr(rag_result, "intent_coverage", None),
         )
 
     except HTTPException:
@@ -144,4 +148,5 @@ async def query(request: QueryRequest):
             query=request.query,
             warnings=[f"Internal processing error: {err}"],
             status="error",
+            request_id=request_id,
         )

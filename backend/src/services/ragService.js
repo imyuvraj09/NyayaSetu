@@ -53,7 +53,7 @@ class RAGService {
    * @param {string} [sessionId] - Optional session ID for tracing
    * @returns {Promise<{ content: string, sources: Array, ragMetadata: Object }>}
    */
-  async queryLegalRAG(query, sessionId = null) {
+  async queryLegalRAG(query, sessionId = null, requestId = null) {
     const endpointUrl = `${this.baseUrl}/api/v1/query`;
     const startTime = Date.now();
 
@@ -63,7 +63,7 @@ class RAGService {
     }, this.timeoutMs);
 
     try {
-      console.log(`[RAG Client] Calling RAG service at ${endpointUrl} (timeout: ${this.timeoutMs}ms)`);
+      console.log(`[RAG Client] Calling RAG service at ${endpointUrl} (request_id: ${requestId || 'adhoc'}, timeout: ${this.timeoutMs}ms)`);
 
       const response = await fetch(endpointUrl, {
         method: 'POST',
@@ -74,6 +74,7 @@ class RAGService {
         body: JSON.stringify({
           query,
           session_id: sessionId,
+          request_id: requestId,
         }),
         signal: controller.signal,
       });
@@ -147,6 +148,8 @@ class RAGService {
         generationStatus: data.generation_status || (data.status === 'retrieval_only' ? 'RETRIEVAL_ONLY' : 'SUCCESS'),
         retrievalStatus: data.retrieval_status || 'SUCCESS',
         validationStatus: data.validation_status || 'PASSED',
+        requestId: data.request_id || requestId,
+        intentCoverage: data.intent_coverage || null,
       };
 
       console.log(

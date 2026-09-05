@@ -97,7 +97,9 @@ class ChatService {
    * @param {string} query
    * @returns {Promise<{ sessionId: string, userMessage: Object, assistantMessage: Object }>}
    */
-  async sendMessage(sessionId, query) {
+  async sendMessage(sessionId, query, requestId = null) {
+    const activeRequestId = requestId || `req-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+
     // 1. Verify session exists
     const session = await ChatSession.findOne({ sessionId });
     if (!session) {
@@ -110,7 +112,7 @@ class ChatService {
       role: 'user',
       content: query,
       sources: [],
-      ragMetadata: {},
+      ragMetadata: { requestId: activeRequestId },
       createdAt: new Date(),
     });
 
@@ -125,7 +127,7 @@ class ChatService {
     // 4. Contact Python FastAPI RAG Service
     // Note: If RAG service fails or times out, typed error is caught by controller/errorHandler.
     // The user's message is safely stored, and no fabricated assistant message is written.
-    const ragResponse = await ragService.queryLegalRAG(query, sessionId);
+    const ragResponse = await ragService.queryLegalRAG(query, sessionId, activeRequestId);
 
     // 5. Persist Assistant Response with normalized sources and provenance
     const assistantMessage = await ChatMessage.create({

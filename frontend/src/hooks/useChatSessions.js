@@ -178,7 +178,8 @@ export function useChatSessions() {
       }
 
       try {
-        const res = await sendChatMessage(text, activeSessionId);
+        const requestId = `req-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+        const res = await sendChatMessage(text, activeSessionId, requestId);
         clearTimeout(stageTimer);
 
         if (res && res.success && res.message) {

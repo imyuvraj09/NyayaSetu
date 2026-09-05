@@ -54,7 +54,14 @@ class LegalQueryAnalysis:
     offence: Optional[str] = None
     topic_keywords: List[str] = field(default_factory=list)
     excluded_topics: List[str] = field(default_factory=list)
+    sub_domain: str = ""
+    hierarchical_taxonomy: Dict[str, str] = field(default_factory=dict)
     legal_question: Optional[LegalQuestion] = None
+
+    @property
+    def domain(self) -> str:
+        """Alias for legal_domain for consistency."""
+        return self.legal_domain
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation."""
@@ -69,6 +76,8 @@ class LegalQueryAnalysis:
             "act_aliases": self.act_aliases,
             "document_id": self.document_id,
             "legal_domain": self.legal_domain,
+            "sub_domain": self.sub_domain,
+            "hierarchical_taxonomy": self.hierarchical_taxonomy,
             "intent": self.intent,
             "entities": self.entities,
             "requested_information": self.requested_information,
@@ -119,7 +128,8 @@ KNOWN_ACT_REGISTRY = [
         "aliases": ["BSA", "BSA 2023", "Bharatiya Sakshya Adhiniyam", "Indian Evidence Act", "IEA", "Evidence Act"],
         "domain": "Evidence Law",
         "keywords": [
-            "electronic records", "electronic record", "admissibility", "admissible", "evidence",
+            "electronic records", "electronic record", "admissibility", "admissible", "law of evidence",
+            "rules of evidence", "admissibility of evidence", "circumstantial evidence", "electronic evidence",
             "burden of proof", "presumption", "confession", "dying declaration", "witness",
             "testimony", "expert opinion", "documentary evidence", "primary evidence", "secondary evidence"
         ],
@@ -148,9 +158,19 @@ KNOWN_ACT_REGISTRY = [
         "document_id": "sexual_harassment_workplace_act_2013",
         "act_name": "The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013",
         "short_name": "POSH",
-        "aliases": ["POSH", "POSH Act", "Sexual Harassment at Workplace", "Sexual Harassment of Women at Workplace"],
+        "aliases": [
+            "POSH", "POSH Act", "Sexual Harassment at Workplace", "Sexual Harassment of Women at Workplace",
+            "The Sexual Harassment of Women at Workplace Act, 2013", "The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013"
+        ],
         "domain": "Labour Law / Women's Rights",
-        "keywords": ["posh", "sexual harassment at workplace", "internal complaints committee", "icc", "local committee"],
+        "keywords": [
+            "posh", "posh act", "sexual harassment", "workplace harassment",
+            "sexual harassment at workplace", "sexual harassment at her workplace",
+            "internal complaints committee", "internal committee", "icc",
+            "local committee", "local complaints committee", "lcc",
+            "complaint of sexual harassment", "employer duties", "section 9",
+            "presiding officer", "conciliating"
+        ],
     },
     {
         "document_id": "right_to_information_act_2005",
@@ -264,6 +284,10 @@ class LegalQueryAnalyzer:
                 "Tax / GST Law": "gst_act_2017",
                 "RTI / Information Law": "right_to_information_act_2005",
                 "Labour Law / Workplace Sexual Harassment (POSH)": "sexual_harassment_workplace_act_2013",
+                "Employment and Workplace Law": "sexual_harassment_workplace_act_2013",
+                "Gender and Sexual Harassment Law": "sexual_harassment_workplace_act_2013",
+                "Workplace Sexual Harassment Law": "sexual_harassment_workplace_act_2013",
+                "Labour Law / Women's Rights": "sexual_harassment_workplace_act_2013",
                 "Transport & Motor Vehicles Law": "motor_vehicle_act",
                 "Law of Evidence": "bsa_2023",
                 "Criminal Procedure": "bnss_2023",
@@ -338,7 +362,8 @@ class LegalQueryAnalyzer:
         is_unindexed = (unindexed_act_name is not None and detected_act_entry is None)
 
         # Generate facet-targeted sub-queries
-        topic_context = lq.primary_legal_issue.replace("_", " ")
+        primary_issue = lq.primary_legal_issue
+        topic_context = primary_issue.replace("_", " ")
         if len(lq.requested_facets) >= 2 or lq.is_multi_part:
             is_multi_part = True
             for facet in lq.requested_facets:
@@ -367,6 +392,19 @@ class LegalQueryAnalyzer:
                     else:
                         sq_text = f"{facet} {topic_context}".strip()
                         sq_act = act_res
+                elif "posh" in domain_res.lower() or "sexual_harassment" in primary_issue.lower() or "sexual harassment" in lower_query:
+                    if f_lower in ("rights", "protections", "protection"):
+                        sq_text = f"Legal protections against sexual harassment at workplace employer duties Section 3 Section 19 {topic_context}".strip()
+                        sq_act = "The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013"
+                    elif f_lower in ("procedure", "complaint", "mechanisms", "mechanism"):
+                        sq_text = f"Internal Complaints Committee ICC Local Committee complaint procedure inquiry Section 4 Section 6 Section 9 {topic_context}".strip()
+                        sq_act = "The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013"
+                    elif f_lower == "evidence":
+                        sq_text = f"Evidence relevant to workplace sexual harassment inquiry Section 11 contemporaneous records statements {topic_context}".strip()
+                        sq_act = "The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013"
+                    else:
+                        sq_text = f"{facet} {topic_context}".strip()
+                        sq_act = "The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013"
                 elif f_lower in ("offence", "offences"):
                     sq_text = f"Offences applicable {topic_context} {act_short_res or ''}".strip()
                     sq_act = act_res
@@ -403,13 +441,38 @@ class LegalQueryAnalyzer:
                     )
                 )
 
-        primary_issue = lq.primary_legal_issue
+        if ("posh" in domain_res.lower() or "sexual_harassment" in primary_issue.lower() or "sexual harassment" in lower_query) and len(sub_queries) < 2:
+            is_multi_part = True
+            posh_act_name = "The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013"
+            sub_queries = [
+                SubQuery(
+                    aspect="protections",
+                    sub_query_text="Legal protections against workplace sexual harassment Section 3 Section 12 Section 19",
+                    target_act=posh_act_name,
+                ),
+                SubQuery(
+                    aspect="complaint_mechanisms",
+                    sub_query_text="Internal Complaints Committee ICC Local Committee complaint procedure Section 4 Section 6 Section 9",
+                    target_act=posh_act_name,
+                ),
+                SubQuery(
+                    aspect="evidence",
+                    sub_query_text="Relevant evidence workplace sexual harassment inquiry Section 11 contemporaneous communication witness records",
+                    target_act=posh_act_name,
+                ),
+            ]
+
         topic_keywords = lq.operative_legal_concepts
         excluded_topics: List[str] = []
         if "circumstantial" in lower_query or "panchsheel" in lower_query:
             excluded_topics = ["consent", "promise to marry", "rape", "sexual offences", "misconception of fact", "abetment of suicide"]
         elif lq.primary_task == "SEARCH_SEIZURE" and lq.background_offence:
             excluded_topics = [f"punishment for {lq.background_offence}", f"sentencing for {lq.background_offence}"]
+        elif "posh" in domain_res.lower() or "sexual_harassment" in primary_issue or "sexual harassment" in lower_query:
+            excluded_topics = [
+                "admissibility of electronic records under bsa", "section 63 certificate",
+                "electronic records admissibility", "circumstantial evidence", "homicide", "theft", "consumer dispute", "insolvency"
+            ]
         detected_offence = lq.operative_legal_concepts[0] if lq.operative_legal_concepts else None
 
         # Authority requirement dynamically derived from LegalQuestion
@@ -420,6 +483,19 @@ class LegalQueryAnalyzer:
         else:
             auth_req = AuthorityRequirement.STATUTE
 
+        # Hierarchical legal taxonomy mapping
+        sub_d = getattr(lq, "sub_domain", domain_res) or domain_res
+        tax_path = getattr(lq, "taxonomy_path", [])
+        hierarchical_taxonomy = {
+            "primary_domain": domain_res,
+            "sub_domain": sub_d,
+            "subdomain": sub_d,
+            "specific_area": tax_path[2] if len(tax_path) > 2 else primary_issue.replace("_", " ").title(),
+            "legal_topic": primary_issue.replace("_", " ").title(),
+            "relevant_act": act_res or (lq.acts[0] if lq.acts else "Indian Statutory Law"),
+            "taxonomy_path": tax_path,
+        }
+
         return LegalQueryAnalysis(
             original_query=query,
             normalized_query=cleaned,
@@ -428,6 +504,8 @@ class LegalQueryAnalyzer:
             act_aliases=act_aliases_res,
             document_id=doc_id_res,
             legal_domain=domain_res,
+            sub_domain=getattr(lq, "sub_domain", ""),
+            hierarchical_taxonomy=hierarchical_taxonomy,
             intent=intent,
             entities=entities,
             requested_information=requested_info,

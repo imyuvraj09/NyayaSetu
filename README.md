@@ -252,6 +252,18 @@ git clone https://github.com/YOUR_USERNAME/NyayaSetu.git
 cd NyayaSetu
 ```
 
+### ⚡ Quick Start (All Services)
+Run all three services (Frontend, Backend, and RAG Service) concurrently with a single command from the project root:
+```bash
+npm run dev
+```
+Or run individually:
+```bash
+npm run dev:frontend  # Vite UI (http://localhost:5173)
+npm run dev:backend   # Express API Gateway (http://localhost:3000)
+npm run dev:rag       # Python FastAPI RAG Service (http://127.0.0.1:8000)
+```
+
 ### Frontend Setup
 ```bash
 cd frontend

@@ -143,7 +143,7 @@ class ClaimEvidenceValidator:
                 act_ref = "Bharatiya Nagarik Suraksha Sanhita, 2023"
             elif "bharatiya sakshya" in lower_s or "bsa" in lower_s:
                 act_ref = "Bharatiya Sakshya Adhiniyam, 2023"
-            elif "right to information" in lower_s or "rti" in lower_s:
+            elif "right to information" in lower_s or re.search(r"\brti\b", lower_s):
                 act_ref = "Right to Information Act, 2005"
             elif "consumer protection" in lower_s:
                 act_ref = "Consumer Protection Act, 2019"

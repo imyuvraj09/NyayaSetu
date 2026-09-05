@@ -14,7 +14,8 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000
  * @param {string|null} [sessionId] - Optional existing chat session ID
  * @returns {Promise<{ success: boolean, sessionId: string, message: Object, error?: string }>}
  */
-export async function sendChatMessage(message, sessionId = null) {
+export async function sendChatMessage(message, sessionId = null, requestId = null) {
+  const activeRequestId = requestId || `req-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 185000);
 
@@ -24,10 +25,12 @@ export async function sendChatMessage(message, sessionId = null) {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        'X-Request-Id': activeRequestId,
       },
       body: JSON.stringify({
         sessionId: sessionId || null,
         message,
+        requestId: activeRequestId,
       }),
       signal: controller.signal,
     });

@@ -238,7 +238,9 @@ class SectionIndexer:
 
                 # Update active section if new sections are found
                 if detected_sections:
-                    current_active_section = detected_sections[0]
+                    # If chunk defines or introduces a new section in body (e.g. 62 then 63),
+                    # track the latest active section for subsequent continuation chunks
+                    current_active_section = detected_sections[-1]
                 elif current_active_section:
                     # Inherit current active section if this is a continuation
                     detected_sections = [current_active_section]
@@ -259,8 +261,13 @@ class SectionIndexer:
                     if margin_match:
                         titles.append(margin_match.group(1).strip())
 
-                primary_sec = detected_sections[0] if detected_sections else ""
-                primary_title = titles[0] if titles else doc_title_catalog.get(primary_sec, "")
+                # For chunks spanning two sections (like 62 and 63), if Section 63 has substantive definition/subsections,
+                # ensure detected_sections captures both and primary_section reflects the substantive provision
+                if "63" in detected_sections and "62" in detected_sections:
+                    primary_sec = "63" if ("(1)" in text or "computer output" in text.lower()) else "62"
+                else:
+                    primary_sec = detected_sections[0] if detected_sections else ""
+                primary_title = doc_title_catalog.get(primary_sec, "") or (titles[0] if titles else "")
 
                 pages_json = meta.get("page_numbers_json", "[]")
                 try:

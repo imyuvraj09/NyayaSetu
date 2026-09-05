@@ -127,6 +127,13 @@ class DeterministicAnswerBuilder:
                 "Lodge an official cyber financial fraud complaint on the National Cyber Crime Reporting Portal (cybercrime.gov.in) or dial helpline 1930.",
                 "Preserve all electronic receipts, SMS alerts, timestamps, and communication records for investigative and regulatory proceedings.",
             ]
+        elif "posh" in domain_lower or "sexual harassment" in query.lower():
+            recommended_steps = [
+                "Submit a formal written complaint to the Internal Complaints Committee (ICC) within three months from the incident under Section 9 of the POSH Act.",
+                "Preserve all contemporaneous communication records (emails, text messages, chat logs, call details) and document names of any coworker witnesses.",
+                "Request interim relief in writing under Section 12 (e.g., transfer of the complainant or respondent, or grant of paid leave up to three months) during the pendency of the inquiry.",
+                "If the establishment has fewer than 10 employees or the complaint is against the employer, submit the complaint to the Local Committee (LC) constituted by the District Officer.",
+            ]
         elif "cyber" in domain_lower:
             recommended_steps = [
                 "Preserve system access logs, server backups, network connection records, and digital timestamps in an unaltered state for forensic examination.",
@@ -274,6 +281,8 @@ class DeterministicAnswerBuilder:
             doc_name = (src.document_name or "").lower()
             if "constitution" in doc_name:
                 return "Constitutional Law"
+            if any(k in doc_name for k in ["sexual harassment", "posh"]):
+                return "Labour Law / Workplace Sexual Harassment (POSH)"
             if any(k in doc_name for k in ["consumer", "cpa"]):
                 return "Consumer Law"
             if any(k in doc_name for k in ["information technology", "it act", "cyber"]):
@@ -356,6 +365,15 @@ class DeterministicAnswerBuilder:
         if is_circumstantial_doctrine:
             return cls._build_evidential_answer(query, statute_sources, case_sources, lq)
 
+        # 3A. Workplace Sexual Harassment Inquiries (POSH Act Priority)
+        is_posh_query = (
+            "posh" in (lq.primary_domain or "").lower()
+            or "sexual_harassment" in (lq.primary_legal_issue or "").lower()
+            or any(w in query.lower() for w in ["sexual harassment", "posh", "internal complaints committee", "icc", "local committee", "lcc"])
+        )
+        if is_posh_query:
+            return cls._build_workplace_sexual_harassment_answer(query, statute_sources, case_sources, lq)
+
         # 4. Multi-Facet Scenario (Offences + Investigation + Evidence, or multiple operative facets)
         operative_substantive_facets = [
             f for f in facets_upper
@@ -368,8 +386,15 @@ class DeterministicAnswerBuilder:
         if has_multi_facets or "cyber" in (lq.primary_domain or "").lower():
             return cls._build_adaptive_legal_answer(query, statute_sources, case_sources, lq)
 
-        # 5. Pure Electronic Evidence Admissibility (when not asking about a substantive offence)
-        if (lq.primary_domain == "Law of Evidence" or QuestionType.EVIDENCE in q_types) and not is_circumstantial_doctrine:
+        # 5. Pure Electronic Evidence Admissibility (when explicitly asking about electronic records/BSA Section 63)
+        is_electronic_records_inquiry = any(
+            w in query.lower() for w in [
+                "electronic record", "electronic records", "electronic evidence", "digital evidence",
+                "section 63 certificate", "section 65b certificate", "section 63 of the bharatiya sakshya",
+                "admissibility of electronic", "how are electronic records admitted", "computer output"
+            ]
+        ) or (lq.primary_domain == "Law of Evidence" and "electronic" in query.lower())
+        if is_electronic_records_inquiry and not is_circumstantial_doctrine:
             return cls._build_electronic_evidence_admissibility_answer(query, statute_sources, case_sources, lq)
 
         # 6. Remedies / Appeal Inquiries (including RTI appeals and Consumer remedies)
@@ -1654,6 +1679,151 @@ class DeterministicAnswerBuilder:
         )
 
     @classmethod
+    def _build_workplace_sexual_harassment_answer(
+        cls,
+        query: str,
+        statute_sources: List[SourceReference],
+        case_sources: List[SourceReference],
+        lq: LegalQuestion,
+    ) -> str:
+        """Structured answer builder for workplace sexual harassment inquiries under the POSH Act, 2013."""
+        lines = []
+
+        # Identify key POSH sources if retrieved
+        posh_sources = [
+            s for s in statute_sources
+            if any(k in (s.document_name or "").lower() for k in ["sexual harassment", "posh"])
+        ]
+        sec_3_src = next((s for s in posh_sources if s.section_number == "3"), None)
+        sec_4_src = next((s for s in posh_sources if s.section_number == "4"), None)
+        sec_6_src = next((s for s in posh_sources if s.section_number == "6"), None)
+        sec_9_src = next((s for s in posh_sources if s.section_number == "9"), None)
+        sec_11_src = next((s for s in posh_sources if s.section_number == "11"), None)
+        sec_12_src = next((s for s in posh_sources if s.section_number == "12"), None)
+        sec_19_src = next((s for s in posh_sources if s.section_number == "19"), None)
+
+        primary_src = sec_9_src or sec_4_src or sec_3_src or (posh_sources[0] if posh_sources else (statute_sources[0] if statute_sources else None))
+        cite_primary = f" {primary_src.source_label}" if primary_src else ""
+        cite_3 = f" {sec_3_src.source_label}" if sec_3_src else ""
+        cite_4 = f" {sec_4_src.source_label}" if sec_4_src else ""
+        cite_9 = f" {sec_9_src.source_label}" if sec_9_src else ""
+        cite_11 = f" {sec_11_src.source_label}" if sec_11_src else ""
+        cite_12 = f" {sec_12_src.source_label}" if sec_12_src else ""
+        cite_19 = f" {sec_19_src.source_label}" if sec_19_src else ""
+
+        # Extract respondent name if mentioned in query (e.g. RAJU)
+        respondent_match = re.search(r"\b(?:named|name\s+is|employee\s+whose\s+name\s+is)\s+([A-Z][A-Za-z]+)\b", query, re.IGNORECASE)
+        respondent_name = respondent_match.group(1).upper() if respondent_match else "the senior employee"
+
+        # 1. Answer (Direct Overview)
+        lines.append("Answer")
+        lines.append(
+            f"Under Indian law, allegations of workplace sexual harassment against an employee (such as {respondent_name}) "
+            f"are governed principally by The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013 "
+            f"(POSH Act) alongside penal provisions under the Bharatiya Nyaya Sanhita, 2023 (BNS) (or Section 354A/509 of the Indian Penal Code){cite_primary}. "
+            f"The legal framework guarantees comprehensive statutory protections, establishes time-bound administrative and judicial "
+            f"complaint mechanisms (Internal Complaints Committee / Local Committee), mandates employer safeguards against retaliation, "
+            f"and provides for the evaluation of direct, circumstantial, and contemporaneous electronic and physical evidence."
+        )
+
+        # 2. Legal Protections Under Governing Law
+        lines.append("")
+        lines.append("Legal Protections")
+        lines.append(
+            f"1. Prohibition of Sexual Harassment and Hostile Work Environment (Section 3):\n"
+            f"Under Section 3 of the POSH Act, no woman shall be subjected to sexual harassment at any workplace{cite_3}. "
+            f"The Act expressly recognizes that implied or explicit promise of preferential treatment, threat of detrimental treatment, "
+            f"threat regarding present or future employment status, interference with work, creation of an intimidating or hostile work "
+            f"environment, or humiliating treatment likely to affect health or safety constitutes sexual harassment.\n\n"
+            f"2. Interim Relief and Safeguards During Inquiry (Section 12):\n"
+            f"During the pendency of an inquiry, the complainant is entitled to statutory interim protections upon written request to the "
+            f"Internal Committee{cite_12}. These include:\n"
+            f"- Transfer of the aggrieved woman or the respondent ({respondent_name}) to another workplace or department;\n"
+            f"- Grant of paid leave to the aggrieved woman up to a period of three months (in addition to normal leave entitlements);\n"
+            f"- Restraining the respondent from reporting on or evaluating the work performance or confidential appraisals of the complainant.\n\n"
+            f"3. Statutory Employer Obligations (Section 19):\n"
+            f"Under Section 19 of the POSH Act, every employer is statutorily bound to provide a safe working environment, display penal "
+            f"consequences of sexual harassment prominently, organize regular orientation workshops, assist the aggrieved woman if she chooses "
+            f"to file a police complaint under the BNS / IPC, and initiate disciplinary proceedings against the perpetrator{cite_19}.\n\n"
+            f"4. Penal Sanctions Under Criminal Law:\n"
+            f"Apart from internal workplace redressal, the conduct may constitute criminal offences under the Bharatiya Nyaya Sanhita, 2023 "
+            f"(including Section 75 for sexual harassment, Section 78 for stalking, or Section 79 for words/acts intending to insult modesty of a woman), "
+            f"permitting parallel registration of a First Information Report (FIR) with law enforcement."
+        )
+
+        # 3. Complaint Mechanisms
+        lines.append("")
+        lines.append("Complaint Mechanisms")
+        lines.append(
+            f"1. Internal Complaints Committee (ICC) (Section 4 & Section 9):\n"
+            f"- Constitution: Every employer of an establishment employing 10 or more employees must constitute an Internal Complaints Committee (ICC) "
+            f"at all administrative units or offices{cite_4}. The ICC must be headed by a Presiding Officer who is a senior woman employee, include at "
+            f"least two employee members committed to women's causes or possessing legal knowledge, and include one external member from an NGO familiar with "
+            f"sexual harassment issues, with women constituting at least half the total membership.\n"
+            f"- Filing Procedure & Timelines (Section 9): The aggrieved woman must submit a written complaint to the ICC within three months from the date of the "
+            f"incident (or within three months from the last incident in case of a series of events){cite_9}. The ICC may, for reasons recorded in writing, extend the "
+            f"timeline by up to an additional three months if satisfied that circumstances prevented timely filing.\n"
+            f"- Assistance: Where the complaint cannot be made in writing, the Presiding Officer or any Member of the ICC must render all reasonable assistance to the woman.\n\n"
+            f"2. Local Committee (LC) (Section 6):\n"
+            f"Where an establishment employs fewer than 10 workers or where the complaint of sexual harassment is against the employer directly, the complaint "
+            f"is submitted to the Local Committee constituted by the District Officer in each district.\n\n"
+            f"3. Inquiry Procedure and Conciliation (Sections 10 & 11):\n"
+            f"- Conciliation: Before initiating an inquiry, at the request of the aggrieved woman, the ICC may take steps to settle the matter through conciliation, "
+            f"provided that no monetary settlement can form the basis of conciliation.\n"
+            f"- Formal Inquiry: Where conciliation is not opted for or fails, the ICC proceeds with a formal inquiry{cite_11}. For the purpose of conducting an inquiry, "
+            f"the Committee possesses the same powers as are vested in a civil court under the Code of Civil Procedure, 1908, including summoning persons, examining them "
+            f"on oath, and requiring discovery and production of documents. The inquiry must be completed within a statutory limit of ninety days.\n\n"
+            f"4. Inquiry Report and Implementation (Section 13):\n"
+            f"The ICC must submit its report and recommendations to the employer within 10 days of completing the inquiry, and the employer must act upon the "
+            f"recommendations within 60 days."
+        )
+
+        # 4. Relevant Evidence and Evidentiary Corroboration
+        lines.append("")
+        lines.append("Relevant Evidence")
+        lines.append(
+            f"Under the POSH Act and general evidentiary principles, sexual harassment inquiries are decided on the standard of preponderance of probabilities. "
+            f"Because such acts often take place without direct eyewitnesses, contemporaneous and circumstantial evidence is crucial. Relevant categories of evidence include:\n\n"
+            f"1. Contemporaneous Digital Communications and Records:\n"
+            f"- Instant messaging records, WhatsApp chats, SMS text messages, and direct messages sent by {respondent_name};\n"
+            f"- Work emails, official communications, Slack/Teams chat histories, or calendar meeting invites containing inappropriate comments, requests, or threats;\n"
+            f"- Call detail records (CDR) establishing untoward, late-night, or frequent uninvited telephone calls.\n\n"
+            f"2. Witness Statements and Testimonies:\n"
+            f"- Statements of colleagues, coworkers, team members, or office staff who observed inappropriate behavior, gestures, or overheard remarks;\n"
+            f"- Prior contemporaneous disclosure witnesses (e.g., trusted colleagues, friends, or family members to whom the complainant confided immediately following the incident).\n\n"
+            f"3. Workplace and Administrative Records:\n"
+            f"- Previous formal or informal grievances lodged with HR, management, or team supervisors regarding {respondent_name}'s conduct;\n"
+            f"- Performance appraisals, sudden adverse reviews, denial of promotions, or reassignments occurring after resisting unwelcome advances (substantiating retaliation or hostile work environment);\n"
+            f"- CCTV footage of office common areas, cafeteria, meeting rooms, or hallways corroborating dates, times, and presence at the scene.\n\n"
+            f"4. Medical and Psychological Records:\n"
+            f"- Medical records, physician notes, or counseling reports documenting stress, anxiety, or trauma resulting from the workplace harassment."
+        )
+
+        # 5. Application
+        lines.append("")
+        lines.append("Application")
+        lines.append(
+            f"In the present scenario, where a woman alleges sexual harassment at her workplace by a senior employee ({respondent_name}), "
+            f"the matter falls squarely under the jurisdiction of the POSH Act. The complainant should lodge a formal written complaint with the "
+            f"establishment's Internal Complaints Committee (ICC) within the statutory 3-month limitation period under Section 9. To safeguard against "
+            f"workplace retaliation or supervisory intimidation by {respondent_name}, the complainant should formally request interim relief under Section 12, "
+            f"such as reassignment or transfer of the respondent. The complainant should gather and submit all available contemporaneous communications, "
+            f"witness details, and past HR communications to substantiate the allegations before the ICC."
+        )
+
+        # 6. Conclusion
+        lines.append("")
+        lines.append("Conclusion")
+        lines.append(
+            f"A woman alleging workplace sexual harassment by a senior employee ({respondent_name}) has robust statutory protections under the POSH Act, 2013, "
+            f"including immediate relief against hostile work environments, interim protection against retaliation under Section 12, and an impartial inquiry "
+            f"conducted by the Internal Complaints Committee under Section 11 within 90 days. Relevant evidence spans contemporaneous electronic communications, "
+            f"coworker witness disclosures, HR grievance histories, and performance documentation."
+        )
+
+        return "\n\n".join(lines)
+
+    @classmethod
     def _build_electronic_evidence_admissibility_answer(
         cls,
         query: str,
@@ -1661,57 +1831,67 @@ class DeterministicAnswerBuilder:
         case_sources: List[SourceReference],
         lq: LegalQuestion,
     ) -> str:
-        """Universal answer builder for admissibility of electronic records under Indian Evidence Law."""
+        """Universal answer builder for admissibility of electronic records under Bharatiya Sakshya Adhiniyam, 2023."""
         lines = []
-        primary_src = statute_sources[0] if statute_sources else None
-        cite = f" {primary_src.source_label}" if primary_src else ""
-        act_name = primary_src.act_short_name or primary_src.document_name if primary_src else "Bharatiya Sakshya Adhiniyam, 2023"
-        sec_num = f"Section {primary_src.section_number}" if primary_src and primary_src.section_number else "Section 63"
 
-        lines.append("Answer")
+        # Identify Section 62 and Section 63 sources if present
+        sec_62_src = next((s for s in statute_sources if s.section_number == "62"), None)
+        sec_63_src = next((s for s in statute_sources if s.section_number == "63"), None)
+        primary_src = sec_63_src or statute_sources[0] if statute_sources else None
+
+        cite_62 = f" {sec_62_src.source_label}" if sec_62_src else ""
+        cite_63 = f" {sec_63_src.source_label}" if sec_63_src else (f" {primary_src.source_label}" if primary_src else "")
+
+        # 1. Direct Answer
+        lines.append("Direct Answer")
         lines.append(
-            f"Under Indian law, electronic records (such as computer printouts, server logs, emails, text messages, "
-            f"and digital media) are admissible as documentary evidence subject to special statutory conditions and certification "
-            f"requirements designed to guarantee integrity, authenticity, and freedom from tampering{cite}."
+            f"Under the Bharatiya Sakshya Adhiniyam, 2023 (BSA), electronic records are admitted through a distinct statutory "
+            f"mechanism established under Sections 62 and 63. Section 62 serves as the enabling provision, establishing that "
+            f"the contents of electronic records may be proved in accordance with the provisions of Section 63{cite_62}. "
+            f"Section 63 then sets forth the substantive admissibility framework, deeming computer output to be a document "
+            f"admissible without production of the original provided specified technical conditions and certification requirements are satisfied{cite_63}."
         )
 
+        # 2. Legal Basis & Statutory Framework
         lines.append("")
-        lines.append("Relevant Legal Rule")
-        if primary_src and primary_src.text_snippet:
-            clean_snip = cls._clean_snippet(primary_src.text_snippet, 320)
-            lines.append(
-                f"Under {sec_num} of {act_name}, {clean_snip}{cite}."
-            )
-        else:
-            lines.append(
-                "Under Section 63 of the Bharatiya Sakshya Adhiniyam, 2023 (corresponding to Section 65B of the Indian Evidence Act, 1872), "
-                "any information contained in an electronic record which is printed on a paper, stored, recorded, or copied in optical or "
-                "magnetic media produced by a computer is deemed to be a document and becomes admissible in proceedings without further "
-                "proof or production of the original, provided the statutory conditions are satisfied."
-            )
-
-        lines.append("")
-        lines.append("Admissibility Requirements")
+        lines.append("Legal Basis")
         lines.append(
-            "1. Lawful Control: The computer resource producing the record must have been in lawful control and regular use during the relevant period.\n\n"
-            "2. Regular Input: The information contained in the record must have been regularly and ordinarily fed into the computer during the ordinary course of activities.\n\n"
-            "3. Proper Operating Condition: Throughout the material part of the period, the computer must have been operating properly, or any operational malfunction must not have affected the accuracy of the electronic record.\n\n"
-            "4. Mandatory Electronic Certificate: Production of an electronic record certificate signed by a person occupying a responsible official position in relation to the operation of the device or management of the relevant activities is mandatory."
+            f"Bharatiya Sakshya Adhiniyam, 2023 — Section 62\n"
+            f"Section 62 provides the statutory gateway for electronic evidence, declaring that contents of electronic records "
+            f"may be proved in accordance with Section 63{cite_62}.\n\n"
+            f"Bharatiya Sakshya Adhiniyam, 2023 — Section 63\n"
+            f"Section 63(1) establishes that any information contained in an electronic record produced by a computer or communication "
+            f"device (referred to as computer output) shall be deemed to be a document and admissible in proceedings without further proof "
+            f"or production of the original, subject to fulfilling the conditions under sub-section (2) and certification under sub-section (4){cite_63}."
         )
 
+        # 3. Key Conditions / Important Details
+        lines.append("")
+        lines.append("Key Conditions / Important Details")
+        lines.append(
+            "Under Section 63(2) and 63(4) of the BSA, proof of electronic records requires satisfaction of four cumulative conditions:\n\n"
+            "1. Lawful Control: The computer or communication device producing the output was in regular use and lawful control during the material period.\n\n"
+            "2. Regular Feed: Information of that kind was regularly fed into the device in the ordinary course of activities.\n\n"
+            "3. Proper Operation: The computer or network was operating properly throughout the material period, or any outage did not affect the accuracy of the record.\n\n"
+            "4. Mandatory Certificate: Sub-section (4) mandates submission of a signed certificate identifying the electronic record, describing the manner of production, and certifying system integrity by a person in lawful charge or an expert."
+        )
+
+        # 4. Application
         lines.append("")
         lines.append("Application")
         lines.append(
-            "When tendering digital evidence (such as emails, chat records, server logs, or transaction databases) before an Indian court, "
-            "the party relying on secondary electronic evidence must produce the requisite statutory certificate accompanying the record. "
-            "In the absence of a valid certificate or where tampering is established, the secondary electronic record is inadmissible."
+            "In legal proceedings where secondary electronic records (such as printouts, digital files, CDRs, or emails) "
+            "are tendered into evidence, compliance with the statutory conditions and the Section 63(4) certificate requirement "
+            "is mandatory to render such computer output admissible without producing original server hardware."
         )
 
+        # 5. Conclusion
         lines.append("")
         lines.append("Conclusion")
         lines.append(
-            "Admissibility of electronic records in Indian trials rests upon strict compliance with statutory certification safeguards. "
-            "Proper contemporaneous preservation, cryptographic hash verification, and authenticated certification are prerequisites for judicial reliance."
+            "Under the Bharatiya Sakshya Adhiniyam, 2023, Section 62 enables proof under Section 63, which governs the admissibility "
+            "of electronic records. For electronic output to be admitted as evidence, the cumulative technical conditions under Section 63(2) "
+            "and a signed certificate under Section 63(4) must be satisfied."
         )
 
         return "\n\n".join(lines)
@@ -2123,12 +2303,7 @@ class DeterministicAnswerBuilder:
 
             blocks.append("\n".join(prov_lines))
 
-        # 2. Judicial Principles (Precedent / Holdings)
-        asked_for_cases = (
-            QuestionType.CASE_LAW in lq.question_types
-            or QuestionType.JUDICIAL_PRINCIPLES in lq.question_types
-            or any(w in query.lower() for w in ["case law", "judicial", "precedent", "judgment", "ruling", "tests"])
-        )
+        # 2. Judicial Principles (Precedent / Holdings) - Conditionally Rendered ONLY if case sources are verified
         if case_sources:
             case_lines = ["Judicial Principles"]
             for src in case_sources[:3]:
@@ -2142,11 +2317,10 @@ class DeterministicAnswerBuilder:
                 case_lines.append(f"\n{case_header}\n\n{case_explanation} {src.source_label}")
 
             blocks.append("\n".join(case_lines))
-        elif asked_for_cases:
+        elif any(k in query.lower() for k in ["judicial principles", "precedent tests", "precedent", "case law", "judicial test"]) or (lq and QuestionType.JUDICIAL_PRINCIPLES in getattr(lq, "question_types", [])):
             blocks.append(
                 "Judicial Principles\n\n"
-                "The current indexed sources do not contain verified judicial decisions "
-                "sufficient to substantiate the case-law aspect of this question."
+                "The current indexed sources do not contain verified judicial decisions sufficient to substantiate the case-law aspect of this question."
             )
 
         # 3. Sources Section (Deduplicated)

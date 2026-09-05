@@ -70,9 +70,10 @@ async function deleteChat(req, res, next) {
 async function postMessage(req, res, next) {
   try {
     const { sessionId } = req.params;
-    const { query } = req.body;
+    const { query, requestId: bodyRequestId } = req.body;
+    const requestId = bodyRequestId || req.headers['x-request-id'] || null;
 
-    const result = await chatService.sendMessage(sessionId, query);
+    const result = await chatService.sendMessage(sessionId, query, requestId);
 
     // Conforms strictly to the response contract:
     // { success: true, data: { sessionId, message: assistantMessage, userMessage } }
@@ -82,6 +83,7 @@ async function postMessage(req, res, next) {
         sessionId: result.sessionId,
         message: result.assistantMessage,
         userMessage: result.userMessage,
+        requestId: result.assistantMessage.ragMetadata?.requestId || requestId,
       },
       200
     );
@@ -99,7 +101,8 @@ async function postMessage(req, res, next) {
  */
 async function handleDirectChat(req, res, next) {
   try {
-    const { sessionId: rawSessionId, message: rawMessage, query: rawQuery, title } = req.body || {};
+    const { sessionId: rawSessionId, message: rawMessage, query: rawQuery, title, requestId: bodyRequestId } = req.body || {};
+    const requestId = bodyRequestId || req.headers['x-request-id'] || null;
     const text = (rawMessage || rawQuery || '').trim();
 
     if (!text) {
@@ -127,7 +130,7 @@ async function handleDirectChat(req, res, next) {
       effectiveSessionId = newSession.sessionId;
     }
 
-    const result = await chatService.sendMessage(effectiveSessionId, text);
+    const result = await chatService.sendMessage(effectiveSessionId, text, requestId);
 
     return res.status(200).json({
       success: true,

@@ -35,7 +35,7 @@ app.use(
       return callback(new Error('CORS policy does not allow access from this origin.'));
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Request-Id', 'x-request-id'],
     credentials: true,
   })
 );

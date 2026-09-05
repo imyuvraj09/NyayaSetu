@@ -1,0 +1,26 @@
+{
+  "name": "nyayasetu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NyayaSetu — An AI-Powered RAG-Based Legal Assistant for Accessible, Explainable, and Citation-Backed Legal Knowledge in India",
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "dev:all": "node scripts/dev.js",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:rag": "node scripts/run-rag.js",
+    "build:frontend": "npm run build --prefix frontend",
+    "install:all": "npm install --prefix backend && npm install --prefix frontend"
+  },
+  "keywords": [
+    "legal-ai",
+    "rag",
+    "fastapi",
+    "react",
+    "express",
+    "nyayasetu",
+    "indian-law"
+  ],
+  "author": "Yuvraj Singh",
+  "license": "MIT"
+}

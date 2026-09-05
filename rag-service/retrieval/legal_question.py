@@ -202,6 +202,8 @@ class LegalQuestion:
     background_offence: Optional[str] = None
     contextual_issues: List[str] = field(default_factory=list)
     primary_domain: str = ""
+    sub_domain: str = ""
+    taxonomy_path: List[str] = field(default_factory=list)
     secondary_domains: List[str] = field(default_factory=list)
     candidate_acts: List[str] = field(default_factory=list)
     candidate_sections: List[str] = field(default_factory=list)
@@ -222,6 +224,8 @@ class LegalQuestion:
             self.primary_domain = self.legal_domain
         if not self.acts and (self.primary_task in ("SEARCH_SEIZURE", "BAIL", "ARREST") or self.primary_domain == "Criminal Procedure"):
             self.acts = ["Bharatiya Nagarik Suraksha Sanhita, 2023"]
+        elif not self.acts and self.primary_domain == "Law of Evidence":
+            self.acts = ["Bharatiya Sakshya Adhiniyam, 2023"]
         if not self.candidate_acts:
             self.candidate_acts = self.acts
         if not self.candidate_sections:
@@ -230,6 +234,49 @@ class LegalQuestion:
             self.question_type = self.question_types[0].value
         if not self.candidate_cases and self.requires_case_law:
             self.candidate_cases = []
+
+        # Derive hierarchical taxonomy: Primary Domain -> Subdomain -> Legal Topic -> Relevant Act
+        if not self.sub_domain:
+            p_dom = self.primary_domain or self.legal_domain
+            p_issue = self.primary_issue or ""
+            r_query = (self.raw_question or self.original_query).lower()
+
+            if p_dom == "Law of Evidence":
+                if any(w in r_query or w in p_issue for w in ["electronic", "whatsapp", "digital", "record", "computer"]):
+                    self.sub_domain = "Electronic Evidence"
+                    self.taxonomy_path = ["Law of Evidence", "Electronic Evidence", "Admissibility and Proof of Electronic Records", "Bharatiya Sakshya Adhiniyam, 2023"]
+                elif "burden" in r_query or "burden" in p_issue:
+                    self.sub_domain = "Burden and Standard of Proof"
+                    self.taxonomy_path = ["Law of Evidence", "Burden and Standard of Proof", "Burden of Proof in Legal Proceedings", "Bharatiya Sakshya Adhiniyam, 2023"]
+                elif "circumstantial" in r_query:
+                    self.sub_domain = "Circumstantial Evidence"
+                    self.taxonomy_path = ["Law of Evidence", "Circumstantial Evidence", "Standard of Proof on Circumstantial Evidence", "Bharatiya Sakshya Adhiniyam, 2023"]
+                else:
+                    self.sub_domain = "General Law of Evidence"
+                    self.taxonomy_path = ["Law of Evidence", "General Law of Evidence", p_issue.replace("_", " ").title(), "Bharatiya Sakshya Adhiniyam, 2023"]
+            elif p_dom == "Criminal Law":
+                if "theft" in r_query or "theft" in p_issue:
+                    self.sub_domain = "Offences Against Property"
+                    self.taxonomy_path = ["Criminal Law", "Offences Against Property", "Theft and Prescribed Punishment", "Bharatiya Nyaya Sanhita, 2023"]
+                elif "murder" in r_query or "homicide" in r_query:
+                    self.sub_domain = "Offences Affecting Life"
+                    self.taxonomy_path = ["Criminal Law", "Offences Affecting Life", "Murder and Culpable Homicide", "Bharatiya Nyaya Sanhita, 2023"]
+                else:
+                    self.sub_domain = "Substantive Criminal Law"
+                    self.taxonomy_path = ["Criminal Law", "Substantive Criminal Law", p_issue.replace("_", " ").title(), "Bharatiya Nyaya Sanhita, 2023"]
+            elif "cyber" in p_dom.lower():
+                self.sub_domain = "Cyber Offences and Digital Security"
+                self.taxonomy_path = ["Cyber Law", "Cyber Offences and Digital Security", "Unauthorized Access and Computer Violations", "Information Technology Act, 2000"]
+            elif "constitutional" in p_dom.lower():
+                self.sub_domain = "Fundamental Rights"
+                self.taxonomy_path = ["Constitutional Law", "Fundamental Rights", p_issue.replace("_", " ").title(), "Constitution of India"]
+            elif "consumer" in p_dom.lower():
+                self.sub_domain = "Consumer Protection and Product Liability"
+                self.taxonomy_path = ["Consumer Law", "Consumer Protection and Product Liability", p_issue.replace("_", " ").title(), "Consumer Protection Act, 2019"]
+            else:
+                self.sub_domain = p_dom
+                act_name = self.acts[0] if self.acts else "Indian Statutory Law"
+                self.taxonomy_path = [p_dom, self.sub_domain, p_issue.replace("_", " ").title(), act_name]
 
     @property
     def raw_query(self) -> str:
@@ -302,6 +349,8 @@ class LegalQuestion:
             "primary_issue": self.primary_issue,
             "secondary_issues": self.secondary_issues,
             "primary_domain": self.primary_domain or self.legal_domain,
+            "sub_domain": self.sub_domain,
+            "taxonomy_path": self.taxonomy_path,
             "legal_domain": self.legal_domain,
             "secondary_domains": self.secondary_domains,
             "requested_facets": self.requested_facets,
@@ -604,7 +653,7 @@ class LegalQuestionAnalyzer:
             (r"\b(?:companies\s+act)\b", "The Companies Act, 2013"),
             (r"\b(?:ibc|insolvency\s+and\s+bankruptcy\s+code)\b", "The Insolvency and Bankruptcy Code, 2016"),
             (r"\b(?:pocso|protection\s+of\s+children\s+from\s+sexual\s+offences)\b", "The Protection of Children from Sexual Offences Act, 2012"),
-            (r"\b(?:posh|sexual\s+harassment\s+of\s+women\s+at\s+workplace)\b", "The Sexual Harassment of Women at Workplace Act, 2013"),
+            (r"\b(?:posh|sexual\s+harassment(?:\s+of\s+women)?\s+at\s+(?:[a-z]+\s+)?workplace|sexual\s+harassment\s+at\s+workplace|internal\s+complaints\s+committee|icc|local\s+complaints\s+committee)\b", "The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013"),
             (r"\b(?:rti|right\s+to\s+information)\b", "The Right to Information Act, 2005"),
             (r"\b(?:rte|right\s+to\s+education)\b", "The Right of Children to Free and Compulsory Education Act, 2009"),
             (r"\b(?:gst|goods\s+and\s+services\s+tax)\b", "The Goods and Services Tax Act, 2017"),
@@ -614,6 +663,13 @@ class LegalQuestionAnalyzer:
         for pattern, canon_name in act_patterns:
             if re.search(pattern, lower_q):
                 instruments.append(canon_name)
+
+        # Contextual inference: sexual harassment inquiry in workplace context
+        if any(w in lower_q for w in ["sexual harassment", "posh", "internal complaints committee", "icc"]):
+            posh_canon = "The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013"
+            if posh_canon not in instruments:
+                instruments.insert(0, posh_canon)
+
         return list(dict.fromkeys(instruments))
 
     def _is_factual_scenario(self, raw_q: str, lower_q: str) -> bool:
@@ -727,6 +783,8 @@ class LegalQuestionAnalyzer:
             (r"\b(?:investigation|investigate|investigators? collect|investigators? preserve|investigative procedure)\b", "INVESTIGATION"),
             (r"\b(?:evidence|what evidence|proof|admissible evidence|evidentiary|investigators? collect|investigators? preserve|what to collect|collect or preserve)\b", "EVIDENCE"),
             (r"\b(?:remedy|remedies|relief|what can be done|redressal|what can i do)\b", "REMEDY"),
+            (r"\b(?:protections?|safeguards?|statutory protections?)\b", "PROTECTIONS"),
+            (r"\b(?:complaint\s+mechanisms?|mechanisms?|redressal\s+mechanisms?)\b", "PROCEDURE"),
             (r"\b(?:compensation|damages|refund)\b", "COMPENSATION"),
             (r"\b(?:appeal|appellate|challenge the order|how to appeal)\b", "APPEAL"),
             (r"\b(?:procedure|process|steps|how to file|how to report|mechanism|cirp process)\b", "PROCEDURE"),
@@ -794,11 +852,13 @@ class LegalQuestionAnalyzer:
         # 1. SEARCH_SEIZURE
         if any(re.search(pat, lower_q) for pat in [
             r"\b(?:search\s+(?:his|a|the)?\s*(?:mobile|phone|device|computer|premises|house))\b",
+            r"\b(?:seized\s+(?:a|the|his)?\s*(?:mobile|phone|device|computer))\b",
             r"\b(?:police\s+want\s+to\s+search)\b",
-            r"\b(?:search\s+and\s+seizure)\b",
-            r"\b(?:procedure\s+governs?\s+the\s+search)\b",
+            r"\b(?:search\s+and\s+seizure|search\s+or\s+seizure)\b",
+            r"\b(?:procedure\s+governs?\s+the\s+search|seizure\s+procedure)\b",
             r"\b(?:seizure\s+of\s+(?:mobile|phone|electronic|device))\b",
             r"\b(?:examination\s+of\s+(?:mobile|phone|device))\b",
+            r"\b(?:unlawful\s+seizure|illegal\s+seizure)\b",
         ]):
             return PrimaryTask.SEARCH_SEIZURE
 
@@ -819,12 +879,20 @@ class LegalQuestionAnalyzer:
         # 4. EVIDENCE ADMISSIBILITY (Doctrine / Rules of Evidence)
         if any(re.search(pat, lower_q) for pat in [
             r"\b(?:admissibility\s+requirements?|rules\s+(?:for|of)\s+admissibility)\b",
-            r"\b(?:how\s+is\s+electronic\s+evidence\s+admissible|admissibility\s+of\s+electronic)\b",
+            r"\b(?:how\s+(?:is|are)\s+electronic\s+(?:evidence|records?)\s+admiss(?:ible|ion)|how\s+are\s+electronic\s+records\s+admitted)\b",
+            r"\b(?:how\s+(?:is|are)\s+.*?\s*admitted\s+(?:under|in|into|as))\b",
+            r"\b(?:admitted\s+under\s+(?:bsa|bharatiya\s+sakshya|evidence\s+act))\b",
+            r"\b(?:admissibility\s+of\s+electronic|admitted\s+as\s+evidence|admitted\s+in\s+evidence|admitted\s+into\s+evidence)\b",
+            r"\b(?:admission\s+of\s+electronic|proof\s+of\s+electronic\s+records?|prove\s+electronic\s+records?)\b",
             r"\b(?:section\s+65b\s+certificate|section\s+63\s+certificate)\b",
             r"\b(?:is\s+this\s+electronic\s+record\s+admissible|admissible\s+in\s+court)\b",
             r"\b(?:burden\s+of\s+proof|standard\s+of\s+proof)\b",
             r"\b(?:test\s+for\s+circumstantial\s+evidence|circumstantial\s+evidence\s+test)\b",
-        ]):
+        ]) or (
+            ("bsa" in lower_q or "bharatiya sakshya" in lower_q or "evidence act" in lower_q)
+            and any(w in lower_q for w in ["admitted", "admit", "electronic record", "electronic evidence", "document", "proof", "prove", "certificate"])
+            and not any(c in lower_q for c in ["hacker", "hack", "murder", "theft", "consumer", "contract", "employee"])
+        ):
             return PrimaryTask.EVIDENCE_ADMISSIBILITY
 
         # 5. RTI APPEAL / APPLICATION
@@ -838,7 +906,14 @@ class LegalQuestionAnalyzer:
             if any(w in lower_q for w in ["remedy", "remedies", "compensation", "relief", "what can i do", "what remedies"]):
                 return PrimaryTask.CONSUMER_REMEDY
 
-        # 7. EMPLOYMENT REMEDY
+        # 7. EMPLOYMENT REMEDY / WORKPLACE HARASSMENT
+        if (
+            any(w in lower_q for w in ["sexual harassment", "posh", "internal complaints committee", "icc", "local committee", "lcc"])
+            or ("workplace" in lower_q and ("harassment" in lower_q or "harass" in lower_q))
+        ):
+            if any(w in lower_q for w in ["complaint", "mechanism", "mechanisms", "protection", "protections", "evidence", "procedure", "remedy", "remedies", "rights", "allege", "allegation", "redressal"]):
+                return PrimaryTask.EMPLOYMENT_REMEDY
+
         if any(w in lower_q for w in ["employee", "employer", "dismissed", "termination", "retrenchment", "workplace"]):
             if any(w in lower_q for w in ["rights", "remedy", "remedies", "compensation", "recourse"]):
                 return PrimaryTask.EMPLOYMENT_REMEDY
@@ -971,6 +1046,14 @@ class LegalQuestionAnalyzer:
             return "Consumer Law", []
 
         if primary_task == PrimaryTask.EMPLOYMENT_REMEDY:
+            if (
+                any(w in lower_q for w in ["sexual harassment", "posh", "internal complaints committee", "icc", "local committee", "lcc", "harass"])
+                or ("workplace" in lower_q and "harass" in lower_q)
+            ):
+                sec_domains = ["Employment and Workplace Law", "Gender and Sexual Harassment Law"]
+                if "evidence" in lower_q:
+                    sec_domains.append("Law of Evidence")
+                return "Labour Law / Workplace Sexual Harassment (POSH)", sec_domains
             return "Employment / Labour Law", []
 
         if primary_task == PrimaryTask.CONTRACT_REMEDY:
@@ -983,13 +1066,29 @@ class LegalQuestionAnalyzer:
             return "Family Law", []
         secondary_domains: List[str] = []
 
-        # 1. PURE EVIDENCE LAW (Triggered ONLY when inquiry is about evidence/admissibility rules themselves)
-        is_pure_evidence_law = (
-            any(p in lower_q for p in [
+        # 1. PURE EVIDENCE LAW (Triggered when inquiry is about evidence, admissibility, proof, witnesses, presumptions)
+        is_evidence_law = (
+            primary_task == PrimaryTask.EVIDENCE_ADMISSIBILITY
+            or any(p in lower_q for p in [
                 "rules of admissibility of electronic evidence",
                 "rules for admissibility of electronic evidence",
                 "admissibility of electronic record",
+                "admissibility of electronic records",
                 "admissibility of electronic evidence",
+                "how are electronic records admitted",
+                "how is an electronic record admitted",
+                "admitted under bharatiya sakshya",
+                "admitted under bsa",
+                "admitted as evidence",
+                "admitted in evidence",
+                "used in court",
+                "used as evidence in court",
+                "admissible in court",
+                "whatsapp message be used in court",
+                "whatsapp message used in court",
+                "whatsapp message admissible",
+                "proof of electronic record",
+                "electronic document admissibility",
                 "section 65b certificate",
                 "section 63 certificate",
                 "legal test for proving guilt solely through circumstantial evidence",
@@ -998,23 +1097,48 @@ class LegalQuestionAnalyzer:
                 "circumstantial evidence test",
                 "circumstantial evidence doctrine",
                 "burden of proof in criminal",
+                "burden of proof",
                 "standard of proof beyond reasonable doubt",
+                "standard of proof",
                 "dying declaration admissibility",
                 "expert opinion admissibility",
                 "hearsay evidence rule",
                 "primary vs secondary evidence",
                 "what evidence is admissible in court",
                 "what evidence is admissible for proving an electronic record",
+                "admissibility of digital evidence",
+                "proof of electronic records",
+                "presumption as to electronic records",
+                "presumption",
+                "burden of proof",
+                "examination of witnesses",
+                "competence of witness",
+                "confession under bharatiya sakshya",
             ])
             or (
-                ("bsa" in lower_q or "bharatiya sakshya" in lower_q or "evidence act" in lower_q)
-                and not any(c in lower_q for c in ["hacker", "hack", "murder", "theft", "consumer", "contract", "employee"])
+                any(act_term in lower_q for act_term in [
+                    "bharatiya sakshya adhiniyam", "bharatiya sakshya", "bsa",
+                    "indian evidence act", "evidence act", "law of evidence"
+                ])
+                and not any(re.search(rf"\b{re.escape(co)}\b", lower_q) for co in [
+                    "theft", "murder", "rape", "cheating", "extortion", "robbery", "dacoity",
+                    "punishment for", "penalty for", "prescribed for theft", "prescribed for murder",
+                    "sexual harassment", "workplace", "posh", "internal complaints"
+                ])
+            )
+            or (
+                any(w in lower_q for w in ["electronic record", "electronic records", "digital evidence"])
+                and any(w in lower_q for w in ["admit", "admitted", "admissibility", "proof", "prove", "proved", "court", "certificate"])
+                and not any(w in lower_q for w in ["sexual harassment", "posh", "workplace"])
             )
         )
-        if is_pure_evidence_law:
-            if "circumstantial" in lower_q:
-                return "Law of Evidence", ["Criminal Law"]
-            return "Law of Evidence", []
+        if is_evidence_law:
+            sec_domains = []
+            if "circumstantial" in lower_q or "criminal trial" in lower_q:
+                sec_domains.append("Criminal Law")
+            if "whatsapp" in lower_q or "electronic" in lower_q or "digital" in lower_q:
+                sec_domains.append("Cyber Law")
+            return "Law of Evidence", sec_domains
 
         # 2. CYBERCRIME / INFORMATION TECHNOLOGY LAW
         is_cyber = (
@@ -1176,8 +1300,18 @@ class LegalQuestionAnalyzer:
             return "Criminal Law / Child Protection (POCSO)", []
 
         # 14. POSH / WORKPLACE SEXUAL HARASSMENT
-        if any("posh" in a.lower() for a in acts) or any(w in lower_q for w in ["posh", "sexual harassment at workplace", "internal complaints committee", "icc"]):
-            return "Labour Law / Workplace Sexual Harassment (POSH)", []
+        is_posh = (
+            any("posh" in a.lower() or "sexual harassment" in a.lower() for a in acts)
+            or any(w in lower_q for w in ["posh", "sexual harassment", "internal complaints committee", "icc", "local committee", "lcc"])
+            or ("workplace" in lower_q and ("harassment" in lower_q or "harass" in lower_q))
+        )
+        if is_posh:
+            sec_domains = ["Employment and Workplace Law", "Gender and Sexual Harassment Law"]
+            if "evidence" in lower_q:
+                sec_domains.append("Law of Evidence")
+            if any(w in lower_q for w in ["offence", "crime", "criminal", "punish", "bns"]):
+                sec_domains.append("Criminal Law")
+            return "Labour Law / Workplace Sexual Harassment (POSH)", sec_domains
 
         # 15. MOTOR VEHICLES / TRANSPORT LAW
         if any("motor" in a.lower() or "mva" in a.lower() for a in acts) or any(w in lower_q for w in ["motor vehicle", "driving licence", "accident claims tribunal", "mva"]):
@@ -1273,13 +1407,20 @@ class LegalQuestionAnalyzer:
         stop_words = {
             "what", "is", "the", "are", "of", "and", "under", "in", "to", "for", "a", "an", "can",
             "does", "explain", "how", "person", "who", "which", "its", "applicable", "relevant",
-            "legal", "provisions", "principles", "tests", "law", "indian", "act", "section", "article"
+            "legal", "provisions", "principles", "tests", "law", "indian", "act", "section", "article",
+            "woman", "man", "name", "named", "whose", "senior", "employee", "raju", "ramesh", "suresh"
         }
         words = re.findall(r"\b[a-z]{3,}\b", lower_q)
         meaningful = [w for w in words if w not in stop_words]
 
         phrases = []
         phrase_patterns = [
+            r"\bsexual\s+harassment\b",
+            r"\bcomplaint\s+mechanisms?\b",
+            r"\blegal\s+protections?\b",
+            r"\bworkplace\s+harassment\b",
+            r"\binternal\s+complaints\s+committee\b",
+            r"\blocal\s+(?:complaints\s+)?committee\b",
             r"\bcircumstantial\s+evidence\b",
             r"\bchain\s+of\s+circumstances\b",
             r"\bstandard\s+of\s+proof\b",
@@ -1383,9 +1524,13 @@ class LegalQuestionAnalyzer:
                 primary = "circumstantial_evidence_conviction_standard"
                 secondary = ["judicial_test", "standard_of_proof", "circumstantial_chain"]
                 return primary, secondary
-            if any(p in lower_q for p in ["admissibility", "electronic record", "electronic evidence", "section 63", "section 65b"]):
+            if any(p in lower_q for p in ["admissibility", "electronic record", "electronic records", "electronic evidence", "digital evidence", "whatsapp", "section 63", "section 65b", "section 62"]):
                 primary = "admissibility_of_electronic_records"
-                secondary = ["evidentiary_certificate", "tampering_safeguards"]
+                secondary = ["evidentiary_certificate", "tampering_safeguards", "computer_output_conditions"]
+                return primary, secondary
+            if any(p in lower_q for p in ["burden of proof", "onus of proof", "standard of proof"]):
+                primary = "burden_of_proof_in_legal_proceedings"
+                secondary = ["beyond_reasonable_doubt", "burden_of_proving_fact"]
                 return primary, secondary
 
         # 3. Constitutional Right / Article Inquiries
@@ -1441,7 +1586,21 @@ class LegalQuestionAnalyzer:
             secondary = ["deficiency_in_service", "defect_in_goods"]
             return primary, secondary
 
-        # 7. Employment / Labour Law
+        # 7. Employment / Labour Law & Workplace Sexual Harassment
+        if (
+            "posh" in primary_domain.lower()
+            or "sexual harassment" in primary_domain.lower()
+            or any(w in lower_q for w in ["sexual harassment", "posh", "internal complaints committee", "icc", "local committee"])
+            or ("workplace" in lower_q and "harass" in lower_q)
+        ):
+            primary = "workplace_sexual_harassment_protections_and_redressal"
+            secondary = [
+                "complaint_mechanisms_icc_and_local_committee",
+                "relevant_evidence_and_documentation",
+                "statutory_protections_and_employer_duties",
+            ]
+            return primary, secondary
+
         if "employment" in primary_domain.lower() or "labour" in primary_domain.lower():
             primary = "wrongful_termination_rights_and_remedies"
             secondary = ["statutory_notice", "severance_compensation", "reinstatement"]

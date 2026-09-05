@@ -29,6 +29,8 @@ from retrieval.case_law_retriever import CaseLawRetriever
 from retrieval.evidence_graph import LegalEvidenceGraph
 from retrieval.facet_evidence_models import CaseLawStatus
 from retrieval.judicial_principle_extractor import JudicialPrincipleExtractor
+from retrieval.provision_relationship_validator import get_provision_relationship_validator
+from retrieval.answer_consistency_validator import get_answer_consistency_validator
 from retrieval.topic_compatibility import TopicCompatibilityEngine
 from schemas.generation import RAGResponse, SourceReference
 from utils.logger import get_logger
@@ -182,6 +184,7 @@ class LegalRAGPipeline:
         initial_k: Optional[int] = None,
         final_k: Optional[int] = None,
         max_per_document: Optional[int] = None,
+        request_id: Optional[str] = None,
     ) -> RAGResponse:
         """Process a legal inquiry and return a grounded, cited response.
 
@@ -190,6 +193,7 @@ class LegalRAGPipeline:
             initial_k: Candidate retrieval count override.
             final_k: Final reranked source count override.
             max_per_document: Document diversity limit override.
+            request_id: Unique correlation ID for request tracing.
 
         Returns:
             RAGResponse object with synthesized answer, citations, and provenance.
@@ -197,7 +201,8 @@ class LegalRAGPipeline:
         if not query_text or not query_text.strip():
             raise ValueError("Query cannot be empty or whitespace only.")
 
-        logger.info("Executing Legal RAG Pipeline for query: '%s'", query_text.strip())
+        req_id = request_id or "adhoc"
+        logger.info("[LegalRAGPipeline] Executing pipeline [request_id='%s']: '%s'", req_id, query_text.strip())
 
         # Step 1: Execute Phase 6 Advanced Retrieval
         retrieval_result = self.retriever.retrieve(
@@ -205,6 +210,8 @@ class LegalRAGPipeline:
             initial_k=initial_k,
             final_k=final_k,
             max_per_document=max_per_document,
+            request_id=req_id,
+            original_query=query_text,
         )
 
         statutory_chunks = list(retrieval_result.results)
@@ -328,6 +335,7 @@ class LegalRAGPipeline:
                 generation_status="SUCCESS",
                 retrieval_status="NO_SOURCES_FOUND",
                 validation_status="NOT_RUN",
+                request_id=req_id,
             )
 
         # Step 3: Build Grounded Context
@@ -437,11 +445,29 @@ class LegalRAGPipeline:
                     "fallback": True,
                 }
 
-        # Step 7: Deterministic Citation and Safety Validation
+        # Step 7: Deterministic Citation, Safety, and Topic Relevance Validation
+        lq_active = active_q_analysis.legal_question if hasattr(active_q_analysis, "legal_question") else None
         val_result = self.validator.validate(
             answer=raw_answer,
             available_source_count=len(sources),
+            query=query_text,
+            legal_question=lq_active,
         )
+
+        from rag.query_answer_validator import QueryAnswerRelevanceValidator
+        query_relevance_result = QueryAnswerRelevanceValidator.validate(
+            query=query_text,
+            answer=raw_answer,
+            legal_question=lq_active,
+            query_analysis=active_q_analysis,
+        )
+        if query_relevance_result.contamination_detected:
+            logger.error(
+                "[LegalRAGPipeline] Stale context / topic contamination detected for request_id='%s': %s",
+                req_id,
+                query_relevance_result.warnings,
+            )
+            warnings_combined.extend(query_relevance_result.warnings)
 
         # Step 8: Deep Claim-to-Evidence and Facet Completeness Validation
         facet_val_result = None
@@ -548,7 +574,28 @@ class LegalRAGPipeline:
         except Exception as audit_err:
             logger.warning("Answer sanitization audit failed: %s", audit_err)
 
-        # Step 8c: Professional post-processing: remove meta-chat leaks, markdown bolding, and internal terminology
+        # Step 8c: Validate statutory provision relationships (e.g. BSA Section 62 -> 63 conditions & certificate)
+        try:
+            rel_val = get_provision_relationship_validator()
+            raw_answer = rel_val.correct_and_sanitize_relationships(
+                answer_text=raw_answer,
+                sources=sources,
+                query_analysis=active_q_analysis,
+            )
+        except Exception as rel_err:
+            logger.warning("Provision relationship sanitization failed: %s", rel_err)
+
+        # Step 8d: Reconcile cross-claim consistency and eliminate section duplication
+        try:
+            consistency_val = get_answer_consistency_validator()
+            raw_answer = consistency_val.reconcile_and_sanitize_answer(
+                answer_text=raw_answer,
+                query_analysis=active_q_analysis,
+            )
+        except Exception as const_err:
+            logger.warning("Answer consistency sanitization failed: %s", const_err)
+
+        # Step 8e: Professional post-processing: remove meta-chat leaks, markdown bolding, and internal terminology
         raw_answer = self._sanitize_meta_chat_and_formatting(raw_answer)
 
         warnings_combined = list(val_result.warnings) + case_warnings
@@ -599,6 +646,8 @@ class LegalRAGPipeline:
             generation_status=generation_status,
             retrieval_status="SUCCESS",
             validation_status=val_status,
+            request_id=req_id,
+            intent_coverage=query_relevance_result.intent_coverage if 'query_relevance_result' in locals() else None,
         )
 
 

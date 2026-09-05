@@ -158,9 +158,9 @@ LEGAL_FACET_DEFINITIONS: Dict[str, Dict[str, Any]] = {
     "evidence": {
         "display_name": "Evidence & Admissibility",
         "patterns": [
-            r"\b(?:evidence|relevant evidence|evidentiary value|admissibility|admissible|proof|burden of proof|prove)\b",
+            r"\b(?:evidence|relevant evidence|evidentiary value|admissibility|admissible|admitted|admit|admitting|proof|burden of proof|prove|proved|electronic record|digital record|certificate)\b",
         ],
-        "keywords": ["evidence", "admissible", "relevant fact", "burden of proof", "documentary evidence", "testimony"],
+        "keywords": ["evidence", "admissible", "admitted", "relevant fact", "burden of proof", "documentary evidence", "testimony", "electronic record", "certificate"],
     },
     "defences": {
         "display_name": "Legal Defences",

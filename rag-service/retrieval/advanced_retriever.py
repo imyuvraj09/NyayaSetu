@@ -94,8 +94,24 @@ class AdvancedRetriever:
         initial_k: Optional[int] = None,
         final_k: Optional[int] = None,
         max_per_document: Optional[int] = None,
+        request_id: Optional[str] = None,
+        original_query: Optional[str] = None,
     ) -> AdvancedRetrievalResult:
         """Execute evidence-first multi-strategy retrieval."""
+        clean_q = query.strip()
+        if not clean_q:
+            raise ValueError("Retrieval query cannot be empty or blank.")
+
+        req_id = request_id or "adhoc"
+        orig_q = (original_query or query).strip()
+
+        logger.info(
+            "[AdvancedRetriever] Input Verification [request_id='%s']: query='%s' | original_query='%s'",
+            req_id,
+            clean_q,
+            orig_q,
+        )
+
         ik = initial_k or self.initial_k
         fk = final_k or self.final_k
         mpd = max_per_document or self.max_per_document

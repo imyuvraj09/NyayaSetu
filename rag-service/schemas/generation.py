@@ -173,6 +173,14 @@ class RAGResponse(BaseModel):
         default="PASSED",
         description="Answer validation outcome: 'PASSED', 'FAILED', 'NOT_RUN'",
     )
+    request_id: Optional[str] = Field(
+        default=None,
+        description="Unique request correlation ID matching the client's request",
+    )
+    intent_coverage: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="Multi-intent query coverage report",
+    )
     timestamp: str = Field(
         default_factory=lambda: datetime.now(timezone.utc).isoformat(),
         description="ISO 8601 UTC timestamp of generation",

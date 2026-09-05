@@ -180,4 +180,12 @@ class QueryResponse(BaseModel):
         default="PASSED",
         description="Validation status: PASSED, FAILED, NOT_RUN",
     )
+    request_id: Optional[str] = Field(
+        default=None,
+        description="Unique request correlation ID matching the client's request.",
+    )
+    intent_coverage: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="Multi-intent query coverage report.",
+    )
 

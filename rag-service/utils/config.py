@@ -45,6 +45,15 @@ class Settings(BaseSettings):
     RERANKER_MODEL: str = "BAAI/bge-reranker-base"
     RERANKER_BATCH_SIZE: int = 16
 
+    # ── Centralized RAG Architecture Thresholds & Guardrails ────
+    RETRIEVAL_TOP_K: int = 20
+    RERANK_TOP_K: int = 5
+    DIRECT_RELEVANCE_THRESHOLD: float = 0.40
+    HIGH_CONFIDENCE_THRESHOLD: float = 0.70
+    MAX_RETRIEVAL_ATTEMPTS: int = 2
+    MAX_CONTEXT_CHUNKS: int = 5
+    CLAIM_VALIDATION_THRESHOLD: float = 0.65
+
     # ── LLM & Answer Generation (Google Gemini Primary) ─────────
     LLM_PROVIDER: str = "gemini"  # Primary: "gemini" / "google" | Also supports: "openai", "mock"
     LLM_MODEL: str = "gemini-3.6-flash"

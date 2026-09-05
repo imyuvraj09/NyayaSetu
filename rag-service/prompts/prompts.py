@@ -155,14 +155,23 @@ Always use "Article X" (never "Section X") when referring to the Constitution of
 ============================================================
 9. CASE-LAW & JUDICIAL PRINCIPLES
 ============================================================
-When judicial authorities are relevant, present verified case law as:
+When judicial authorities are relevant and present in context, present verified case law as:
 Case Name
 Court · Citation · Paragraph [Case Source C1]
 The Court held/observed/ruled that ... [Case Source C1].
 Do NOT dump judgment text. Match the actual ratio from the provided evidence.
-If the question asks for judicial principles but verified judicial decisions are absent from context:
+- CRITICAL: If the user DID NOT explicitly ask for case law or judicial precedents, and NO verified judicial decisions are present in the sources, DO NOT create an empty "Judicial Principles" section. Simply omit this section entirely.
+- Only if the question explicitly asked for case-law/judicial principles but verified decisions are absent:
 "The current indexed sources do not contain verified judicial decisions sufficient to substantiate the case-law aspect of this question."
 Then explain the supported statutory portion.
+
+============================================================
+9A. PRECISE STATUTORY RELATIONSHIPS & NO CONDITION TRANSFER
+============================================================
+When multiple provisions are involved (e.g. BSA Section 62 and Section 63):
+- Maintain exact statutory hierarchy: Section 62 acts as the enabling provision that refers to Section 63; Section 63 contains the substantive admissibility conditions and certificate requirements.
+- NEVER invert the relationship: Do NOT state that Section 63 refers to Section 62, and do NOT claim that Section 62 imposes the four conditions or certificate requirement.
+- Never transfer conditions or mandates from one section to another.
 
 ============================================================
 10. FACTUAL SCENARIOS
@@ -346,10 +355,25 @@ def build_rag_prompt(
     directives = []
     if legal_question:
         lq = legal_question
+        p_issue = (
+            getattr(lq, 'primary_legal_issue', '') or getattr(lq, 'primary_issue', '')
+            if not isinstance(lq, dict)
+            else (lq.get('primary_legal_issue') or lq.get('primary_issue') or '')
+        )
+        p_domain = (
+            getattr(lq, 'primary_domain', '') or getattr(lq, 'legal_domain', '')
+            if not isinstance(lq, dict)
+            else (lq.get('primary_domain') or lq.get('legal_domain') or '')
+        )
+        r_facets = (
+            getattr(lq, 'requested_facets', [])
+            if not isinstance(lq, dict)
+            else lq.get('requested_facets', [])
+        )
         directives.append(
-            f"PRIMARY LEGAL ISSUE: {getattr(lq, 'primary_legal_issue', '') or getattr(lq, 'primary_issue', '')}\n"
-            f"PRIMARY LEGAL DOMAIN: {getattr(lq, 'primary_domain', '') or getattr(lq, 'legal_domain', '')}\n"
-            f"REQUESTED FACETS: {', '.join(getattr(lq, 'requested_facets', []))}\n\n"
+            f"PRIMARY LEGAL ISSUE: {p_issue}\n"
+            f"PRIMARY LEGAL DOMAIN: {p_domain}\n"
+            f"REQUESTED FACETS: {', '.join(r_facets)}\n\n"
             f"DIRECTIVES:\n"
             f"1. Answer the primary legal issue first based on the actual factual conduct.\n"
             f"2. Use requested facets to determine which specific sections to include (e.g. Possible Offences, Investigation, Evidence, Available Remedies).\n"
@@ -358,7 +382,8 @@ def build_rag_prompt(
             f"5. STRICT CLAIM GROUNDING: Do NOT mention, cite, or invent any statutory sections, acts, or offences that do not appear in the context above. If only Section 66 is retrieved, do NOT mention Section 43, 66C, 66D, or BNS 308. Never backfill law from pretrained memory.\n"
             f"6. NO CITATION BORROWING: Do NOT cite a source for an unretrieved provision. Every citation must directly support the proposition immediately before it.\n"
             f"7. TARGET RESPONSE DEPTH: Produce structured, detailed, and facet-complete sections. If the user asks to explain judicial principles and tests, provide the full judicial test (e.g. five golden rules of circumstantial evidence) with detailed explanation and apply each circumstance (motive, CCTV, call records, forensics). Do not collapse into a one-liner.\n"
-            f"8. ABSOLUTE PROHIBITION OF META-CHAT: Never end with follow-up offers ('Would you like...', 'Let me know...', 'I can help...'). Never mention internal terminology (cleanPropositions, RAG, JSON). Terminate immediately after Conclusion/Sources/Disclaimer."
+            f"8. ABSOLUTE PROHIBITION OF META-CHAT: Never end with follow-up offers ('Would you like...', 'Let me know...', 'I can help...'). Never mention internal terminology (cleanPropositions, RAG, JSON). Terminate immediately after Conclusion/Sources/Disclaimer.\n"
+            f"9. STATUTORY PROVISION THOROUGHNESS: When explaining admissibility under provisions such as Section 63 of Bharatiya Sakshya Adhiniyam, explain both the substantive conditions (sub-section 2) and the certificate requirement (sub-section 4) whenever these subsections are provided in the sources."
         )
     elif requested_facets:
         facets_list = ", ".join(requested_facets)

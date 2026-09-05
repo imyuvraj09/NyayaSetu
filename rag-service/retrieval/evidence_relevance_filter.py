@@ -127,8 +127,86 @@ class UniversalEvidenceFilter:
                 )
 
         # =====================================================================
-        # 1B. BACKGROUND OFFENCE DOWNGRADE & PROCEDURAL DIRECT UPGRADE
+        # 1A. DIRECT LEGAL RELEVANCE: COMMENCEMENT, APPLICATION & OPERATIVE RULES
         # =====================================================================
+        raw_q_lower = (getattr(lq, "raw_query", "") or getattr(lq, "raw_question", "") or getattr(lq, "original_query", "")).lower()
+        is_commencement_inquiry = any(w in raw_q_lower for w in ["commence", "commencement", "come into force", "extent and application", "applicability of the act"])
+        is_definition_inquiry = (QuestionType.DEFINITION in q_types) or any(w in raw_q_lower for w in ["definition", "define", "what is defined as", "meaning of"])
+
+        # Filter out commencement (Section 1) unless specifically asked
+        if sec_num in ("1", "Section 1") and not is_commencement_inquiry:
+            return EvidenceEvaluationResult(
+                compatibility=EvidenceCompatibility.IRRELEVANT,
+                reason=f"Section 1 ({sec_title or 'Commencement/Extent'}) is general introductory provision, not relevant to substantive query.",
+                affinity_score=0.0,
+            )
+
+        # Filter out general statutory definitions (Section 2) unless definition specifically requested
+        if sec_num in ("2", "Section 2") and not is_definition_inquiry:
+            # Only keep Section 2 if it contains the exact operative entity requested
+            if not any(c in chunk_lower for c in concepts):
+                return EvidenceEvaluationResult(
+                    compatibility=EvidenceCompatibility.BACKGROUND,
+                    reason=f"Section 2 ({sec_title or 'Definitions'}) is general definitions section; substantive provisions take priority.",
+                    affinity_score=0.2,
+                )
+
+        # Direct Electronic Evidence Rule: Prioritize Section 62 & 63 for electronic record inquiries
+        is_electronic_record_inquiry = any(w in raw_q_lower for w in ["electronic record", "electronic records", "electronic evidence", "digital evidence", "whatsapp", "section 63", "section 62", "computer output"])
+        if is_electronic_record_inquiry and ("sakshya" in chunk_act.lower() or "bsa" in chunk_act.lower() or meta.get("document_id") == "bsa_2023"):
+            if sec_num in ("62", "63", "61"):
+                return EvidenceEvaluationResult(
+                    compatibility=EvidenceCompatibility.DIRECT,
+                    reason=f"BSA Section {sec_num} directly provides the governing framework for admissibility and proof of electronic records.",
+                    affinity_score=1.0,
+                    matched_concepts=["electronic_records", "admissibility", "section_63"],
+                )
+            elif sec_num not in ("62", "63", "61") and not any(c in chunk_lower for c in ["electronic", "computer", "digital", "certificate"]):
+                return EvidenceEvaluationResult(
+                    compatibility=EvidenceCompatibility.IRRELEVANT,
+                    reason=f"BSA Section {sec_num} ({sec_title}) does not address electronic records admissibility.",
+                    affinity_score=0.0,
+                )
+
+        # Direct Workplace Sexual Harassment Rule (POSH Act Priority & BSA Rejection)
+        is_posh_inquiry = (
+            any(w in raw_q_lower for w in ["sexual harassment", "posh", "internal complaints committee", "icc", "local committee", "lcc"])
+            or ("workplace" in raw_q_lower and ("harass" in raw_q_lower or "harassment" in raw_q_lower))
+            or (lq and "posh" in (lq.primary_domain or "").lower())
+            or (lq and "sexual_harassment" in (lq.primary_legal_issue or "").lower())
+        )
+        if is_posh_inquiry:
+            is_posh_chunk = (
+                "sexual harassment" in chunk_act.lower()
+                or "posh" in chunk_act.lower()
+                or meta.get("document_id") == "sexual_harassment_workplace_act_2013"
+            )
+            if is_posh_chunk:
+                if sec_num in ("3", "4", "6", "9", "10", "11", "12", "13", "19"):
+                    return EvidenceEvaluationResult(
+                        compatibility=EvidenceCompatibility.DIRECT,
+                        reason=f"POSH Act Section {sec_num} directly governs workplace sexual harassment protections, complaint mechanisms, or inquiry procedures.",
+                        affinity_score=1.0,
+                        matched_concepts=["sexual_harassment", "posh_act", f"section_{sec_num}"],
+                    )
+                return EvidenceEvaluationResult(
+                    compatibility=EvidenceCompatibility.DIRECT,
+                    reason="POSH Act provision directly relevant to workplace sexual harassment inquiry.",
+                    affinity_score=0.9,
+                    matched_concepts=["sexual_harassment", "posh_act"],
+                )
+
+            # Reject BSA electronic record chunks if retrieved in POSH context
+            is_bsa_electronic = (
+                ("sakshya" in chunk_act.lower() or "bsa" in chunk_act.lower() or meta.get("document_id") == "bsa_2023")
+                and (sec_num in ("62", "63", "61") or any(w in chunk_lower for w in ["electronic record", "computer output", "section 63"]))
+            )
+            if is_bsa_electronic:
+                return EvidenceEvaluationResult(
+                    compatibility=EvidenceCompatibility.IRRELEVANT,
+                    reason="Bharatiya Sakshya Adhiniyam electronic records admissibility provisions (Sections 62/63) are unrelated to workplace sexual harassment under POSH Act.",
+                    affinity_score=0.0,
+                )
         bg_offence = getattr(lq, "background_offence", None)
         primary_task = getattr(lq, "primary_task", "")
         is_procedural_task = (

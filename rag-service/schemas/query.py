@@ -26,6 +26,11 @@ class QueryRequest(BaseModel):
         description="Optional session ID for conversation continuity.",
         examples=["session-abc-123"],
     )
+    request_id: Optional[str] = Field(
+        default=None,
+        description="Unique correlation ID for request tracing and isolation.",
+        examples=["req-789-xyz"],
+    )
 
     @field_validator("query", mode="before")
     @classmethod
