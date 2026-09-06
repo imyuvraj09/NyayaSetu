@@ -63,7 +63,14 @@ export default function Footer({ onNavigate }) {
 
         {/* Right */}
         <div className="right-col" style={styles.rightCol}>
-          <div>AI-powered legal information platform</div>
+          <div style={styles.emblemBadge}>
+            <img
+              src="/ashoka-emblem.png"
+              alt="Ashoka Emblem"
+              style={styles.emblemLogo}
+            />
+            <span>AI-powered legal information platform</span>
+          </div>
         </div>
       </div>
     </footer>
@@ -139,5 +146,18 @@ const styles = {
     alignItems: 'flex-end',
     fontSize: '0.8125rem', /* 13px */
     color: '#334155',
+  },
+  emblemBadge: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.625rem',
+  },
+  emblemLogo: {
+    height: '36px',
+    width: 'auto',
+    maxHeight: '38px',
+    objectFit: 'contain',
+    display: 'block',
+    background: 'transparent',
   },
 };

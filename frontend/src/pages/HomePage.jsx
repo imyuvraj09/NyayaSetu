@@ -7,7 +7,6 @@ export default function HomePage({ onStartChat, onNavigate }) {
   return (
     <main>
       <HeroSection onStartChat={onStartChat} onNavigate={onNavigate} />
-      <TrustSection />
       <ConnectSection />
     </main>
   );

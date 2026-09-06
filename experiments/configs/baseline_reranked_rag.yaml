@@ -1,6 +1,7 @@
-# Baseline D: Reranked RAG (Hybrid Retrieval + Cross-Encoder Reranking)
+# Baseline D: Hybrid RAG + Cross-Encoder Reranking
 experiment_id: baseline_reranked_rag
-description: "Two-stage retrieval generating candidate pool via hybrid search and reranking via BAAI/bge-reranker-base."
+display_name: "Baseline D — Hybrid RAG + Cross-Encoder Reranking"
+description: "Two-stage retrieval generating candidate pool via hybrid search (Dense + BM25 + RRF) and reranking via BAAI/bge-reranker-base cross-encoder."
 
 # Pipeline Switches (Strictly Isolated)
 pipeline:

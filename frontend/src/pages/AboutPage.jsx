@@ -105,7 +105,7 @@ export default function AboutPage({ onStartChat }) {
       role: "Developer",
       organization: "MCKV Institute of Engineering, West Bengal",
       linkedin: "https://www.linkedin.com/in/sumit-nath-b8b972198/",
-      email: "sumitnath@gmail.com",
+      email: "nathsumit628@gmail.com",
       image: sumitImg,
     },
     {

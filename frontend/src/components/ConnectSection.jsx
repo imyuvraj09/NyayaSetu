@@ -10,7 +10,7 @@ export default function ConnectSection() {
     { name: 'Sunit Das', email: 'sunitdasclassx@gmail.com' },
     { name: 'Raju Shaw', email: 'rajushaw2741@gmail.com' },
     { name: 'Pallab Bag', email: 'pallab861774@gmail.com' },
-    { name: 'Sumit Kumar Nath', email: 'sumitnath@gmail.com' },
+    { name: 'Sumit Kumar Nath', email: 'nathsumit628@gmail.com' },
     { name: 'Nababrato Bishwas', email: 'nababratobiswas.11c@gmail.com' },
   ];
 
@@ -26,7 +26,6 @@ export default function ConnectSection() {
         <div className="two-column-layout" style={styles.twoColumnLayout}>
           {/* Left Panel: Open Source & Cite */}
           <div style={styles.panel}>
-            <span style={styles.panelTag}>OPEN SOURCE · RESEARCH</span>
             <h3 style={styles.panelTitle}>Built for research and accessibility</h3>
             <p style={styles.panelDesc}>
               NyayaSetu is an academic and research-oriented AI legal assistant project demonstrating
@@ -74,7 +73,6 @@ export default function ConnectSection() {
 
           {/* Right Panel: Contact & Contribute */}
           <div style={styles.panel}>
-            <span style={styles.panelTag}>CONNECT</span>
             <h3 style={styles.panelTitle}>Contact & Contribute</h3>
             <p style={styles.panelDesc}>
               Found a discrepancy in statutory interpretations, have an architectural feature request,
@@ -142,20 +140,22 @@ export default function ConnectSection() {
 
 const styles = {
   section: {
-    backgroundColor: '#fafbfc',
+    backgroundColor: '#ffffff',
+    padding: '0 0 2.5rem 0',
   },
   twoColumnLayout: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-    gap: '2rem',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))',
+    gap: '1.5rem',
   },
   panel: {
     backgroundColor: '#ffffff',
     border: '1px solid #e2e8f0',
-    borderRadius: 'var(--radius-sm, 4px)',
-    padding: '1.5rem 1.35rem',
+    borderRadius: '12px',
+    padding: '1.75rem 1.6rem',
     display: 'flex',
     flexDirection: 'column',
+    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)',
   },
   panelTag: {
     fontSize: '0.6875rem', /* 11px compact */

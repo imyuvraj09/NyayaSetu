@@ -1,6 +1,6 @@
 [
   {
-    "Configuration": "baseline_direct_llm",
+    "Configuration": "Baseline A — Direct LLM",
     "Number of Questions": 43,
     "Hit@1": 0.0,
     "Hit@3": 0.0,
@@ -13,7 +13,7 @@
     "Average Total Latency (s)": 0.0531
   },
   {
-    "Configuration": "baseline_dense_rag",
+    "Configuration": "Baseline B — Dense RAG",
     "Number of Questions": 43,
     "Hit@1": 0.8974,
     "Hit@3": 0.9744,
@@ -26,7 +26,7 @@
     "Average Total Latency (s)": 1.8819
   },
   {
-    "Configuration": "baseline_hybrid_rag",
+    "Configuration": "Baseline C — Hybrid RAG",
     "Number of Questions": 43,
     "Hit@1": 0.9231,
     "Hit@3": 1.0,
@@ -39,7 +39,7 @@
     "Average Total Latency (s)": 0.4133
   },
   {
-    "Configuration": "baseline_reranked_rag",
+    "Configuration": "Baseline D — Hybrid RAG + Cross-Encoder Reranking",
     "Number of Questions": 43,
     "Hit@1": 0.8974,
     "Hit@3": 0.9487,

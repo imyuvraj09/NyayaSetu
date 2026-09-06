@@ -1,5 +1,6 @@
 # Baseline B: Clean Dense RAG
 experiment_id: baseline_dense_rag
+display_name: "Baseline B — Dense RAG"
 description: "Dense semantic retrieval using BAAI/bge-small-en-v1.5 and ChromaDB without BM25, reranking, or routing."
 
 # Pipeline Switches (Strictly Isolated)

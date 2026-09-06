@@ -1,5 +1,6 @@
 # Baseline A: Direct LLM (Zero-Retrieval)
 experiment_id: baseline_direct_llm
+display_name: "Baseline A — Direct LLM"
 description: "Direct LLM answering without any retrieval, context injection, or grounding."
 
 # Pipeline Switches (Strictly Isolated)

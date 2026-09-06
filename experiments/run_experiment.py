@@ -50,6 +50,7 @@ from evaluation.metrics import (
     calculate_recall_at_k,
     calculate_reciprocal_rank,
 )
+from evaluation.statistics.bootstrap_ci import compute_experiment_bootstrap_cis
 from llm.provider import get_llm_provider
 from prompts.prompts import SYSTEM_INSTRUCTION, build_rag_prompt
 from rag.context_builder import LegalContextBuilder
@@ -108,13 +109,22 @@ def validate_configuration(config: Dict[str, Any]) -> None:
         assert pipeline.get("use_dense_retrieval"), "Reranked RAG must have use_dense_retrieval=True"
         assert pipeline.get("use_reranker"), "Reranked RAG must have use_reranker=True"
 
+    elif exp_id == "routing_only":
+        assert pipeline.get("use_dense_retrieval"), "routing_only must have use_dense_retrieval=True"
+        assert pipeline.get("use_bm25"), "routing_only must have use_bm25=True"
+        assert pipeline.get("use_hybrid_fusion"), "routing_only must have use_hybrid_fusion=True"
+        assert pipeline.get("use_fact_routing"), "routing_only must have use_fact_routing=True"
+        assert not pipeline.get("use_compatibility_filter"), "routing_only must have use_compatibility_filter=False"
+        assert not pipeline.get("use_reranker"), "routing_only must have use_reranker=False"
+
 
 def reciprocal_rank_fusion(
     ranked_lists: List[List[RetrievedChunk]],
     k_const: int = 60,
     top_k: int = 5,
+    routing_boosts: Optional[Dict[str, float]] = None,
 ) -> List[RetrievedChunk]:
-    """Fuse multiple ranked lists using standard Reciprocal Rank Fusion."""
+    """Fuse multiple ranked lists using standard Reciprocal Rank Fusion, with optional soft routing boosts."""
     rrf_scores: Dict[str, float] = {}
     chunk_map: Dict[str, RetrievedChunk] = {}
 
@@ -124,6 +134,20 @@ def reciprocal_rank_fusion(
             chunk_map[cid] = chunk
             score = 1.0 / (k_const + rank)
             rrf_scores[cid] = rrf_scores.get(cid, 0.0) + score
+
+    # Soft boost routed regimes without hard document exclusion
+    if routing_boosts:
+        for cid, chunk in chunk_map.items():
+            doc_name = chunk.document_name or ""
+            source_fn = chunk.source_filename or ""
+            doc_target = f"{doc_name} {source_fn}".lower()
+            max_boost = 1.0
+            for doc_pat, boost in routing_boosts.items():
+                if doc_pat.lower() in doc_target:
+                    if boost > max_boost:
+                        max_boost = boost
+            if max_boost > 1.0:
+                rrf_scores[cid] = rrf_scores[cid] * max_boost
 
     sorted_chunks = sorted(rrf_scores.keys(), key=lambda x: rrf_scores[x], reverse=True)
     fused: List[RetrievedChunk] = []
@@ -140,8 +164,14 @@ def run_experiment(
     config_path: str,
     limit: Optional[int] = None,
     output_dir: Optional[str] = None,
+    retrieval_only: bool = False,
 ) -> Dict[str, Any]:
-    """Execute experiment defined by config_path."""
+    """Execute experiment defined by config_path.
+    
+    Supports:
+    - Track A (Retrieval Only): Set via retrieval_only=True or benchmark.eval_generation_metrics=False.
+    - Track B (Generation): Requires real LLM provider; audits and logs any fallback.
+    """
     cfg_file = Path(config_path)
     if not cfg_file.exists():
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
@@ -174,6 +204,11 @@ def run_experiment(
         print(msg, flush=True)
         logs.append(msg)
 
+    # Determine evaluation track
+    eval_gen = config.get("benchmark", {}).get("eval_generation_metrics", True)
+    if retrieval_only:
+        eval_gen = False
+
     # Initialize components based on configuration switches
     pipeline_cfg = config.get("pipeline", {})
     retrieval_cfg = config.get("retrieval", {})
@@ -190,12 +225,51 @@ def run_experiment(
         log("Pre-loading reranker model...")
         reranker._load_model()
     context_builder = LegalContextBuilder()
-    llm_provider = get_llm_provider()
+
+    router = None
+    if pipeline_cfg.get("use_fact_routing"):
+        from research.issue_router import get_fact_first_router
+        log("Initializing Fact-First Legal Issue Router...")
+        router = get_fact_first_router()
+
+    # Track B / Generation LLM Setup & Audit
+    llm_provider = None
+    generation_provider = "none"
+    generation_mode = "unavailable"
+    fallback_used = False
+    fallback_reason = None
+
+    if eval_gen:
+        try:
+            llm_provider = get_llm_provider()
+            generation_provider = getattr(llm_provider, "provider_name", "unknown")
+            if generation_provider == "mock":
+                generation_mode = "mock"
+                fallback_used = True
+                fallback_reason = "Mock provider configured by environment/settings"
+            else:
+                generation_mode = "real"
+                fallback_used = False
+                fallback_reason = None
+        except Exception as exc:
+            generation_mode = "unavailable"
+            fallback_used = False
+            fallback_reason = f"Provider initialization failed: {str(exc)}"
+            llm_provider = None
+    else:
+        generation_provider = "none"
+        generation_mode = "unavailable"
+        fallback_used = False
+        fallback_reason = "Track A Retrieval-Only Evaluation (Zero LLM dependence)"
 
     log(f"\n{'='*75}")
     log(f"EXPERIMENT EXECUTION: {exp_id}")
+    log(f"Evaluation Track: {'Track A (Retrieval Only)' if not eval_gen else 'Track B (Retrieval + Generation)'}")
     log(f"Benchmark File: {bm_file} | Queries: {len(queries)}")
     log(f"Pipeline Config: {pipeline_cfg}")
+    log(f"Generation Mode: {generation_mode.upper()} (Provider: {generation_provider})")
+    if generation_mode == "mock":
+        log("  [AUDIT WARNING] Generation Mode is MOCK. Latency measurements will NOT represent production latency.")
     log(f"{'='*75}\n")
 
     evaluable_items: List[Dict[str, Any]] = []
@@ -209,11 +283,34 @@ def run_experiment(
 
         retrieved_chunks: List[RetrievedChunk] = []
         retrieval_time = 0.0
+        routing_time = 0.0
+        routing_decision = None
         e2e_t0 = time.perf_counter()
 
         # Step 1: Retrieval
         if pipeline_cfg.get("use_retrieval", True):
             ret_t0 = time.perf_counter()
+
+            # Optional Fact-First Legal Issue Routing
+            routing_boosts: Optional[Dict[str, float]] = None
+            if pipeline_cfg.get("use_fact_routing") and router:
+                r_t0 = time.perf_counter()
+                routing_decision = router.route_query(qtext)
+                routing_time = time.perf_counter() - r_t0
+
+                if not routing_decision.fallback_used and routing_decision.selected_regimes:
+                    routing_boosts = {}
+                    regimes_cfg = router.config.get("regimes", {})
+                    for reg_id in routing_decision.selected_regimes:
+                        reg_info = regimes_cfg.get(reg_id, {})
+                        doc_filters = reg_info.get("document_filter", [])
+                        boost_val = 1.35
+                        for cr in routing_decision.candidate_regimes:
+                            if cr.regime_id == reg_id:
+                                boost_val = cr.priority_boost
+                                break
+                        for df in doc_filters:
+                            routing_boosts[df] = max(routing_boosts.get(df, 1.0), boost_val)
 
             # Stream 1: Dense Semantic
             dense_candidates: List[RetrievedChunk] = []
@@ -245,6 +342,7 @@ def run_experiment(
                     [dense_candidates, bm25_candidates],
                     k_const=retrieval_cfg.get("rrf_constant_k", 60),
                     top_k=initial_k if pipeline_cfg.get("use_reranker") else top_k,
+                    routing_boosts=routing_boosts,
                 )
             else:
                 candidates = dense_candidates
@@ -293,7 +391,10 @@ def run_experiment(
 
         # Step 2: Generation (if enabled)
         generated_answer = ""
-        if config.get("benchmark", {}).get("eval_generation_metrics", True):
+        is_mock_generation = False
+        prod_e2e_time = None
+
+        if eval_gen and llm_provider:
             try:
                 if pipeline_cfg.get("use_retrieval", True) and ranked_chunks_for_context:
                     context_result = context_builder.build_context(ranked_chunks_for_context)
@@ -309,27 +410,48 @@ def run_experiment(
                     prompt = f"Answer the following Indian legal question based on your knowledge of Indian law. Question: {qtext}"
                     llm_response = llm_provider.generate(prompt=prompt, system_instruction=SYSTEM_INSTRUCTION)
                     generated_answer = llm_response.content
+                
+                is_mock_generation = (getattr(llm_provider, "provider_name", "") == "mock")
             except Exception as e:
-                if "QUOTA_EXCEEDED" in str(e) or "429" in str(e) or "quota" in str(e).lower():
-                    # Fallback to MockLLMProvider to prevent stalling full benchmark runs
-                    from llm.provider import MockLLMProvider
-                    log(f"    [NOTICE] LLM Quota exceeded: Engaging deterministic MockLLM fallback for query {qid}")
-                    try:
-                        mock_p = MockLLMProvider()
-                        llm_provider = mock_p
-                        if pipeline_cfg.get("use_retrieval", True) and ranked_chunks_for_context:
-                            p_mock = f"Context: {[c.text[:200] for c in ranked_chunks_for_context]}\nQuestion: {qtext}"
-                            resp = mock_p.generate(prompt=p_mock)
-                            generated_answer = f"[OFFLINE/MOCK FALLBACK]: {resp.content[:200]}"
-                        else:
-                            resp = mock_p.generate(prompt=qtext)
-                            generated_answer = f"[OFFLINE/MOCK FALLBACK]: {resp.content[:200]}"
-                    except Exception as me:
-                        generated_answer = f"[LLM GENERATION ERROR: {str(e)}]"
+                is_quota = any(q_term in str(e).lower() for q_term in ["quota", "429", "resource_exhausted"])
+                if is_quota:
+                    if config.get("llm", {}).get("fallback_allowed", True):
+                        from llm.provider import MockLLMProvider
+                        log(f"    [AUDIT ALERT] Quota exceeded: Engaging MockLLMProvider for query {qid}")
+                        try:
+                            mock_p = MockLLMProvider()
+                            llm_provider = mock_p
+                            generation_mode = "mock"
+                            fallback_used = True
+                            fallback_reason = f"Quota exceeded: {str(e)}"
+                            is_mock_generation = True
+                            if pipeline_cfg.get("use_retrieval", True) and ranked_chunks_for_context:
+                                p_mock = f"Context: {[c.text[:200] for c in ranked_chunks_for_context]}\nQuestion: {qtext}"
+                                resp = mock_p.generate(prompt=p_mock)
+                                generated_answer = f"[OFFLINE/MOCK FALLBACK]: {resp.content[:200]}"
+                            else:
+                                resp = mock_p.generate(prompt=qtext)
+                                generated_answer = f"[OFFLINE/MOCK FALLBACK]: {resp.content[:200]}"
+                        except Exception as me:
+                            generated_answer = f"[LLM GENERATION ERROR: {str(e)}]"
+                    else:
+                        generation_mode = "unavailable"
+                        fallback_used = False
+                        fallback_reason = f"Quota exceeded: {str(e)}"
+                        generated_answer = f"[GENERATION_UNAVAILABLE: {str(e)}]"
                 else:
+                    generation_mode = "unavailable"
+                    fallback_used = False
+                    fallback_reason = f"LLM Generation Error: {str(e)}"
                     generated_answer = f"[LLM GENERATION ERROR: {str(e)}]"
 
         e2e_time = time.perf_counter() - e2e_t0
+        if not eval_gen:
+            prod_e2e_time = round(retrieval_time, 4)
+        elif not is_mock_generation and generation_mode == "real":
+            prod_e2e_time = round(e2e_time, 4)
+        else:
+            prod_e2e_time = None  # Do not report mock latency as production latency
 
         # Metric computation
         hit_1 = calculate_hit_at_k(retrieved_docs, [exp_doc] if exp_doc else [], 1, partial_match=True) if exp_doc else 0.0
@@ -356,8 +478,15 @@ def run_experiment(
             "recall_at_5": r5,
             "ndcg_at_5": ndcg_5,
             "keyword_coverage": kw_cov,
+            "routing_latency_sec": round(routing_time, 4) if pipeline_cfg.get("use_fact_routing") else None,
+            "routing_mode": routing_decision.routing_mode.value if routing_decision else None,
+            "routing_fallback_used": routing_decision.fallback_used if routing_decision else None,
+            "routing_selected_regimes": routing_decision.selected_regimes if routing_decision else None,
+            "routing_confidence": round(routing_decision.confidence, 4) if routing_decision else None,
             "retrieval_latency_sec": round(retrieval_time, 4),
             "total_latency_sec": round(e2e_time, 4),
+            "production_total_latency_sec": prod_e2e_time,
+            "is_mock_generation": is_mock_generation,
             "generated_answer_preview": generated_answer[:150] if generated_answer else "",
         }
         predictions.append(item_result)
@@ -370,8 +499,20 @@ def run_experiment(
 
     # Compute Summary Metrics
     n_eval = len(evaluable_items)
+    valid_prod_lats = [it["production_total_latency_sec"] for it in predictions if it["production_total_latency_sec"] is not None]
+    avg_prod_total_lat = round(sum(valid_prod_lats) / len(valid_prod_lats), 4) if valid_prod_lats else None
+
+    # Compute Bootstrap Confidence Intervals
+    bootstrap_results = compute_experiment_bootstrap_cis(
+        predictions=evaluable_items,
+        num_bootstraps=2000,
+        random_seed=42,
+    )
+    bootstrap_dict = {k: v.to_dict() for k, v in bootstrap_results.items()}
+
     summary_metrics = {
         "experiment_id": exp_id,
+        "evaluation_track": "Track A — Retrieval Evaluation" if not eval_gen else "Track B — Generation Evaluation",
         "total_queries": len(queries),
         "statutory_evaluable_queries": n_eval,
         "out_of_scope_or_negative_queries": len(queries) - n_eval,
@@ -384,7 +525,20 @@ def run_experiment(
         "mean_ndcg_at_5": round(sum(it["ndcg_at_5"] for it in evaluable_items) / n_eval, 4) if n_eval else 0.0,
         "average_keyword_coverage": round(sum(it["keyword_coverage"] for it in evaluable_items) / n_eval, 4) if n_eval else 0.0,
         "average_retrieval_latency_sec": round(sum(it["retrieval_latency_sec"] for it in predictions) / len(predictions), 4) if predictions else 0.0,
+        "average_routing_latency_sec": (
+            round(sum(it["routing_latency_sec"] for it in predictions if it["routing_latency_sec"] is not None) / len(predictions), 4)
+            if pipeline_cfg.get("use_fact_routing") and predictions
+            else None
+        ),
         "average_total_latency_sec": round(sum(it["total_latency_sec"] for it in predictions) / len(predictions), 4) if predictions else 0.0,
+        "average_production_total_latency_sec": avg_prod_total_lat,
+        "generation_metadata": {
+            "generation_provider": generation_provider,
+            "generation_mode": generation_mode,
+            "fallback_used": fallback_used,
+            "fallback_reason": fallback_reason,
+        },
+        "bootstrap_confidence_intervals": bootstrap_dict,
     }
 
     # Save outputs
@@ -404,6 +558,7 @@ def run_experiment(
         "embedding_model": retrieval_cfg.get("embedding_model"),
         "reranker_model": retrieval_cfg.get("reranker_model"),
         "top_k": top_k,
+        "generation_metadata": summary_metrics["generation_metadata"],
         "summary_metrics": summary_metrics,
     }
     with open(run_dir / "manifest.json", "w", encoding="utf-8") as f:
@@ -426,15 +581,26 @@ def run_experiment(
     with open(run_dir / "environment.txt", "w", encoding="utf-8") as f:
         json.dump(get_environment_info(), f, indent=2)
 
+    h1_ci = bootstrap_dict.get("Hit@1", {})
+    mrr_ci = bootstrap_dict.get("MRR", {})
+
     log(f"\n{'='*75}")
     log(f"EXPERIMENT COMPLETE: {exp_id}")
-    log(f"  Hit@1     : {summary_metrics['document_hit_at_1']:.4f}")
+    log(f"  Track     : {summary_metrics['evaluation_track']}")
+    log(f"  Gen Mode  : {generation_mode.upper()} (Fallback Used: {fallback_used})")
+    log(f"  Hit@1     : {summary_metrics['document_hit_at_1']:.4f} (95% CI: [{h1_ci.get('ci_lower', 0):.4f}, {h1_ci.get('ci_upper', 0):.4f}])")
     log(f"  Hit@5     : {summary_metrics['document_hit_at_5']:.4f}")
-    log(f"  MRR       : {summary_metrics['mean_reciprocal_rank']:.4f}")
+    log(f"  MRR       : {summary_metrics['mean_reciprocal_rank']:.4f} (95% CI: [{mrr_ci.get('ci_lower', 0):.4f}, {mrr_ci.get('ci_upper', 0):.4f}])")
     log(f"  Prec@5    : {summary_metrics['average_precision_at_5']:.4f}")
     log(f"  Recall@5  : {summary_metrics['average_recall_at_5']:.4f}")
     log(f"  nDCG@5    : {summary_metrics['mean_ndcg_at_5']:.4f}")
+    if summary_metrics.get("average_routing_latency_sec") is not None:
+        log(f"  Rout. Lat.: {summary_metrics['average_routing_latency_sec']:.4f}s")
     log(f"  Retr. Lat.: {summary_metrics['average_retrieval_latency_sec']:.4f}s")
+    if avg_prod_total_lat is not None:
+        log(f"  Prod Total Lat.: {avg_prod_total_lat:.4f}s")
+    else:
+        log("  Prod Total Lat.: [UNAVAILABLE / MOCK NOT REPORTED]")
     log(f"  Artifacts : {run_dir}")
     log(f"{'='*75}\n")
 
@@ -446,10 +612,17 @@ def main():
     parser.add_argument("--config", required=True, help="Path to YAML experiment config")
     parser.add_argument("--limit", type=int, default=None, help="Limit number of queries for smoke testing")
     parser.add_argument("--output_dir", default=None, help="Custom output directory")
+    parser.add_argument("--retrieval_only", action="store_true", help="Execute Track A retrieval-only evaluation without LLM generation")
     args = parser.parse_args()
 
-    run_experiment(args.config, limit=args.limit, output_dir=args.output_dir)
+    run_experiment(
+        args.config,
+        limit=args.limit,
+        output_dir=args.output_dir,
+        retrieval_only=args.retrieval_only,
+    )
 
 
 if __name__ == "__main__":
     main()
+

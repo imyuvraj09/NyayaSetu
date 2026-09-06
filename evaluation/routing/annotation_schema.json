@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NyayaSetu Routing Evaluation Dataset Schema",
+  "description": "Schema for evaluating Fact-First Legal Issue Routing against ground-truth legal regimes.",
+  "type": "object",
+  "required": ["metadata", "routing_queries"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["name", "version", "creation_date", "review_status"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "creation_date": { "type": "string" },
+        "review_status": {
+          "type": "string",
+          "enum": ["expert_annotated", "manually_annotated", "provisional_research", "automatically_inferred"]
+        },
+        "disclaimer": { "type": "string" }
+      }
+    },
+    "routing_queries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "query_id",
+          "question",
+          "gold_primary_regime",
+          "gold_candidate_regimes",
+          "query_type",
+          "annotation_source",
+          "review_status"
+        ],
+        "properties": {
+          "query_id": { "type": "string" },
+          "question": { "type": "string" },
+          "gold_primary_regime": {
+            "type": "string",
+            "enum": [
+              "BNS_SUBSTANTIVE",
+              "BNSS_PROCEDURAL",
+              "BSA_EVIDENCE",
+              "IT_ACT",
+              "CONSTITUTION",
+              "CONSUMER_PROTECTION",
+              "MOTOR_VEHICLES",
+              "POSH_LABOUR",
+              "POCSO_CHILD",
+              "GENERAL",
+              "OUT_OF_SCOPE",
+              "AMBIGUOUS"
+            ]
+          },
+          "gold_candidate_regimes": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "query_type": { "type": "string" },
+          "annotation_source": { "type": "string" },
+          "review_status": {
+            "type": "string",
+            "enum": ["expert_annotated", "manually_annotated", "provisional_research", "automatically_inferred"]
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

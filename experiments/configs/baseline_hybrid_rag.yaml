@@ -1,5 +1,6 @@
 # Baseline C: Hybrid RAG (Dense + BM25Okapi with Reciprocal Rank Fusion)
 experiment_id: baseline_hybrid_rag
+display_name: "Baseline C — Hybrid RAG"
 description: "Dual-stream retrieval fusing dense semantic search with lexical BM25Okapi using RRF (k=60)."
 
 # Pipeline Switches (Strictly Isolated)

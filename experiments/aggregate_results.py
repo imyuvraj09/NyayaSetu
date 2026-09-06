@@ -56,10 +56,18 @@ def aggregate_experiments(
         "Average Total Latency (s)",
     ]
 
+    CONFIG_DISPLAY_NAMES = {
+        "baseline_direct_llm": "Baseline A — Direct LLM",
+        "baseline_dense_rag": "Baseline B — Dense RAG",
+        "baseline_hybrid_rag": "Baseline C — Hybrid RAG",
+        "baseline_reranked_rag": "Baseline D — Hybrid RAG + Cross-Encoder Reranking",
+    }
+
     for exp_id, m in latest_by_exp.items():
         summary = m.get("summary_metrics", {})
+        display_name = CONFIG_DISPLAY_NAMES.get(exp_id, exp_id)
         row = {
-            "Configuration": exp_id,
+            "Configuration": display_name,
             "Number of Questions": m.get("queries_evaluated_count", summary.get("total_queries", 0)),
             "Hit@1": summary.get("document_hit_at_1", 0.0),
             "Hit@3": summary.get("document_hit_at_3", 0.0),
@@ -74,7 +82,12 @@ def aggregate_experiments(
         rows.append(row)
 
     # Sort in baseline order: direct_llm -> dense_rag -> hybrid_rag -> reranked_rag
-    order = {"baseline_direct_llm": 1, "baseline_dense_rag": 2, "baseline_hybrid_rag": 3, "baseline_reranked_rag": 4}
+    order = {
+        "Baseline A — Direct LLM": 1,
+        "Baseline B — Dense RAG": 2,
+        "Baseline C — Hybrid RAG": 3,
+        "Baseline D — Hybrid RAG + Cross-Encoder Reranking": 4,
+    }
     rows.sort(key=lambda r: order.get(r["Configuration"], 99))
 
     # Save CSV
@@ -92,14 +105,14 @@ def aggregate_experiments(
         json.dump(rows, f, indent=2)
 
     # Print markdown table
-    print("\n" + "=" * 80)
-    print("NYAYASETU BASELINE EXPERIMENT COMPARISON TABLE")
-    print("=" * 80)
-    print(f"| {'Configuration':<24} | {'N':<3} | {'Hit@1':<6} | {'Hit@5':<6} | {'Prec@5':<6} | {'Recall@5':<8} | {'MRR':<6} | {'nDCG@5':<6} | {'Retr. Lat.':<10} |")
-    print("|" + "-" * 26 + "|" + "-" * 5 + "|" + "-" * 8 + "|" + "-" * 8 + "|" + "-" * 8 + "|" + "-" * 10 + "|" + "-" * 8 + "|" + "-" * 8 + "|" + "-" * 12 + "|")
+    print("\n" + "=" * 95)
+    print("DEVELOPMENT BENCHMARK BASELINE RESULTS (PRELIMINARY / NOT FINAL PUBLICATION)")
+    print("=" * 95)
+    print(f"| {'Configuration':<50} | {'N':<3} | {'Hit@1':<6} | {'Hit@5':<6} | {'Prec@5':<6} | {'Recall@5':<8} | {'MRR':<6} | {'nDCG@5':<6} | {'Retr. Lat.':<10} |")
+    print("|" + "-" * 52 + "|" + "-" * 5 + "|" + "-" * 8 + "|" + "-" * 8 + "|" + "-" * 8 + "|" + "-" * 10 + "|" + "-" * 8 + "|" + "-" * 8 + "|" + "-" * 12 + "|")
     for r in rows:
-        print(f"| {r['Configuration']:<24} | {r['Number of Questions']:<3} | {r['Hit@1']:<6.4f} | {r['Hit@5']:<6.4f} | {r['Precision@5']:<6.4f} | {r['Recall@5']:<8.4f} | {r['MRR']:<6.4f} | {r['nDCG@5']:<6.4f} | {r['Average Retrieval Latency (s)']:<10.4f} |")
-    print("=" * 80 + "\n")
+        print(f"| {r['Configuration']:<50} | {r['Number of Questions']:<3} | {r['Hit@1']:<6.4f} | {r['Hit@5']:<6.4f} | {r['Precision@5']:<6.4f} | {r['Recall@5']:<8.4f} | {r['MRR']:<6.4f} | {r['nDCG@5']:<6.4f} | {r['Average Retrieval Latency (s)']:<10.4f} |")
+    print("=" * 95 + "\n")
 
     return rows
 

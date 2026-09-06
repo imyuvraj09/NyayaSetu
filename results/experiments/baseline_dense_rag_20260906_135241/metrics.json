@@ -1,0 +1,70 @@
+{
+  "experiment_id": "baseline_dense_rag",
+  "evaluation_track": "Track A \u2014 Retrieval Evaluation",
+  "total_queries": 1,
+  "statutory_evaluable_queries": 1,
+  "out_of_scope_or_negative_queries": 0,
+  "document_hit_at_1": 1.0,
+  "document_hit_at_3": 1.0,
+  "document_hit_at_5": 1.0,
+  "mean_reciprocal_rank": 1.0,
+  "average_precision_at_5": 1.0,
+  "average_recall_at_5": 1.0,
+  "mean_ndcg_at_5": 1.0,
+  "average_keyword_coverage": 1.0,
+  "average_retrieval_latency_sec": 19.9158,
+  "average_total_latency_sec": 19.9161,
+  "average_production_total_latency_sec": 19.9158,
+  "generation_metadata": {
+    "generation_provider": "none",
+    "generation_mode": "unavailable",
+    "fallback_used": false,
+    "fallback_reason": "Track A Retrieval-Only Evaluation (Zero LLM dependence)"
+  },
+  "bootstrap_confidence_intervals": {
+    "Hit@1": {
+      "metric": "Hit@1",
+      "mean": 1.0,
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "num_queries": 1,
+      "bootstrap_samples": 2000,
+      "random_seed": 42,
+      "confidence_level": 0.95,
+      "standard_error": 0.0
+    },
+    "Hit@5": {
+      "metric": "Hit@5",
+      "mean": 1.0,
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "num_queries": 1,
+      "bootstrap_samples": 2000,
+      "random_seed": 42,
+      "confidence_level": 0.95,
+      "standard_error": 0.0
+    },
+    "MRR": {
+      "metric": "MRR",
+      "mean": 1.0,
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "num_queries": 1,
+      "bootstrap_samples": 2000,
+      "random_seed": 42,
+      "confidence_level": 0.95,
+      "standard_error": 0.0
+    },
+    "nDCG@5": {
+      "metric": "nDCG@5",
+      "mean": 1.0,
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "num_queries": 1,
+      "bootstrap_samples": 2000,
+      "random_seed": 42,
+      "confidence_level": 0.95,
+      "standard_error": 0.0
+    }
+  }
+}

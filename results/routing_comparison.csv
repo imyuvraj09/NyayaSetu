@@ -1,0 +1,5 @@
+Configuration,Evaluated Queries,Hit@1,Hit@1 95% CI,Hit@5,Hit@5 95% CI,MRR,MRR 95% CI,nDCG@5,Routing Latency (s),Average Retrieval Latency (s)
+Baseline B — Dense RAG,39,0.8974,"[0.7949, 0.9744]",0.9744,"[0.9231, 1.0000]",0.9359,"[0.8590, 0.9872]",0.9649,N/A,1.8361
+Baseline C — Hybrid RAG,39,0.9231,"[0.8205, 1.0000]",1.0000,"[1.0000, 1.0000]",0.9573,"[0.9017, 1.0000]",0.9872,N/A,0.3792
+Baseline D — Hybrid RAG + Cross-Encoder Reranker,39,0.8974,"[0.7949, 0.9744]",0.9744,"[0.9231, 1.0000]",0.9295,"[0.8590, 0.9872]",0.9697,N/A,13.0859
+Routing + Hybrid RAG (Phase 3),39,0.9231,"[0.8205, 1.0000]",1.0000,"[1.0000, 1.0000]",0.9573,"[0.9060, 1.0000]",1.0000,0.0017,0.6264
