@@ -1,0 +1,68 @@
+{
+  "benchmark_file": "evaluation/development/existing_questions.json",
+  "evaluated_statutory_queries": 39,
+  "out_of_scope_or_negative_queries": 4,
+  "total_queries": 43,
+  "configurations": [
+    {
+      "configuration": "Baseline B — Dense RAG",
+      "hit_at_1": 0.8974,
+      "hit_at_1_95_ci": [0.7949, 0.9744],
+      "hit_at_5": 0.9744,
+      "hit_at_5_95_ci": [0.9231, 1.0000],
+      "mean_reciprocal_rank": 0.9359,
+      "mrr_95_ci": [0.8590, 0.9872],
+      "mean_ndcg_at_5": 0.9649,
+      "mean_ndcg_at_5_95_ci": [0.9041, 1.0000],
+      "routing_latency_sec": null,
+      "average_retrieval_latency_sec": 1.8361
+    },
+    {
+      "configuration": "Baseline C — Hybrid RAG",
+      "hit_at_1": 0.9231,
+      "hit_at_1_95_ci": [0.8205, 1.0000],
+      "hit_at_5": 1.0000,
+      "hit_at_5_95_ci": [1.0000, 1.0000],
+      "mean_reciprocal_rank": 0.9573,
+      "mrr_95_ci": [0.9017, 1.0000],
+      "mean_ndcg_at_5": 0.9872,
+      "mean_ndcg_at_5_95_ci": [0.9615, 1.0000],
+      "routing_latency_sec": null,
+      "average_retrieval_latency_sec": 0.3792
+    },
+    {
+      "configuration": "Baseline D — Hybrid RAG + Cross-Encoder Reranker",
+      "hit_at_1": 0.8974,
+      "hit_at_1_95_ci": [0.7949, 0.9744],
+      "hit_at_5": 0.9744,
+      "hit_at_5_95_ci": [0.9231, 1.0000],
+      "mean_reciprocal_rank": 0.9295,
+      "mrr_95_ci": [0.8590, 0.9872],
+      "mean_ndcg_at_5": 0.9697,
+      "mean_ndcg_at_5_95_ci": [0.9137, 1.0000],
+      "routing_latency_sec": null,
+      "average_retrieval_latency_sec": 13.0859
+    },
+    {
+      "configuration": "Routing + Hybrid RAG (Phase 3)",
+      "hit_at_1": 0.9231,
+      "hit_at_1_95_ci": [0.8205, 1.0000],
+      "hit_at_5": 1.0000,
+      "hit_at_5_95_ci": [1.0000, 1.0000],
+      "mean_reciprocal_rank": 0.9573,
+      "mrr_95_ci": [0.9060, 1.0000],
+      "mean_ndcg_at_5": 1.0000,
+      "mean_ndcg_at_5_95_ci": [1.0000, 1.0000],
+      "routing_latency_sec": 0.0017,
+      "average_retrieval_latency_sec": 0.6264
+    }
+  ],
+  "routing_standalone_metrics": {
+    "top_1_accuracy": 0.4651,
+    "top_3_coverage": 0.4884,
+    "macro_f1": 0.5019,
+    "fallback_rate": 0.5116,
+    "incorrect_high_confidence_routing_rate": 0.0000,
+    "mean_routing_latency_seconds": 0.000185
+  }
+}

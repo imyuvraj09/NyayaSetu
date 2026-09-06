@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "template_name": "Claim Grounding Annotation Template",
+  "description": "Template for evaluating generated claims and verifying supporting evidence alignment.",
+  "query_id": "VAL_Q001",
+  "generated_claim": "Section 482 of the Bharatiya Nagarik Suraksha Sanhita empowers the High Court or Sessions Court to direct bail.",
+  "cited_sources": ["[SOURCE 1]"],
+  "ground_truth_support": "SUPPORTED",
+  "support_labels": [
+    "SUPPORTED",
+    "PARTIALLY_SUPPORTED",
+    "UNSUPPORTED"
+  ],
+  "supporting_chunk_ids": ["bnss_2023_c0482"],
+  "is_hallucinated": false,
+  "action_required": "RETAIN",
+  "action_options": [
+    "RETAIN",
+    "QUALIFY_UNCERTAINTY",
+    "PRUNE_UNSUPPORTED",
+    "ABSTAIN"
+  ],
+  "annotator_id": "LEGAL_EXPERT_01",
+  "review_status": "draft"
+}

@@ -185,6 +185,7 @@ class LegalRAGPipeline:
         final_k: Optional[int] = None,
         max_per_document: Optional[int] = None,
         request_id: Optional[str] = None,
+        use_fact_routing: bool = False,
     ) -> RAGResponse:
         """Process a legal inquiry and return a grounded, cited response.
 
@@ -194,6 +195,7 @@ class LegalRAGPipeline:
             final_k: Final reranked source count override.
             max_per_document: Document diversity limit override.
             request_id: Unique correlation ID for request tracing.
+            use_fact_routing: Optional research switch for Fact-First Legal Issue Routing.
 
         Returns:
             RAGResponse object with synthesized answer, citations, and provenance.
@@ -203,6 +205,23 @@ class LegalRAGPipeline:
 
         req_id = request_id or "adhoc"
         logger.info("[LegalRAGPipeline] Executing pipeline [request_id='%s']: '%s'", req_id, query_text.strip())
+
+        # Optional Fact-First Legal Issue Routing
+        routing_info = None
+        if use_fact_routing:
+            try:
+                from research.issue_router import get_fact_first_router
+                router = get_fact_first_router()
+                r_decision = router.route_query(query_text)
+                routing_info = r_decision.to_dict()
+                logger.info(
+                    "[LegalRAGPipeline] Fact-First Routing: mode=%s, regimes=%s, fallback=%s",
+                    r_decision.routing_mode.value,
+                    r_decision.selected_regimes,
+                    r_decision.fallback_used,
+                )
+            except Exception as r_err:
+                logger.warning("[LegalRAGPipeline] Fact-First Routing failed gracefully: %s", r_err)
 
         # Step 1: Execute Phase 6 Advanced Retrieval
         retrieval_result = self.retriever.retrieve(
@@ -305,6 +324,8 @@ class LegalRAGPipeline:
             "facet_coverage": facet_coverage,
             "debug_telemetry": retrieval_result.debug_telemetry,
         }
+        if routing_info is not None:
+            retrieval_meta["fact_first_routing"] = routing_info
 
         # Step 2: Check for empty retrieval results
         if not ranked_chunks:

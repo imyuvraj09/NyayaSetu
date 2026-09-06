@@ -1,0 +1,70 @@
+[
+  {
+    "query_id": "bns_001",
+    "question": "What is the punishment for committing theft under the Bharatiya Nyaya Sanhita?",
+    "expected_target": "Bharatiya Nyaya Sanhita, 2023",
+    "retrieved_top_5": [
+      "Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "Bharatiya Nyaya Sanhita, 2023",
+      "Bharatiya Nyaya Sanhita, 2023",
+      "Bharatiya Nyaya Sanhita, 2023"
+    ],
+    "rank_of_first_relevant_result": 3,
+    "baseline_configuration": "routing_only",
+    "failure_category": "ROUTING_CORRECT_RETRIEVAL_FAILURE",
+    "notes": "Fact router correctly selected regime 'BNS_SUBSTANTIVE', but chunk-level retrieval ranked target at 3.",
+    "analysis_type": "SYSTEM_ERROR_ANALYSIS",
+    "routing_mode": "high_confidence",
+    "routing_selected_regimes": [
+      "BNS_SUBSTANTIVE"
+    ],
+    "routing_fallback_used": false
+  },
+  {
+    "query_id": "it_001",
+    "question": "What constitutes legal recognition of electronic records and digital signatures under the IT Act?",
+    "expected_target": "Information Technology Act",
+    "retrieved_top_5": [
+      "Bharatiya Sakshya Adhiniyam, 2023",
+      "Information Technology Act",
+      "Information Technology Act",
+      "Information Technology Act",
+      "Information Technology Act"
+    ],
+    "rank_of_first_relevant_result": 2,
+    "baseline_configuration": "routing_only",
+    "failure_category": "ROUTING_CORRECT_RETRIEVAL_FAILURE",
+    "notes": "Fact router correctly selected regime 'IT_ACT', but chunk-level retrieval ranked target at 2.",
+    "analysis_type": "SYSTEM_ERROR_ANALYSIS",
+    "routing_mode": "medium_confidence_soft_boost",
+    "routing_selected_regimes": [
+      "BSA_EVIDENCE",
+      "IT_ACT"
+    ],
+    "routing_fallback_used": false
+  },
+  {
+    "query_id": "it_003",
+    "question": "What is the punishment for identity theft and cheating by personation using a computer resource?",
+    "expected_target": "Information Technology Act",
+    "retrieved_top_5": [
+      "Bharatiya Nyaya Sanhita, 2023",
+      "Information Technology Act",
+      "Information Technology Act",
+      "Information Technology Act",
+      "Bharatiya Nyaya Sanhita, 2023"
+    ],
+    "rank_of_first_relevant_result": 2,
+    "baseline_configuration": "routing_only",
+    "failure_category": "ROUTING_CORRECT_RETRIEVAL_FAILURE",
+    "notes": "Fact router correctly selected regime 'IT_ACT', but chunk-level retrieval ranked target at 2.",
+    "analysis_type": "SYSTEM_ERROR_ANALYSIS",
+    "routing_mode": "high_confidence",
+    "routing_selected_regimes": [
+      "IT_ACT",
+      "BNS_SUBSTANTIVE"
+    ],
+    "routing_fallback_used": false
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "template_name": "Evidence Compatibility Annotation Template",
+  "description": "Template for annotating multi-dimensional evidence compatibility for Phase 4 evaluation.",
+  "query_id": "VAL_Q001",
+  "chunk_id": "bnss_2023_c0482",
+  "fact_compatibility": "COMPATIBLE",
+  "issue_compatibility": "COMPATIBLE",
+  "context_compatibility": "COMPATIBLE",
+  "overall_compatibility": "COMPATIBLE",
+  "compatibility_labels": [
+    "COMPATIBLE",
+    "PARTIALLY_COMPATIBLE",
+    "UNKNOWN",
+    "INCOMPATIBLE"
+  ],
+  "reasoning": "Detailed factual and statutory alignment justification.",
+  "annotator_id": "LEGAL_EXPERT_01",
+  "review_status": "draft"
+}

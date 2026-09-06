@@ -1,0 +1,519 @@
+{
+  "metadata": {
+    "name": "NyayaSetu Provisional Routing Evaluation Benchmark",
+    "version": "1.0-provisional",
+    "creation_date": "2026-09-06",
+    "review_status": "provisional_research",
+    "disclaimer": "Provisional research benchmark based on legacy development questions. Gold primary regimes are manually mapped from target enactments for preliminary routing validation and are not claimed as independent expert annotations."
+  },
+  "routing_queries": [
+    {
+      "query_id": "constitution_001",
+      "question": "What fundamental rights are guaranteed by the Constitution of India?",
+      "gold_primary_regime": "CONSTITUTION",
+      "gold_candidate_regimes": [
+        "CONSTITUTION"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Constitution of India']"
+    },
+    {
+      "query_id": "constitution_002",
+      "question": "What rights are guaranteed by the Constitution?",
+      "gold_primary_regime": "CONSTITUTION",
+      "gold_candidate_regimes": [
+        "CONSTITUTION"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Constitution of India']"
+    },
+    {
+      "query_id": "constitution_003",
+      "question": "What is guaranteed under Article 14 regarding equality before law?",
+      "gold_primary_regime": "CONSTITUTION",
+      "gold_candidate_regimes": [
+        "CONSTITUTION"
+      ],
+      "query_type": "fact_pattern",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Constitution of India']"
+    },
+    {
+      "query_id": "constitution_004",
+      "question": "What rights regarding freedom of speech and expression are provided in Article 19?",
+      "gold_primary_regime": "CONSTITUTION",
+      "gold_candidate_regimes": [
+        "CONSTITUTION"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Constitution of India']"
+    },
+    {
+      "query_id": "constitution_005",
+      "question": "What is the procedure to move the Supreme Court under Article 32 for constitutional remedies?",
+      "gold_primary_regime": "CONSTITUTION",
+      "gold_candidate_regimes": [
+        "CONSTITUTION"
+      ],
+      "query_type": "fact_pattern",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Constitution of India']"
+    },
+    {
+      "query_id": "constitution_006",
+      "question": "What does the Constitution provide regarding the Right to Education under Article 21A?",
+      "gold_primary_regime": "CONSTITUTION",
+      "gold_candidate_regimes": [
+        "CONSTITUTION"
+      ],
+      "query_type": "fact_pattern",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Constitution of India']"
+    },
+    {
+      "query_id": "bns_001",
+      "question": "What is the punishment for committing theft under the Bharatiya Nyaya Sanhita?",
+      "gold_primary_regime": "BNS_SUBSTANTIVE",
+      "gold_candidate_regimes": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Nyaya Sanhita, 2023']"
+    },
+    {
+      "query_id": "bns_002",
+      "question": "What are the legal consequences and penalties for causing death by negligence?",
+      "gold_primary_regime": "BNS_SUBSTANTIVE",
+      "gold_candidate_regimes": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Nyaya Sanhita, 2023']"
+    },
+    {
+      "query_id": "bns_003",
+      "question": "How is snatching defined and punished under Section 304 of BNS?",
+      "gold_primary_regime": "BNS_SUBSTANTIVE",
+      "gold_candidate_regimes": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Nyaya Sanhita, 2023']"
+    },
+    {
+      "query_id": "bns_004",
+      "question": "What constitutes the offense of extortion and how is it penalised?",
+      "gold_primary_regime": "BNS_SUBSTANTIVE",
+      "gold_candidate_regimes": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Nyaya Sanhita, 2023']"
+    },
+    {
+      "query_id": "bns_005",
+      "question": "What constitutes criminal conspiracy and what is the punishment under the Bharatiya Nyaya Sanhita?",
+      "gold_primary_regime": "BNS_SUBSTANTIVE",
+      "gold_candidate_regimes": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Nyaya Sanhita, 2023']"
+    },
+    {
+      "query_id": "bns_006",
+      "question": "What is the punishment for organized crime under the Bharatiya Nyaya Sanhita?",
+      "gold_primary_regime": "BNS_SUBSTANTIVE",
+      "gold_candidate_regimes": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Nyaya Sanhita, 2023']"
+    },
+    {
+      "query_id": "bnss_001",
+      "question": "What is the procedure for recording an arrest and rights of the arrested person under BNSS?",
+      "gold_primary_regime": "BNSS_PROCEDURAL",
+      "gold_candidate_regimes": [
+        "BNSS_PROCEDURAL"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Nagarik Suraksha Sanhita, 2023']"
+    },
+    {
+      "query_id": "bnss_002",
+      "question": "How is information in cognizable cases or First Information Report recorded under Section 173 of BNSS?",
+      "gold_primary_regime": "BNSS_PROCEDURAL",
+      "gold_candidate_regimes": [
+        "BNSS_PROCEDURAL"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Nagarik Suraksha Sanhita, 2023']"
+    },
+    {
+      "query_id": "bnss_003",
+      "question": "What are the powers of police to arrest any person without warrant under BNSS?",
+      "gold_primary_regime": "BNSS_PROCEDURAL",
+      "gold_candidate_regimes": [
+        "BNSS_PROCEDURAL"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Nagarik Suraksha Sanhita, 2023']"
+    },
+    {
+      "query_id": "bnss_004",
+      "question": "What are the statutory provisions regarding the grant of bail in non-bailable offences?",
+      "gold_primary_regime": "BNSS_PROCEDURAL",
+      "gold_candidate_regimes": [
+        "BNSS_PROCEDURAL"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Nagarik Suraksha Sanhita, 2023']"
+    },
+    {
+      "query_id": "bnss_005",
+      "question": "What is the procedure for zero FIR registration under the Bharatiya Nagarik Suraksha Sanhita?",
+      "gold_primary_regime": "BNSS_PROCEDURAL",
+      "gold_candidate_regimes": [
+        "BNSS_PROCEDURAL"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Nagarik Suraksha Sanhita, 2023']"
+    },
+    {
+      "query_id": "bnss_006",
+      "question": "What are the provisions for anticipatory bail under the Bharatiya Nagarik Suraksha Sanhita?",
+      "gold_primary_regime": "BNSS_PROCEDURAL",
+      "gold_candidate_regimes": [
+        "BNSS_PROCEDURAL"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Nagarik Suraksha Sanhita, 2023']"
+    },
+    {
+      "query_id": "bsa_001",
+      "question": "What is the distinction between primary evidence and secondary evidence under Bharatiya Sakshya Adhiniyam?",
+      "gold_primary_regime": "BSA_EVIDENCE",
+      "gold_candidate_regimes": [
+        "BSA_EVIDENCE"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Sakshya Adhiniyam, 2023']"
+    },
+    {
+      "query_id": "bsa_002",
+      "question": "What are the conditions for admissibility of electronic records under Section 63 of BSA?",
+      "gold_primary_regime": "BSA_EVIDENCE",
+      "gold_candidate_regimes": [
+        "BSA_EVIDENCE"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Sakshya Adhiniyam, 2023']"
+    },
+    {
+      "query_id": "bsa_003",
+      "question": "When are admissions and confessions made to a police officer inadmissible in court?",
+      "gold_primary_regime": "BSA_EVIDENCE",
+      "gold_candidate_regimes": [
+        "BSA_EVIDENCE"
+      ],
+      "query_type": "fact_pattern",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Sakshya Adhiniyam, 2023']"
+    },
+    {
+      "query_id": "bsa_004",
+      "question": "What is the rule of burden of proof and who bears it in a legal proceeding?",
+      "gold_primary_regime": "BSA_EVIDENCE",
+      "gold_candidate_regimes": [
+        "BSA_EVIDENCE"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Sakshya Adhiniyam, 2023']"
+    },
+    {
+      "query_id": "bsa_005",
+      "question": "What are the rules regarding electronic evidence?",
+      "gold_primary_regime": "BSA_EVIDENCE",
+      "gold_candidate_regimes": [
+        "BSA_EVIDENCE"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Sakshya Adhiniyam, 2023']"
+    },
+    {
+      "query_id": "bsa_006",
+      "question": "Under what circumstances can dying declarations be admitted as evidence?",
+      "gold_primary_regime": "BSA_EVIDENCE",
+      "gold_candidate_regimes": [
+        "BSA_EVIDENCE"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Bharatiya Sakshya Adhiniyam, 2023']"
+    },
+    {
+      "query_id": "consumer_001",
+      "question": "How is a consumer defined under the Consumer Protection Act?",
+      "gold_primary_regime": "CONSUMER_PROTECTION",
+      "gold_candidate_regimes": [
+        "CONSUMER_PROTECTION"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Consumer Protection Act']"
+    },
+    {
+      "query_id": "consumer_002",
+      "question": "What should a consumer do when a product is defective?",
+      "gold_primary_regime": "CONSUMER_PROTECTION",
+      "gold_candidate_regimes": [
+        "CONSUMER_PROTECTION"
+      ],
+      "query_type": "fact_pattern",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Consumer Protection Act']"
+    },
+    {
+      "query_id": "consumer_003",
+      "question": "What is the procedure for filing a complaint before the District Consumer Disputes Redressal Commission?",
+      "gold_primary_regime": "CONSUMER_PROTECTION",
+      "gold_candidate_regimes": [
+        "CONSUMER_PROTECTION"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Consumer Protection Act']"
+    },
+    {
+      "query_id": "consumer_004",
+      "question": "What reliefs or orders can the District Commission pass if goods suffer from defects?",
+      "gold_primary_regime": "CONSUMER_PROTECTION",
+      "gold_candidate_regimes": [
+        "CONSUMER_PROTECTION"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Consumer Protection Act']"
+    },
+    {
+      "query_id": "consumer_005",
+      "question": "What are the rules and liabilities governing product manufacturers under product liability?",
+      "gold_primary_regime": "CONSUMER_PROTECTION",
+      "gold_candidate_regimes": [
+        "CONSUMER_PROTECTION"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Consumer Protection Act']"
+    },
+    {
+      "query_id": "it_001",
+      "question": "What constitutes legal recognition of electronic records and digital signatures under the IT Act?",
+      "gold_primary_regime": "IT_ACT",
+      "gold_candidate_regimes": [
+        "IT_ACT"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Information Technology Act']"
+    },
+    {
+      "query_id": "it_002",
+      "question": "What are the penalties for unauthorized access to computer systems or hacking under the IT Act?",
+      "gold_primary_regime": "IT_ACT",
+      "gold_candidate_regimes": [
+        "IT_ACT"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Information Technology Act']"
+    },
+    {
+      "query_id": "it_003",
+      "question": "What is the punishment for identity theft and cheating by personation using a computer resource?",
+      "gold_primary_regime": "IT_ACT",
+      "gold_candidate_regimes": [
+        "IT_ACT"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Information Technology Act']"
+    },
+    {
+      "query_id": "it_004",
+      "question": "What is the liability of network service providers and intermediaries under Section 79 of the IT Act?",
+      "gold_primary_regime": "IT_ACT",
+      "gold_candidate_regimes": [
+        "IT_ACT"
+      ],
+      "query_type": "fact_pattern",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Information Technology Act']"
+    },
+    {
+      "query_id": "it_005",
+      "question": "What are the powers of the Controller of Certifying Authorities under the Information Technology Act?",
+      "gold_primary_regime": "IT_ACT",
+      "gold_candidate_regimes": [
+        "IT_ACT"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Information Technology Act']"
+    },
+    {
+      "query_id": "mv_001",
+      "question": "What are the licensing requirements to drive a motor vehicle under the Motor Vehicles Act?",
+      "gold_primary_regime": "MOTOR_VEHICLES",
+      "gold_candidate_regimes": [
+        "MOTOR_VEHICLES"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Motor Vehicles Act']"
+    },
+    {
+      "query_id": "mv_002",
+      "question": "What are the penalties and fines for driving under the influence of alcohol or drugs?",
+      "gold_primary_regime": "MOTOR_VEHICLES",
+      "gold_candidate_regimes": [
+        "MOTOR_VEHICLES"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Motor Vehicles Act']"
+    },
+    {
+      "query_id": "mv_003",
+      "question": "What are the requirements for mandatory insurance of motor vehicles against third party risk?",
+      "gold_primary_regime": "MOTOR_VEHICLES",
+      "gold_candidate_regimes": [
+        "MOTOR_VEHICLES"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Motor Vehicles Act']"
+    },
+    {
+      "query_id": "mv_004",
+      "question": "What is the procedure for claiming compensation before a Motor Accidents Claims Tribunal?",
+      "gold_primary_regime": "MOTOR_VEHICLES",
+      "gold_candidate_regimes": [
+        "MOTOR_VEHICLES"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Motor Vehicles Act']"
+    },
+    {
+      "query_id": "mv_005",
+      "question": "What is the penalty for driving an uninsured vehicle under the Motor Vehicles Act?",
+      "gold_primary_regime": "MOTOR_VEHICLES",
+      "gold_candidate_regimes": [
+        "MOTOR_VEHICLES"
+      ],
+      "query_type": "direct_statutory",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: ['Motor Vehicles Act']"
+    },
+    {
+      "query_id": "out_of_scope_001",
+      "question": "What is the capital of France?",
+      "gold_primary_regime": "OUT_OF_SCOPE",
+      "gold_candidate_regimes": [],
+      "query_type": "out_of_scope",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: []"
+    },
+    {
+      "query_id": "out_of_scope_002",
+      "question": "What is Newton's third law of motion?",
+      "gold_primary_regime": "OUT_OF_SCOPE",
+      "gold_candidate_regimes": [],
+      "query_type": "out_of_scope",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: []"
+    },
+    {
+      "query_id": "ambiguous_001",
+      "question": "Can I sue someone?",
+      "gold_primary_regime": "AMBIGUOUS",
+      "gold_candidate_regimes": [],
+      "query_type": "ambiguous",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: []"
+    },
+    {
+      "query_id": "ambiguous_002",
+      "question": "What is the limitation period?",
+      "gold_primary_regime": "AMBIGUOUS",
+      "gold_candidate_regimes": [],
+      "query_type": "ambiguous",
+      "annotation_source": "manual_statute_mapping_from_legacy_benchmark",
+      "review_status": "provisional_research",
+      "notes": "Ground truth derived manually from specified target enactment: []"
+    }
+  ]
+}

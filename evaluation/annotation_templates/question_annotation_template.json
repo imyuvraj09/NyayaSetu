@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "template_name": "Legal Question Annotation Template",
+  "description": "Template for annotators creating new benchmark legal queries.",
+  "query_id": "VAL_Q001",
+  "question": "Insert natural language question here (e.g., What are the legal requirements for anticipatory bail?)",
+  "query_type": "direct_statutory | section_identification | fact_pattern | multi_part | cross_section | ambiguous | negative_or_out_of_scope",
+  "difficulty": "easy | medium | hard",
+  "statute": [
+    "Bharatiya Nagarik Suraksha Sanhita, 2023"
+  ],
+  "legal_domain": [
+    "Criminal Procedure"
+  ],
+  "facts": {
+    "actors": ["accused", "police officer"],
+    "actions": ["anticipating arrest", "applying for bail"],
+    "events": [],
+    "objects": [],
+    "time_context": [],
+    "location_context": [],
+    "relationships": [],
+    "explicit_legal_terms": ["anticipatory bail"]
+  },
+  "legal_issue": "Conditions governing grant of pre-arrest bail under procedural law",
+  "relevant_sections": [
+    "Section 482"
+  ],
+  "relevant_chunk_ids": [],
+  "negative_or_ambiguous": false,
+  "annotation_source": "Annotator ID / Citation Source",
+  "review_status": "draft",
+  "notes": "Enter any qualitative or domain-specific notes here."
+}

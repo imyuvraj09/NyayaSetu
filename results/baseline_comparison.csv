@@ -1,0 +1,5 @@
+Configuration,Number of Questions,Hit@1,Hit@3,Hit@5,Precision@5,Recall@5,MRR,nDCG@5,Average Retrieval Latency (s),Average Total Latency (s)
+Baseline A — Direct LLM,43,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0531
+Baseline B — Dense RAG,43,0.8974,0.9744,0.9744,0.8051,0.9744,0.9359,0.9649,1.8361,1.8819
+Baseline C — Hybrid RAG,43,0.9231,1.0,1.0,0.8462,1.0,0.9573,0.9872,0.3792,0.4133
+Baseline D — Hybrid RAG + Cross-Encoder Reranking,43,0.8974,0.9487,0.9744,0.8359,0.9744,0.9295,0.9697,13.0859,13.1362

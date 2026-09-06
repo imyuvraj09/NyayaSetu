@@ -1,0 +1,91 @@
+# Fact-First Legal Issue Routing Configuration
+# Defines regimes, issue-to-regime affinity, confidence thresholds, and soft routing weights.
+
+regimes:
+  BNS_SUBSTANTIVE:
+    name: "Bharatiya Nyaya Sanhita, 2023 (Substantive Criminal Law)"
+    document_filter: ["Bharatiya Nyaya Sanhita, 2023", "bns_2023"]
+    act_code: "BNS"
+    description: "Substantive penal offenses, definitions, and statutory punishments"
+  BNSS_PROCEDURAL:
+    name: "Bharatiya Nagarik Suraksha Sanhita, 2023 (Criminal Procedure)"
+    document_filter: ["Bharatiya Nagarik Suraksha Sanhita, 2023", "bnss_2023"]
+    act_code: "BNSS"
+    description: "Criminal investigation, arrest powers, bail, trial procedure, FIR"
+  BSA_EVIDENCE:
+    name: "Bharatiya Sakshya Adhiniyam, 2023 (Evidence Law)"
+    document_filter: ["Bharatiya Sakshya Adhiniyam, 2023", "bsa_2023"]
+    act_code: "BSA"
+    description: "Rules of evidence, electronic records admissibility, dying declarations"
+  IT_ACT:
+    name: "Information Technology Act, 2000 (Cyber Law)"
+    document_filter: ["Information Technology Act", "it_act"]
+    act_code: "IT_ACT"
+    description: "Cyber crimes, hacking, digital identity theft, electronic records"
+  CONSTITUTION:
+    name: "Constitution of India (Constitutional Law)"
+    document_filter: ["Constitution of India", "constitution_of_india"]
+    act_code: "CONSTITUTION"
+    description: "Fundamental rights, writ remedies, judicial review, constitutional framework"
+  CONSUMER_PROTECTION:
+    name: "Consumer Protection Act, 2019 (Consumer Law)"
+    document_filter: ["Consumer Protection Act, 2019", "consumer"]
+    act_code: "CPA"
+    description: "Deficiency in service, defective goods, unfair trade practices"
+  MOTOR_VEHICLES:
+    name: "Motor Vehicles Act, 1988 (Transport Law)"
+    document_filter: ["Motor Vehicles Act", "motor_vehicle_act"]
+    act_code: "MVA"
+    description: "Traffic regulation, driving licenses, drunk driving, motor accident claims"
+  POSH_LABOUR:
+    name: "Sexual Harassment of Women at Workplace Act, 2013 (POSH)"
+    document_filter: ["The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013", "sexual_harassment_workplace_act_2013"]
+    act_code: "POSH"
+    description: "Workplace sexual harassment, Internal Complaints Committee redressal"
+  POCSO_CHILD:
+    name: "Protection of Children from Sexual Offences Act, 2012 (POCSO)"
+    document_filter: ["The Protection of Children from Sexual Offences Act, 2012", "pocso_act_2012"]
+    act_code: "POCSO"
+    description: "Offenses against minors, child sexual assault protection"
+  GENERAL:
+    name: "General Statutory Corpus"
+    document_filter: []
+    act_code: "GENERAL"
+    description: "Cross-statute or general legal corpus fallback"
+
+issue_to_regime_map:
+  cyber_identity_theft_personation: "IT_ACT"
+  cyber_unauthorized_access: "IT_ACT"
+  substantive_theft_offence: "BNS_SUBSTANTIVE"
+  substantive_criminal_conspiracy: "BNS_SUBSTANTIVE"
+  substantive_organized_crime: "BNS_SUBSTANTIVE"
+  substantive_homicide_murder: "BNS_SUBSTANTIVE"
+  procedural_police_arrest_powers: "BNSS_PROCEDURAL"
+  procedural_bail_investigation: "BNSS_PROCEDURAL"
+  evidentiary_electronic_records_admissibility: "BSA_EVIDENCE"
+  evidentiary_dying_declaration: "BSA_EVIDENCE"
+  constitutional_fundamental_rights: "CONSTITUTION"
+  workplace_sexual_harassment_protection: "POSH_LABOUR"
+  child_sexual_abuse_protection: "POCSO_CHILD"
+  consumer_dispute_deficiency: "CONSUMER_PROTECTION"
+  motor_vehicle_offence_liability: "MOTOR_VEHICLES"
+  general_legal_inquiry: "GENERAL"
+
+thresholds:
+  high_confidence: 0.70
+  medium_confidence: 0.40
+  fallback_threshold: 0.40
+  top_n_regimes: 3
+
+strategy_parameters:
+  high_confidence:
+    target_allocation_ratio: 0.70  # 70% candidate pool allocated to primary regime
+    global_fallback_slots: 6      # Minimum 6 global candidates preserved for safety
+    soft_boost_factor: 1.50
+  medium_confidence:
+    target_allocation_ratio: 0.50
+    global_fallback_slots: 10
+    soft_boost_factor: 1.25
+  low_confidence:
+    soft_boost_factor: 1.00
+    fallback_used: true

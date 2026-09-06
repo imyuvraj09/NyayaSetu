@@ -1,0 +1,14 @@
+{
+  "dataset_name": "NyayaSetu Legacy Development Benchmark",
+  "dataset_version": "1.0-dev",
+  "creation_date": "2026-09-05",
+  "annotation_source": "legacy_development_corpus",
+  "annotation_status": "legacy",
+  "review_status": "development_only",
+  "sha256_hash": "399cfd66a17ea62cd6afe540559b09252e0d69e1c8109e55c868f366255afac2",
+  "benchmark_file": "evaluation/development/existing_questions.json",
+  "total_queries": 43,
+  "statutory_evaluable_queries": 39,
+  "out_of_scope_or_ambiguous_queries": 4,
+  "disclaimer": "This dataset is strictly designated for internal development, architectural isolation verification, and regression tracking. It must not be cited as an expert-annotated or peer-reviewed benchmark for publication claims."
+}

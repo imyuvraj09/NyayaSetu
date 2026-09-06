@@ -1,0 +1,41 @@
+[
+  {
+    "Configuration": "Baseline B — Dense RAG",
+    "Evaluated Queries": 39,
+    "Hit@1": 0.8974,
+    "Hit@1_95CI": [0.7949, 0.9744],
+    "Hit@5": 0.9744,
+    "Hit@5_95CI": [0.9231, 1.0],
+    "MRR": 0.9359,
+    "MRR_95CI": [0.859, 0.9872],
+    "nDCG@5": 0.9649,
+    "nDCG@5_95CI": [0.9041, 1.0],
+    "Average Retrieval Latency (s)": 1.8361
+  },
+  {
+    "Configuration": "Baseline C — Hybrid RAG",
+    "Evaluated Queries": 39,
+    "Hit@1": 0.9231,
+    "Hit@1_95CI": [0.8205, 1.0],
+    "Hit@5": 1.0,
+    "Hit@5_95CI": [1.0, 1.0],
+    "MRR": 0.9573,
+    "MRR_95CI": [0.9017, 1.0],
+    "nDCG@5": 0.9872,
+    "nDCG@5_95CI": [0.9615, 1.0],
+    "Average Retrieval Latency (s)": 0.3792
+  },
+  {
+    "Configuration": "Baseline D — Hybrid RAG + Cross-Encoder Reranking",
+    "Evaluated Queries": 39,
+    "Hit@1": 0.8974,
+    "Hit@1_95CI": [0.7949, 0.9744],
+    "Hit@5": 0.9744,
+    "Hit@5_95CI": [0.9231, 1.0],
+    "MRR": 0.9295,
+    "MRR_95CI": [0.859, 0.9872],
+    "nDCG@5": 0.9697,
+    "nDCG@5_95CI": [0.9137, 1.0],
+    "Average Retrieval Latency (s)": 13.0859
+  }
+]

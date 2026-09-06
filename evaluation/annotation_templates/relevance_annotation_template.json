@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "template_name": "Passage Relevance Annotation Template",
+  "description": "Template for annotating passage-level graded relevance for nDCG and multi-target retrieval evaluation.",
+  "query_id": "VAL_Q001",
+  "chunk_id": "bnss_2023_c0482",
+  "document_name": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+  "section_number": "482",
+  "graded_relevance": 3,
+  "relevance_scale_definition": {
+    "0": "Irrelevant - Off-topic, unrelated Act or procedural stage",
+    "1": "Marginally Relevant - Provides peripheral or general context",
+    "2": "Relevant - Directly addresses substantive facets or criteria",
+    "3": "Highly Relevant - The primary statutory provision or core operative section"
+  },
+  "justification": "Explains why this passage is relevant or irrelevant to the query.",
+  "annotator_id": "LEGAL_EXPERT_01",
+  "review_status": "draft"
+}

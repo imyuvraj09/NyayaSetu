@@ -1,0 +1,9 @@
+
+===========================================================================
+EXPERIMENT EXECUTION: baseline_dense_rag
+Benchmark File: evaluation\development\existing_questions.json | Queries: 2
+Pipeline Config: {'use_retrieval': True, 'use_dense_retrieval': True, 'use_bm25': False, 'use_hybrid_fusion': False, 'use_reranker': False, 'use_fact_routing': False, 'use_compatibility_filter': False, 'use_claim_repair': False}
+===========================================================================
+
+  [01/02] constitution_001  : HIT          (RR=1.00, Lat=22.22s) | What fundamental rights are guaranteed by the...
+  [02/02] constitution_002  : HIT          (RR=1.00, Lat=0.03s) | What rights are guaranteed by the Constitutio...

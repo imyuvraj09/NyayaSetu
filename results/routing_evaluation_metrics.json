@@ -1,0 +1,840 @@
+{
+  "dataset_evaluated": "evaluation\\routing\\routing_questions_template.json",
+  "total_queries": 43,
+  "top1_regime_accuracy": 0.4651,
+  "top3_regime_coverage": 0.4884,
+  "macro_precision": 0.713,
+  "macro_recall": 0.4111,
+  "macro_f1": 0.5019,
+  "multilabel_regime_recall": 0.5385,
+  "fallback_rate": 0.5116,
+  "high_confidence_total_count": 17,
+  "high_confidence_incorrect_count": 0,
+  "incorrect_high_confidence_routing_rate": 0.0,
+  "per_regime_metrics": {
+    "AMBIGUOUS": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 2
+    },
+    "BNSS_PROCEDURAL": {
+      "precision": 1.0,
+      "recall": 0.8333,
+      "f1": 0.9091,
+      "support": 6
+    },
+    "BNS_SUBSTANTIVE": {
+      "precision": 0.75,
+      "recall": 0.5,
+      "f1": 0.6,
+      "support": 6
+    },
+    "BSA_EVIDENCE": {
+      "precision": 0.6667,
+      "recall": 0.3333,
+      "f1": 0.4444,
+      "support": 6
+    },
+    "CONSTITUTION": {
+      "precision": 1.0,
+      "recall": 0.8333,
+      "f1": 0.9091,
+      "support": 6
+    },
+    "CONSUMER_PROTECTION": {
+      "precision": 1.0,
+      "recall": 0.2,
+      "f1": 0.3333,
+      "support": 5
+    },
+    "GENERAL": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 0
+    },
+    "IT_ACT": {
+      "precision": 1.0,
+      "recall": 0.6,
+      "f1": 0.75,
+      "support": 5
+    },
+    "MOTOR_VEHICLES": {
+      "precision": 1.0,
+      "recall": 0.4,
+      "f1": 0.5714,
+      "support": 5
+    },
+    "OUT_OF_SCOPE": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 2
+    }
+  },
+  "confusion_matrix": {
+    "CONSTITUTION": {
+      "CONSTITUTION": 5,
+      "GENERAL": 1
+    },
+    "BNS_SUBSTANTIVE": {
+      "BNS_SUBSTANTIVE": 3,
+      "GENERAL": 3
+    },
+    "BNSS_PROCEDURAL": {
+      "BNSS_PROCEDURAL": 5,
+      "GENERAL": 1
+    },
+    "BSA_EVIDENCE": {
+      "GENERAL": 4,
+      "BSA_EVIDENCE": 2
+    },
+    "CONSUMER_PROTECTION": {
+      "CONSUMER_PROTECTION": 1,
+      "GENERAL": 4
+    },
+    "IT_ACT": {
+      "BSA_EVIDENCE": 1,
+      "IT_ACT": 2,
+      "GENERAL": 2
+    },
+    "MOTOR_VEHICLES": {
+      "MOTOR_VEHICLES": 2,
+      "GENERAL": 3
+    },
+    "OUT_OF_SCOPE": {
+      "GENERAL": 2
+    },
+    "AMBIGUOUS": {
+      "GENERAL": 2
+    }
+  },
+  "per_query_results": [
+    {
+      "query_id": "constitution_001",
+      "question": "What fundamental rights are guaranteed by the Constitution of India?",
+      "gold_primary": "CONSTITUTION",
+      "gold_candidates": [
+        "CONSTITUTION"
+      ],
+      "predicted_primary": "CONSTITUTION",
+      "predicted_regimes": [
+        "CONSTITUTION"
+      ],
+      "confidence": 0.805,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "constitution_002",
+      "question": "What rights are guaranteed by the Constitution?",
+      "gold_primary": "CONSTITUTION",
+      "gold_candidates": [
+        "CONSTITUTION"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.35,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "constitution_003",
+      "question": "What is guaranteed under Article 14 regarding equality before law?",
+      "gold_primary": "CONSTITUTION",
+      "gold_candidates": [
+        "CONSTITUTION"
+      ],
+      "predicted_primary": "CONSTITUTION",
+      "predicted_regimes": [
+        "CONSTITUTION"
+      ],
+      "confidence": 0.805,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "constitution_004",
+      "question": "What rights regarding freedom of speech and expression are provided in Article 19?",
+      "gold_primary": "CONSTITUTION",
+      "gold_candidates": [
+        "CONSTITUTION"
+      ],
+      "predicted_primary": "CONSTITUTION",
+      "predicted_regimes": [
+        "CONSTITUTION"
+      ],
+      "confidence": 0.805,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "constitution_005",
+      "question": "What is the procedure to move the Supreme Court under Article 32 for constitutional remedies?",
+      "gold_primary": "CONSTITUTION",
+      "gold_candidates": [
+        "CONSTITUTION"
+      ],
+      "predicted_primary": "CONSTITUTION",
+      "predicted_regimes": [
+        "CONSTITUTION"
+      ],
+      "confidence": 0.805,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "constitution_006",
+      "question": "What does the Constitution provide regarding the Right to Education under Article 21A?",
+      "gold_primary": "CONSTITUTION",
+      "gold_candidates": [
+        "CONSTITUTION"
+      ],
+      "predicted_primary": "CONSTITUTION",
+      "predicted_regimes": [
+        "CONSTITUTION"
+      ],
+      "confidence": 0.805,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "bns_001",
+      "question": "What is the punishment for committing theft under the Bharatiya Nyaya Sanhita?",
+      "gold_primary": "BNS_SUBSTANTIVE",
+      "gold_candidates": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "predicted_primary": "BNS_SUBSTANTIVE",
+      "predicted_regimes": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "confidence": 0.99,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "bns_002",
+      "question": "What are the legal consequences and penalties for causing death by negligence?",
+      "gold_primary": "BNS_SUBSTANTIVE",
+      "gold_candidates": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "bns_003",
+      "question": "How is snatching defined and punished under Section 304 of BNS?",
+      "gold_primary": "BNS_SUBSTANTIVE",
+      "gold_candidates": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.35,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "bns_004",
+      "question": "What constitutes the offense of extortion and how is it penalised?",
+      "gold_primary": "BNS_SUBSTANTIVE",
+      "gold_candidates": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "bns_005",
+      "question": "What constitutes criminal conspiracy and what is the punishment under the Bharatiya Nyaya Sanhita?",
+      "gold_primary": "BNS_SUBSTANTIVE",
+      "gold_candidates": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "predicted_primary": "BNS_SUBSTANTIVE",
+      "predicted_regimes": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "confidence": 0.805,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "bns_006",
+      "question": "What is the punishment for organized crime under the Bharatiya Nyaya Sanhita?",
+      "gold_primary": "BNS_SUBSTANTIVE",
+      "gold_candidates": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "predicted_primary": "BNS_SUBSTANTIVE",
+      "predicted_regimes": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "confidence": 0.805,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "bnss_001",
+      "question": "What is the procedure for recording an arrest and rights of the arrested person under BNSS?",
+      "gold_primary": "BNSS_PROCEDURAL",
+      "gold_candidates": [
+        "BNSS_PROCEDURAL"
+      ],
+      "predicted_primary": "BNSS_PROCEDURAL",
+      "predicted_regimes": [
+        "BNSS_PROCEDURAL"
+      ],
+      "confidence": 0.987,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "bnss_002",
+      "question": "How is information in cognizable cases or First Information Report recorded under Section 173 of BNSS?",
+      "gold_primary": "BNSS_PROCEDURAL",
+      "gold_candidates": [
+        "BNSS_PROCEDURAL"
+      ],
+      "predicted_primary": "BNSS_PROCEDURAL",
+      "predicted_regimes": [
+        "BNSS_PROCEDURAL"
+      ],
+      "confidence": 0.99,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "bnss_003",
+      "question": "What are the powers of police to arrest any person without warrant under BNSS?",
+      "gold_primary": "BNSS_PROCEDURAL",
+      "gold_candidates": [
+        "BNSS_PROCEDURAL"
+      ],
+      "predicted_primary": "BNSS_PROCEDURAL",
+      "predicted_regimes": [
+        "BNSS_PROCEDURAL"
+      ],
+      "confidence": 0.99,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "bnss_004",
+      "question": "What are the statutory provisions regarding the grant of bail in non-bailable offences?",
+      "gold_primary": "BNSS_PROCEDURAL",
+      "gold_candidates": [
+        "BNSS_PROCEDURAL"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.3,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "bnss_005",
+      "question": "What is the procedure for zero FIR registration under the Bharatiya Nagarik Suraksha Sanhita?",
+      "gold_primary": "BNSS_PROCEDURAL",
+      "gold_candidates": [
+        "BNSS_PROCEDURAL"
+      ],
+      "predicted_primary": "BNSS_PROCEDURAL",
+      "predicted_regimes": [
+        "BNSS_PROCEDURAL"
+      ],
+      "confidence": 0.9675,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "bnss_006",
+      "question": "What are the provisions for anticipatory bail under the Bharatiya Nagarik Suraksha Sanhita?",
+      "gold_primary": "BNSS_PROCEDURAL",
+      "gold_candidates": [
+        "BNSS_PROCEDURAL"
+      ],
+      "predicted_primary": "BNSS_PROCEDURAL",
+      "predicted_regimes": [
+        "BNSS_PROCEDURAL"
+      ],
+      "confidence": 0.987,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "bsa_001",
+      "question": "What is the distinction between primary evidence and secondary evidence under Bharatiya Sakshya Adhiniyam?",
+      "gold_primary": "BSA_EVIDENCE",
+      "gold_candidates": [
+        "BSA_EVIDENCE"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.35,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "bsa_002",
+      "question": "What are the conditions for admissibility of electronic records under Section 63 of BSA?",
+      "gold_primary": "BSA_EVIDENCE",
+      "gold_candidates": [
+        "BSA_EVIDENCE"
+      ],
+      "predicted_primary": "BSA_EVIDENCE",
+      "predicted_regimes": [
+        "BSA_EVIDENCE"
+      ],
+      "confidence": 0.805,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "bsa_003",
+      "question": "When are admissions and confessions made to a police officer inadmissible in court?",
+      "gold_primary": "BSA_EVIDENCE",
+      "gold_candidates": [
+        "BSA_EVIDENCE"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "bsa_004",
+      "question": "What is the rule of burden of proof and who bears it in a legal proceeding?",
+      "gold_primary": "BSA_EVIDENCE",
+      "gold_candidates": [
+        "BSA_EVIDENCE"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "bsa_005",
+      "question": "What are the rules regarding electronic evidence?",
+      "gold_primary": "BSA_EVIDENCE",
+      "gold_candidates": [
+        "BSA_EVIDENCE"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "bsa_006",
+      "question": "Under what circumstances can dying declarations be admitted as evidence?",
+      "gold_primary": "BSA_EVIDENCE",
+      "gold_candidates": [
+        "BSA_EVIDENCE"
+      ],
+      "predicted_primary": "BSA_EVIDENCE",
+      "predicted_regimes": [
+        "BSA_EVIDENCE"
+      ],
+      "confidence": 0.4,
+      "routing_mode": "medium_confidence_soft_boost",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "consumer_001",
+      "question": "How is a consumer defined under the Consumer Protection Act?",
+      "gold_primary": "CONSUMER_PROTECTION",
+      "gold_candidates": [
+        "CONSUMER_PROTECTION"
+      ],
+      "predicted_primary": "CONSUMER_PROTECTION",
+      "predicted_regimes": [
+        "CONSUMER_PROTECTION"
+      ],
+      "confidence": 0.805,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "consumer_002",
+      "question": "What should a consumer do when a product is defective?",
+      "gold_primary": "CONSUMER_PROTECTION",
+      "gold_candidates": [
+        "CONSUMER_PROTECTION"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "consumer_003",
+      "question": "What is the procedure for filing a complaint before the District Consumer Disputes Redressal Commission?",
+      "gold_primary": "CONSUMER_PROTECTION",
+      "gold_candidates": [
+        "CONSUMER_PROTECTION"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.3,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "consumer_004",
+      "question": "What reliefs or orders can the District Commission pass if goods suffer from defects?",
+      "gold_primary": "CONSUMER_PROTECTION",
+      "gold_candidates": [
+        "CONSUMER_PROTECTION"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "consumer_005",
+      "question": "What are the rules and liabilities governing product manufacturers under product liability?",
+      "gold_primary": "CONSUMER_PROTECTION",
+      "gold_candidates": [
+        "CONSUMER_PROTECTION"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "it_001",
+      "question": "What constitutes legal recognition of electronic records and digital signatures under the IT Act?",
+      "gold_primary": "IT_ACT",
+      "gold_candidates": [
+        "IT_ACT"
+      ],
+      "predicted_primary": "BSA_EVIDENCE",
+      "predicted_regimes": [
+        "BSA_EVIDENCE",
+        "IT_ACT"
+      ],
+      "confidence": 0.4,
+      "routing_mode": "medium_confidence_soft_boost",
+      "fallback_used": false,
+      "top1_correct": false,
+      "top3_covered": true
+    },
+    {
+      "query_id": "it_002",
+      "question": "What are the penalties for unauthorized access to computer systems or hacking under the IT Act?",
+      "gold_primary": "IT_ACT",
+      "gold_candidates": [
+        "IT_ACT"
+      ],
+      "predicted_primary": "IT_ACT",
+      "predicted_regimes": [
+        "IT_ACT"
+      ],
+      "confidence": 0.99,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "it_003",
+      "question": "What is the punishment for identity theft and cheating by personation using a computer resource?",
+      "gold_primary": "IT_ACT",
+      "gold_candidates": [
+        "IT_ACT"
+      ],
+      "predicted_primary": "IT_ACT",
+      "predicted_regimes": [
+        "IT_ACT",
+        "BNS_SUBSTANTIVE"
+      ],
+      "confidence": 0.9,
+      "routing_mode": "high_confidence",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "it_004",
+      "question": "What is the liability of network service providers and intermediaries under Section 79 of the IT Act?",
+      "gold_primary": "IT_ACT",
+      "gold_candidates": [
+        "IT_ACT"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.35,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "it_005",
+      "question": "What are the powers of the Controller of Certifying Authorities under the Information Technology Act?",
+      "gold_primary": "IT_ACT",
+      "gold_candidates": [
+        "IT_ACT"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.35,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "mv_001",
+      "question": "What are the licensing requirements to drive a motor vehicle under the Motor Vehicles Act?",
+      "gold_primary": "MOTOR_VEHICLES",
+      "gold_candidates": [
+        "MOTOR_VEHICLES"
+      ],
+      "predicted_primary": "MOTOR_VEHICLES",
+      "predicted_regimes": [
+        "MOTOR_VEHICLES"
+      ],
+      "confidence": 0.675,
+      "routing_mode": "medium_confidence_soft_boost",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "mv_002",
+      "question": "What are the penalties and fines for driving under the influence of alcohol or drugs?",
+      "gold_primary": "MOTOR_VEHICLES",
+      "gold_candidates": [
+        "MOTOR_VEHICLES"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "mv_003",
+      "question": "What are the requirements for mandatory insurance of motor vehicles against third party risk?",
+      "gold_primary": "MOTOR_VEHICLES",
+      "gold_candidates": [
+        "MOTOR_VEHICLES"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "mv_004",
+      "question": "What is the procedure for claiming compensation before a Motor Accidents Claims Tribunal?",
+      "gold_primary": "MOTOR_VEHICLES",
+      "gold_candidates": [
+        "MOTOR_VEHICLES"
+      ],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "mv_005",
+      "question": "What is the penalty for driving an uninsured vehicle under the Motor Vehicles Act?",
+      "gold_primary": "MOTOR_VEHICLES",
+      "gold_candidates": [
+        "MOTOR_VEHICLES"
+      ],
+      "predicted_primary": "MOTOR_VEHICLES",
+      "predicted_regimes": [
+        "MOTOR_VEHICLES"
+      ],
+      "confidence": 0.675,
+      "routing_mode": "medium_confidence_soft_boost",
+      "fallback_used": false,
+      "top1_correct": true,
+      "top3_covered": true
+    },
+    {
+      "query_id": "out_of_scope_001",
+      "question": "What is the capital of France?",
+      "gold_primary": "OUT_OF_SCOPE",
+      "gold_candidates": [],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "out_of_scope_002",
+      "question": "What is Newton's third law of motion?",
+      "gold_primary": "OUT_OF_SCOPE",
+      "gold_candidates": [],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "ambiguous_001",
+      "question": "Can I sue someone?",
+      "gold_primary": "AMBIGUOUS",
+      "gold_candidates": [],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    },
+    {
+      "query_id": "ambiguous_002",
+      "question": "What is the limitation period?",
+      "gold_primary": "AMBIGUOUS",
+      "gold_candidates": [],
+      "predicted_primary": "GENERAL",
+      "predicted_regimes": [
+        "GENERAL"
+      ],
+      "confidence": 0.25,
+      "routing_mode": "low_confidence_fallback",
+      "fallback_used": true,
+      "top1_correct": false,
+      "top3_covered": false
+    }
+  ]
+}

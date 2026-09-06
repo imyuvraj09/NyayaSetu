@@ -1,0 +1,10 @@
+
+===========================================================================
+EXPERIMENT EXECUTION: baseline_direct_llm
+Benchmark File: evaluation\development\existing_questions.json | Queries: 3
+Pipeline Config: {'use_retrieval': False, 'use_dense_retrieval': False, 'use_bm25': False, 'use_hybrid_fusion': False, 'use_reranker': False, 'use_fact_routing': False, 'use_compatibility_filter': False, 'use_claim_repair': False}
+===========================================================================
+
+  [01/03] constitution_001  : MISS         (RR=0.00, Lat=0.00s) | What fundamental rights are guaranteed by the...
+  [02/03] constitution_002  : MISS         (RR=0.00, Lat=0.00s) | What rights are guaranteed by the Constitutio...
+  [03/03] constitution_003  : MISS         (RR=0.00, Lat=0.00s) | What is guaranteed under Article 14 regarding...
