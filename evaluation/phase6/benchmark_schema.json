@@ -1,0 +1,170 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NyayaSetuPhase6BenchmarkSchema",
+  "description": "Standardized schema for NyayaSetu Phase 6 Expanded Research Benchmark queries and ground truth records.",
+  "type": "object",
+  "required": [
+    "id",
+    "question",
+    "category",
+    "sub_category",
+    "difficulty",
+    "temporal_context",
+    "legal_regimes_expected",
+    "expected_issue_type",
+    "expected_evidence_type",
+    "expected_statutes",
+    "expected_sections",
+    "expected_answer_properties",
+    "gold_evidence_ids",
+    "risk_level",
+    "source_origin",
+    "split"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^P6_(TRAIN|DEV|VAL|TEST)_[0-9]{3}$",
+      "description": "Unique identifier for the benchmark item (e.g., P6_DEV_001, P6_VAL_001, P6_TEST_001)"
+    },
+    "question": {
+      "type": "string",
+      "minLength": 5,
+      "description": "The natural language legal query or fact pattern"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "legal_regime_identification",
+        "temporal_applicability",
+        "substantive_vs_procedural",
+        "special_vs_general",
+        "multi_statute",
+        "retrieval_ambiguity",
+        "claim_grounding_failures",
+        "out_of_scope"
+      ],
+      "description": "Primary failure mode or architectural evaluation category"
+    },
+    "sub_category": {
+      "type": "string",
+      "description": "Specific sub-classification within the primary category"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["easy", "medium", "hard"],
+      "description": "Assessed complexity of retrieval and doctrinal reasoning"
+    },
+    "temporal_context": {
+      "type": "string",
+      "enum": [
+        "pre_july_2024",
+        "post_july_2024",
+        "ambiguous_date",
+        "prospective",
+        "historical_superseded",
+        "not_applicable"
+      ],
+      "description": "Temporal applicability constraint governing the legal fact pattern"
+    },
+    "legal_regimes_expected": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of expected routing legal regimes (e.g. BNS_SUBSTANTIVE, BNSS_PROCEDURAL, IT_ACT, GENERAL)"
+    },
+    "expected_issue_type": {
+      "type": "string",
+      "description": "Formal legal issue identifier corresponding to research taxonomy"
+    },
+    "expected_evidence_type": {
+      "type": "string",
+      "enum": [
+        "statutory_provision",
+        "procedural_rule",
+        "evidentiary_standard",
+        "constitutional_article",
+        "special_statute_provision",
+        "non_legal"
+      ],
+      "description": "Expected doctrinal evidence category"
+    },
+    "expected_statutes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Canonical statute titles governing the issue. Empty only for out-of-scope queries."
+    },
+    "expected_sections": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Canonical section or article identifiers"
+    },
+    "expected_answer_properties": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Key substantive elements, punishment quantums, or procedural constraints expected"
+    },
+    "gold_evidence_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Target statutory document names or known chunk references in corpus"
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"],
+      "description": "Consequence risk of an erroneous or hallucinated answer"
+    },
+    "source_origin": {
+      "type": "string",
+      "description": "Provenance of the question and gold labels (e.g., bar_council_exam_archive, dlsa_intake_curated, gazette_official)"
+    },
+    "split": {
+      "type": "string",
+      "enum": ["train", "dev", "validation", "test"],
+      "description": "Dataset split assignment"
+    },
+    "annotated_claims": {
+      "type": "array",
+      "description": "Atomic claim decomposition for evaluating Phase 5 claim grounding and citation verification",
+      "items": {
+        "type": "object",
+        "required": ["claim_text", "claim_type", "ground_truth_status", "risk_level"],
+        "properties": {
+          "claim_text": { "type": "string" },
+          "claim_type": { "type": "string" },
+          "ground_truth_status": {
+            "type": "string",
+            "enum": ["SUPPORTED", "UNSUPPORTED", "CONTRADICTED", "PARTIALLY_SUPPORTED"]
+          },
+          "risk_level": {
+            "type": "string",
+            "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+          },
+          "attached_citations": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "verified_section": { "type": ["string", "null"] },
+          "verified_statute": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "generated_answer": {
+      "type": "string",
+      "description": "Candidate answer text for claim grounding validation"
+    },
+    "retrieved_evidence": {
+      "type": "array",
+      "description": "Provided statutory evidence chunks for evaluating grounding",
+      "items": {
+        "type": "object",
+        "required": ["chunk_id", "text", "document_name"],
+        "properties": {
+          "chunk_id": { "type": "string" },
+          "text": { "type": "string" },
+          "document_name": { "type": "string" },
+          "section_number": { "type": "string" }
+        }
+      }
+    }
+  }
+}

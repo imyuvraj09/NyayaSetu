@@ -1,0 +1,239 @@
+{
+  "difficulty": {
+    "easy": {
+      "sample_size": 19,
+      "recall_at_1": 0.8947,
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.2421,
+      "mrr": 0.9184,
+      "ndcg_at_5": 0.9378,
+      "mean_latency_sec": 0.0778
+    },
+    "medium": {
+      "sample_size": 35,
+      "recall_at_1": 0.5286,
+      "recall_at_5": 0.6857,
+      "precision_at_5": 0.6229,
+      "mrr": 0.7152,
+      "ndcg_at_5": 0.7539,
+      "mean_latency_sec": 0.0803
+    },
+    "hard": {
+      "sample_size": 96,
+      "recall_at_1": 0.2847,
+      "recall_at_5": 0.4653,
+      "precision_at_5": 0.3979,
+      "mrr": 0.4509,
+      "ndcg_at_5": 0.4819,
+      "mean_latency_sec": 0.0821
+    }
+  },
+  "legal_domain": {
+    "Criminal Substantive Law": {
+      "sample_size": 43,
+      "recall_at_1": 0.3333,
+      "recall_at_5": 0.5271,
+      "precision_at_5": 0.3814,
+      "mrr": 0.4484,
+      "ndcg_at_5": 0.5221,
+      "mean_latency_sec": 0.0839
+    },
+    "Criminal Procedural Law": {
+      "sample_size": 32,
+      "recall_at_1": 0.4688,
+      "recall_at_5": 0.7344,
+      "precision_at_5": 0.7375,
+      "mrr": 0.7849,
+      "ndcg_at_5": 0.8057,
+      "mean_latency_sec": 0.0718
+    },
+    "Law of Evidence": {
+      "sample_size": 5,
+      "recall_at_1": 0.5,
+      "recall_at_5": 0.8,
+      "precision_at_5": 0.56,
+      "mrr": 0.7,
+      "ndcg_at_5": 0.8,
+      "mean_latency_sec": 0.0722
+    },
+    "Cyber Law": {
+      "sample_size": 9,
+      "recall_at_1": 0.4444,
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.3333,
+      "mrr": 0.5,
+      "ndcg_at_5": 0.5138,
+      "mean_latency_sec": 0.0831
+    },
+    "Constitutional Law": {
+      "sample_size": 7,
+      "recall_at_1": 0.2143,
+      "recall_at_5": 0.4286,
+      "precision_at_5": 0.2571,
+      "mrr": 0.3857,
+      "ndcg_at_5": 0.3963,
+      "mean_latency_sec": 0.0746
+    },
+    "Special Statutes": {
+      "sample_size": 6,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "mean_latency_sec": 0.0916
+    },
+    "General Legal Corpus": {
+      "sample_size": 36,
+      "recall_at_1": 0.2083,
+      "recall_at_5": 0.3333,
+      "precision_at_5": 0.3056,
+      "mrr": 0.3518,
+      "ndcg_at_5": 0.3566,
+      "mean_latency_sec": 0.089
+    },
+    "Out of Scope": {
+      "sample_size": 12,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "mean_latency_sec": 0.0736
+    }
+  },
+  "temporal_condition": {
+    "pre_july_2024": {
+      "sample_size": 12,
+      "recall_at_1": 0.125,
+      "recall_at_5": 0.2917,
+      "precision_at_5": 0.1667,
+      "mrr": 0.2292,
+      "ndcg_at_5": 0.2859,
+      "mean_latency_sec": 0.0801
+    },
+    "post_july_2024": {
+      "sample_size": 94,
+      "recall_at_1": 0.3493,
+      "recall_at_5": 0.5231,
+      "precision_at_5": 0.4553,
+      "mrr": 0.5216,
+      "ndcg_at_5": 0.5584,
+      "mean_latency_sec": 0.0829
+    },
+    "ambiguous_date": {
+      "sample_size": 16,
+      "recall_at_1": 0.2188,
+      "recall_at_5": 0.4375,
+      "precision_at_5": 0.4625,
+      "mrr": 0.5208,
+      "ndcg_at_5": 0.521,
+      "mean_latency_sec": 0.0709
+    },
+    "not_applicable": {
+      "sample_size": 26,
+      "recall_at_1": 0.9615,
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.4615,
+      "mrr": 0.9692,
+      "ndcg_at_5": 0.9764,
+      "mean_latency_sec": 0.0817
+    },
+    "historical_superseded": {
+      "sample_size": 2,
+      "recall_at_1": 0.0,
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.2,
+      "mrr": 0.225,
+      "ndcg_at_5": 0.4088,
+      "mean_latency_sec": 0.0799
+    }
+  },
+  "query_length": {
+    "short": {
+      "sample_size": 2,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.8,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "mean_latency_sec": 0.0629
+    },
+    "medium": {
+      "sample_size": 62,
+      "recall_at_1": 0.6452,
+      "recall_at_5": 0.7984,
+      "precision_at_5": 0.5097,
+      "mrr": 0.782,
+      "ndcg_at_5": 0.799,
+      "mean_latency_sec": 0.0747
+    },
+    "long": {
+      "sample_size": 86,
+      "recall_at_1": 0.2422,
+      "recall_at_5": 0.4205,
+      "precision_at_5": 0.3651,
+      "mrr": 0.4103,
+      "ndcg_at_5": 0.4526,
+      "mean_latency_sec": 0.0862
+    }
+  },
+  "retrieval_ambiguity": {
+    "low_ambiguity": {
+      "sample_size": 75,
+      "recall_at_1": 0.5533,
+      "recall_at_5": 0.7333,
+      "precision_at_5": 0.4773,
+      "mrr": 0.7142,
+      "ndcg_at_5": 0.7459,
+      "mean_latency_sec": 0.0772
+    },
+    "medium_ambiguity": {
+      "sample_size": 57,
+      "recall_at_1": 0.2778,
+      "recall_at_5": 0.4152,
+      "precision_at_5": 0.3474,
+      "mrr": 0.3836,
+      "ndcg_at_5": 0.4243,
+      "mean_latency_sec": 0.0899
+    },
+    "high_ambiguity": {
+      "sample_size": 18,
+      "recall_at_1": 0.3056,
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.5,
+      "mrr": 0.5741,
+      "ndcg_at_5": 0.5742,
+      "mean_latency_sec": 0.07
+    }
+  },
+  "multi_statute_complexity": {
+    "single_statute": {
+      "sample_size": 95,
+      "recall_at_1": 0.5053,
+      "recall_at_5": 0.6316,
+      "precision_at_5": 0.36,
+      "mrr": 0.5533,
+      "ndcg_at_5": 0.5975,
+      "mean_latency_sec": 0.0838
+    },
+    "two_statutes": {
+      "sample_size": 54,
+      "recall_at_1": 0.2685,
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.5444,
+      "mrr": 0.5963,
+      "ndcg_at_5": 0.6055,
+      "mean_latency_sec": 0.0762
+    },
+    "three_or_more_statutes": {
+      "sample_size": 1,
+      "recall_at_1": 0.3333,
+      "recall_at_5": 0.6667,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "mean_latency_sec": 0.0997
+    }
+  }
+}

@@ -1,0 +1,3081 @@
+{
+  "split": "dev",
+  "count": 50,
+  "queries": [
+    {
+      "question": "What penalty is prescribed for theft under Section 303(2) of the Bharatiya Nyaya Sanhita, 2023?",
+      "category": "legal_regime_identification",
+      "sub_category": "bns_theft_penalty",
+      "difficulty": "easy",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "substantive_theft_offence",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 303"
+      ],
+      "expected_answer_properties": [
+        "imprisonment up to 3 years or fine",
+        "community service for first-time petty theft"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "medium",
+      "source_origin": "official_gazette_bns_2023",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, imprisonment up to 3 years or fine.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, community service for first-time petty theft.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'What penalty is prescribed for theft under Section 303(2) of the Bharatiya Nyaya Sanhita, 2023?': Under Indian law, imprisonment up to 3 years or fine. Under Indian law, community service for first-time petty theft.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0001",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding imprisonment up to 3 years or fine, community service for first-time petty theft.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 303"
+        }
+      ],
+      "id": "P6_DEV_001",
+      "split": "dev"
+    },
+    {
+      "question": "What are the statutory requirements for police officers arresting an individual without warrant under Section 35 of BNSS 2023?",
+      "category": "legal_regime_identification",
+      "sub_category": "bnss_arrest_safeguards",
+      "difficulty": "medium",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNSS_PROCEDURAL"
+      ],
+      "expected_issue_type": "procedural_police_arrest_powers",
+      "expected_evidence_type": "procedural_rule",
+      "expected_statutes": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 35"
+      ],
+      "expected_answer_properties": [
+        "notice of appearance under subsection 3",
+        "written recording of reasons",
+        "prior permission for senior citizens or infirm"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "critical",
+      "source_origin": "police_training_manual_2024",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, notice of appearance under subsection 3.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nagarik Suraksha Sanhita, 2023 \u00a7 Section 35]"
+          ],
+          "verified_section": "Section 35",
+          "verified_statute": "Bharatiya Nagarik Suraksha Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, written recording of reasons.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nagarik Suraksha Sanhita, 2023 \u00a7 Section 35]"
+          ],
+          "verified_section": "Section 35",
+          "verified_statute": "Bharatiya Nagarik Suraksha Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, prior permission for senior citizens or infirm.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nagarik Suraksha Sanhita, 2023 \u00a7 Section 35]"
+          ],
+          "verified_section": "Section 35",
+          "verified_statute": "Bharatiya Nagarik Suraksha Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'What are the statutory requirements for police officers arresting an individual without warrant under Section 35 of BNSS 2023?': Under Indian law, notice of appearance under subsection 3. Under Indian law, written recording of reasons. Under Indian law, prior permission for senior citizens or infirm.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0006",
+          "text": "Official Excerpt: Bharatiya Nagarik Suraksha Sanhita, 2023. Provisions regarding notice of appearance under subsection 3, written recording of reasons, prior permission for senior citizens or infirm.",
+          "document_name": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section_number": "Section 35"
+        }
+      ],
+      "id": "P6_DEV_002",
+      "split": "dev"
+    },
+    {
+      "question": "What mandatory conditions must be satisfied in an electronic certificate under Section 63 of Bharatiya Sakshya Adhiniyam, 2023?",
+      "category": "legal_regime_identification",
+      "sub_category": "bsa_electronic_certificate",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BSA_EVIDENCE"
+      ],
+      "expected_issue_type": "evidentiary_electronic_records_admissibility",
+      "expected_evidence_type": "evidentiary_standard",
+      "expected_statutes": [
+        "Bharatiya Sakshya Adhiniyam, 2023"
+      ],
+      "expected_sections": [
+        "Section 63"
+      ],
+      "expected_answer_properties": [
+        "signed by person in lawful control or responsible official",
+        "hash value integrity description",
+        "device operating condition"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Sakshya Adhiniyam, 2023"
+      ],
+      "risk_level": "critical",
+      "source_origin": "high_court_criminal_appeal_record",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, signed by person in lawful control or responsible official.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Sakshya Adhiniyam, 2023 \u00a7 Section 63]"
+          ],
+          "verified_section": "Section 63",
+          "verified_statute": "Bharatiya Sakshya Adhiniyam, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, hash value integrity description.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Sakshya Adhiniyam, 2023 \u00a7 Section 63]"
+          ],
+          "verified_section": "Section 63",
+          "verified_statute": "Bharatiya Sakshya Adhiniyam, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, device operating condition.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Sakshya Adhiniyam, 2023 \u00a7 Section 63]"
+          ],
+          "verified_section": "Section 63",
+          "verified_statute": "Bharatiya Sakshya Adhiniyam, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'What mandatory conditions must be satisfied in an electronic certificate under Section 63 of Bharatiya Sakshya Adhiniyam, 2023?': Under Indian law, signed by person in lawful control or responsible official. Under Indian law, hash value integrity description. Under Indian law, device operating condition.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0011",
+          "text": "Official Excerpt: Bharatiya Sakshya Adhiniyam, 2023. Provisions regarding signed by person in lawful control or responsible official, hash value integrity description, device operating condition.",
+          "document_name": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section_number": "Section 63"
+        }
+      ],
+      "id": "P6_DEV_003",
+      "split": "dev"
+    },
+    {
+      "question": "How does Section 66D of the IT Act 2000 penalize cheating by impersonation using a communication device?",
+      "category": "legal_regime_identification",
+      "sub_category": "it_act_cheating_personation",
+      "difficulty": "easy",
+      "temporal_context": "not_applicable",
+      "legal_regimes_expected": [
+        "IT_ACT"
+      ],
+      "expected_issue_type": "cyber_cheating_personation",
+      "expected_evidence_type": "special_statute_provision",
+      "expected_statutes": [
+        "Information Technology Act"
+      ],
+      "expected_sections": [
+        "Section 66D"
+      ],
+      "expected_answer_properties": [
+        "cheating by personating through computer resource",
+        "imprisonment up to 3 years and fine"
+      ],
+      "gold_evidence_ids": [
+        "Information Technology Act"
+      ],
+      "risk_level": "high",
+      "source_origin": "cyber_crime_cell_inquiry",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, cheating by personating through computer resource.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 66D]"
+          ],
+          "verified_section": "Section 66D",
+          "verified_statute": "Information Technology Act"
+        },
+        {
+          "claim_text": "Under Indian law, imprisonment up to 3 years and fine.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 66D]"
+          ],
+          "verified_section": "Section 66D",
+          "verified_statute": "Information Technology Act"
+        }
+      ],
+      "generated_answer": "Regarding 'How does Section 66D of the IT Act 2000 penalize cheating by impersonation using a communication device?': Under Indian law, cheating by personating through computer resource. Under Indian law, imprisonment up to 3 years and fine.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_INFO_0016",
+          "text": "Official Excerpt: Information Technology Act. Provisions regarding cheating by personating through computer resource, imprisonment up to 3 years and fine.",
+          "document_name": "Information Technology Act",
+          "section_number": "Section 66D"
+        }
+      ],
+      "id": "P6_DEV_004",
+      "split": "dev"
+    },
+    {
+      "question": "What constitutes a writ of Habeas Corpus under Article 32 of the Constitution of India?",
+      "category": "legal_regime_identification",
+      "sub_category": "constitution_habeas_corpus",
+      "difficulty": "easy",
+      "temporal_context": "not_applicable",
+      "legal_regimes_expected": [
+        "CONSTITUTION"
+      ],
+      "expected_issue_type": "constitutional_fundamental_rights",
+      "expected_evidence_type": "constitutional_article",
+      "expected_statutes": [
+        "Constitution of India"
+      ],
+      "expected_sections": [
+        "Article 32"
+      ],
+      "expected_answer_properties": [
+        "order to produce detained person before court",
+        "testing legality of physical detention"
+      ],
+      "gold_evidence_ids": [
+        "Constitution of India"
+      ],
+      "risk_level": "critical",
+      "source_origin": "bar_council_exam_archive",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, order to produce detained person before court.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Constitution of India \u00a7 Article 32]"
+          ],
+          "verified_section": "Article 32",
+          "verified_statute": "Constitution of India"
+        },
+        {
+          "claim_text": "Under Indian law, testing legality of physical detention.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Constitution of India \u00a7 Article 32]"
+          ],
+          "verified_section": "Article 32",
+          "verified_statute": "Constitution of India"
+        }
+      ],
+      "generated_answer": "Regarding 'What constitutes a writ of Habeas Corpus under Article 32 of the Constitution of India?': Under Indian law, order to produce detained person before court. Under Indian law, testing legality of physical detention.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_CONS_0021",
+          "text": "Official Excerpt: Constitution of India. Provisions regarding order to produce detained person before court, testing legality of physical detention.",
+          "document_name": "Constitution of India",
+          "section_number": "Article 32"
+        }
+      ],
+      "id": "P6_DEV_005",
+      "split": "dev"
+    },
+    {
+      "question": "How is misleading advertisement defined and penalized under Section 2(28) and Section 89 of CPA 2019?",
+      "category": "legal_regime_identification",
+      "sub_category": "consumer_misleading_advertisement",
+      "difficulty": "medium",
+      "temporal_context": "not_applicable",
+      "legal_regimes_expected": [
+        "CONSUMER_PROTECTION"
+      ],
+      "expected_issue_type": "consumer_unfair_trade_practices",
+      "expected_evidence_type": "special_statute_provision",
+      "expected_statutes": [
+        "Consumer Protection Act"
+      ],
+      "expected_sections": [
+        "Section 2(28)",
+        "Section 89"
+      ],
+      "expected_answer_properties": [
+        "falsely describing product or guaranteeing performance without scientific test",
+        "imprisonment up to two years and fine up to 10 lakh"
+      ],
+      "gold_evidence_ids": [
+        "Consumer Protection Act"
+      ],
+      "risk_level": "medium",
+      "source_origin": "consumer_disputes_commission_filing",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, falsely describing product or guaranteeing performance without scientific test.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [
+            "[Consumer Protection Act \u00a7 Section 2(28)]"
+          ],
+          "verified_section": "Section 2(28)",
+          "verified_statute": "Consumer Protection Act"
+        },
+        {
+          "claim_text": "Under Indian law, imprisonment up to two years and fine up to 10 lakh.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [
+            "[Consumer Protection Act \u00a7 Section 2(28)]"
+          ],
+          "verified_section": "Section 2(28)",
+          "verified_statute": "Consumer Protection Act"
+        }
+      ],
+      "generated_answer": "Regarding 'How is misleading advertisement defined and penalized under Section 2(28) and Section 89 of CPA 2019?': Under Indian law, falsely describing product or guaranteeing performance without scientific test. Under Indian law, imprisonment up to two years and fine up to 10 lakh.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_CONS_0026",
+          "text": "Official Excerpt: Consumer Protection Act. Provisions regarding falsely describing product or guaranteeing performance without scientific test, imprisonment up to two years and fine up to 10 lakh.",
+          "document_name": "Consumer Protection Act",
+          "section_number": "Section 2(28)"
+        }
+      ],
+      "id": "P6_DEV_006",
+      "split": "dev"
+    },
+    {
+      "question": "What penalties are provided for corporate fraud under Section 447 of the Companies Act, 2013?",
+      "category": "legal_regime_identification",
+      "sub_category": "companies_fraud_punishment",
+      "difficulty": "hard",
+      "temporal_context": "not_applicable",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "corporate_social_responsibility",
+      "expected_evidence_type": "special_statute_provision",
+      "expected_statutes": [
+        "The Companies Act, 2013"
+      ],
+      "expected_sections": [
+        "Section 447"
+      ],
+      "expected_answer_properties": [
+        "imprisonment not less than 6 months extending to 10 years",
+        "fine not less than amount involved extending to 3 times"
+      ],
+      "gold_evidence_ids": [
+        "The Companies Act, 2013"
+      ],
+      "risk_level": "critical",
+      "source_origin": "ministry_corporate_affairs_guidelines",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, imprisonment not less than 6 months extending to 10 years.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[The Companies Act, 2013 \u00a7 Section 447]"
+          ],
+          "verified_section": "Section 447",
+          "verified_statute": "The Companies Act, 2013"
+        },
+        {
+          "claim_text": "Under Indian law, fine not less than amount involved extending to 3 times.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[The Companies Act, 2013 \u00a7 Section 447]"
+          ],
+          "verified_section": "Section 447",
+          "verified_statute": "The Companies Act, 2013"
+        }
+      ],
+      "generated_answer": "Regarding 'What penalties are provided for corporate fraud under Section 447 of the Companies Act, 2013?': Under Indian law, imprisonment not less than 6 months extending to 10 years. Under Indian law, fine not less than amount involved extending to 3 times.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_THE _0031",
+          "text": "Official Excerpt: The Companies Act, 2013. Provisions regarding imprisonment not less than 6 months extending to 10 years, fine not less than amount involved extending to 3 times.",
+          "document_name": "The Companies Act, 2013",
+          "section_number": "Section 447"
+        }
+      ],
+      "id": "P6_DEV_007",
+      "split": "dev"
+    },
+    {
+      "question": "A forgery of property sale deeds occurred on 12 April 2024. The trial commenced in October 2024. Which penal code governs the substantive offense?",
+      "category": "temporal_applicability",
+      "sub_category": "temporal_forgery_pre_2024",
+      "difficulty": "hard",
+      "temporal_context": "pre_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE",
+        "GENERAL"
+      ],
+      "expected_issue_type": "temporal_substantive_transition",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 336",
+        "Section 358"
+      ],
+      "expected_answer_properties": [
+        "substantive offence governed by IPC on date of commission",
+        "procedural conduct governed by BNSS"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "critical",
+      "source_origin": "high_court_criminal_appeal_record",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, substantive offence governed by IPC on date of commission.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 336]"
+          ],
+          "verified_section": "Section 336",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, procedural conduct governed by BNSS.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 336]"
+          ],
+          "verified_section": "Section 336",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'A forgery of property sale deeds occurred on 12 April 2024. The trial commenced in October 2024. Which penal code governs the substantive offense?': Under Indian law, substantive offence governed by IPC on date of commission. Under Indian law, procedural conduct governed by BNSS.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0036",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding substantive offence governed by IPC on date of commission, procedural conduct governed by BNSS.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 336"
+        }
+      ],
+      "id": "P6_DEV_008",
+      "split": "dev"
+    },
+    {
+      "question": "A WhatsApp chat screenshot from March 2024 was submitted to trial court in November 2024. Must the certificate satisfy Section 63 of BSA 2023?",
+      "category": "temporal_applicability",
+      "sub_category": "temporal_bsa_certificate_timing",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BSA_EVIDENCE"
+      ],
+      "expected_issue_type": "evidentiary_electronic_transition",
+      "expected_evidence_type": "evidentiary_standard",
+      "expected_statutes": [
+        "Bharatiya Sakshya Adhiniyam, 2023"
+      ],
+      "expected_sections": [
+        "Section 63"
+      ],
+      "expected_answer_properties": [
+        "rules of evidence at time of tender in court apply",
+        "certificate under Section 63 BSA required"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Sakshya Adhiniyam, 2023"
+      ],
+      "risk_level": "critical",
+      "source_origin": "high_court_criminal_appeal_record",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, rules of evidence at time of tender in court apply.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Sakshya Adhiniyam, 2023 \u00a7 Section 63]"
+          ],
+          "verified_section": "Section 63",
+          "verified_statute": "Bharatiya Sakshya Adhiniyam, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, certificate under Section 63 BSA required.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Sakshya Adhiniyam, 2023 \u00a7 Section 63]"
+          ],
+          "verified_section": "Section 63",
+          "verified_statute": "Bharatiya Sakshya Adhiniyam, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'A WhatsApp chat screenshot from March 2024 was submitted to trial court in November 2024. Must the certificate satisfy Section 63 of BSA 2023?': Under Indian law, rules of evidence at time of tender in court apply. Under Indian law, certificate under Section 63 BSA required.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0041",
+          "text": "Official Excerpt: Bharatiya Sakshya Adhiniyam, 2023. Provisions regarding rules of evidence at time of tender in court apply, certificate under Section 63 BSA required.",
+          "document_name": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section_number": "Section 63"
+        }
+      ],
+      "id": "P6_DEV_009",
+      "split": "dev"
+    },
+    {
+      "question": "An incident of culpable homicide without premeditation was committed on 22 April 2024. Under which statutory penal code should the charge sheet be framed in late 2024?",
+      "category": "temporal_applicability",
+      "sub_category": "temporal_incident_case_3",
+      "difficulty": "hard",
+      "temporal_context": "pre_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "temporal_commission_date_inquiry",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 105"
+      ],
+      "expected_answer_properties": [
+        "offences committed on 22 April 2024 governed by applicable law at date of commission"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "curated_judicial_transition_bank",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, offences committed on 22 April 2024 governed by applicable law at date of commission.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 105]"
+          ],
+          "verified_section": "Section 105",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'An incident of culpable homicide without premeditation was committed on 22 April 2024. Under which statutory penal code should the charge sheet be framed in late 2024?': Under Indian law, offences committed on 22 April 2024 governed by applicable law at date of commission.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0046",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding offences committed on 22 April 2024 governed by applicable law at date of commission.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 105"
+        }
+      ],
+      "id": "P6_DEV_010",
+      "split": "dev"
+    },
+    {
+      "question": "An incident of cyber defacement of government site was committed on 29 July 2024. Under which statutory penal code should the charge sheet be framed in late 2024?",
+      "category": "temporal_applicability",
+      "sub_category": "temporal_incident_case_8",
+      "difficulty": "medium",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "IT_ACT"
+      ],
+      "expected_issue_type": "temporal_commission_date_inquiry",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Information Technology Act"
+      ],
+      "expected_sections": [
+        "Section 66"
+      ],
+      "expected_answer_properties": [
+        "offences committed on 29 July 2024 governed by applicable law at date of commission"
+      ],
+      "gold_evidence_ids": [
+        "Information Technology Act"
+      ],
+      "risk_level": "high",
+      "source_origin": "curated_judicial_transition_bank",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, offences committed on 29 July 2024 governed by applicable law at date of commission.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 66]"
+          ],
+          "verified_section": "Section 66",
+          "verified_statute": "Information Technology Act"
+        }
+      ],
+      "generated_answer": "Regarding 'An incident of cyber defacement of government site was committed on 29 July 2024. Under which statutory penal code should the charge sheet be framed in late 2024?': Under Indian law, offences committed on 29 July 2024 governed by applicable law at date of commission.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_INFO_0051",
+          "text": "Official Excerpt: Information Technology Act. Provisions regarding offences committed on 29 July 2024 governed by applicable law at date of commission.",
+          "document_name": "Information Technology Act",
+          "section_number": "Section 66"
+        }
+      ],
+      "id": "P6_DEV_011",
+      "split": "dev"
+    },
+    {
+      "question": "An incident of fabrication of false evidence in civil suit was committed on 21 January 2024. Under which statutory penal code should the charge sheet be framed in late 2024?",
+      "category": "temporal_applicability",
+      "sub_category": "temporal_incident_case_13",
+      "difficulty": "hard",
+      "temporal_context": "pre_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "temporal_commission_date_inquiry",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 227"
+      ],
+      "expected_answer_properties": [
+        "offences committed on 21 January 2024 governed by applicable law at date of commission"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "curated_judicial_transition_bank",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, offences committed on 21 January 2024 governed by applicable law at date of commission.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 227]"
+          ],
+          "verified_section": "Section 227",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'An incident of fabrication of false evidence in civil suit was committed on 21 January 2024. Under which statutory penal code should the charge sheet be framed in late 2024?': Under Indian law, offences committed on 21 January 2024 governed by applicable law at date of commission.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0056",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding offences committed on 21 January 2024 governed by applicable law at date of commission.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 227"
+        }
+      ],
+      "id": "P6_DEV_012",
+      "split": "dev"
+    },
+    {
+      "question": "An incident of forgery of university graduation degree was committed on 12 July 2024. Under which statutory penal code should the charge sheet be framed in late 2024?",
+      "category": "temporal_applicability",
+      "sub_category": "temporal_incident_case_18",
+      "difficulty": "medium",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "temporal_commission_date_inquiry",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 336"
+      ],
+      "expected_answer_properties": [
+        "offences committed on 12 July 2024 governed by applicable law at date of commission"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "curated_judicial_transition_bank",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, offences committed on 12 July 2024 governed by applicable law at date of commission.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 336]"
+          ],
+          "verified_section": "Section 336",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'An incident of forgery of university graduation degree was committed on 12 July 2024. Under which statutory penal code should the charge sheet be framed in late 2024?': Under Indian law, offences committed on 12 July 2024 governed by applicable law at date of commission.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0061",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding offences committed on 12 July 2024 governed by applicable law at date of commission.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 336"
+        }
+      ],
+      "id": "P6_DEV_013",
+      "split": "dev"
+    },
+    {
+      "question": "An incident of mischief causing water supply cutoff was committed on 11 June 2024. Under which statutory penal code should the charge sheet be framed in late 2024?",
+      "category": "temporal_applicability",
+      "sub_category": "temporal_incident_case_23",
+      "difficulty": "hard",
+      "temporal_context": "pre_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "temporal_commission_date_inquiry",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 324"
+      ],
+      "expected_answer_properties": [
+        "offences committed on 11 June 2024 governed by applicable law at date of commission"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "curated_judicial_transition_bank",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, offences committed on 11 June 2024 governed by applicable law at date of commission.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 324]"
+          ],
+          "verified_section": "Section 324",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'An incident of mischief causing water supply cutoff was committed on 11 June 2024. Under which statutory penal code should the charge sheet be framed in late 2024?': Under Indian law, offences committed on 11 June 2024 governed by applicable law at date of commission.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0066",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding offences committed on 11 June 2024 governed by applicable law at date of commission.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 324"
+        }
+      ],
+      "id": "P6_DEV_014",
+      "split": "dev"
+    },
+    {
+      "question": "Where is criminal conspiracy defined under BNS, and where are the procedural rules for trial of joint conspirators under BNSS?",
+      "category": "substantive_vs_procedural",
+      "sub_category": "conspiracy_substantive_vs_trial_procedure",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE",
+        "BNSS_PROCEDURAL"
+      ],
+      "expected_issue_type": "substantive_vs_procedural_distinction",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 61",
+        "Section 246"
+      ],
+      "expected_answer_properties": [
+        "BNS Section 61 defines conspiracy elements",
+        "BNSS Section 246 governs joint charges at trial"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "bar_council_criminal_law_curriculum",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, BNS Section 61 defines conspiracy elements.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 61]"
+          ],
+          "verified_section": "Section 61",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, BNSS Section 246 governs joint charges at trial.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 61]"
+          ],
+          "verified_section": "Section 61",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'Where is criminal conspiracy defined under BNS, and where are the procedural rules for trial of joint conspirators under BNSS?': Under Indian law, BNS Section 61 defines conspiracy elements. Under Indian law, BNSS Section 246 governs joint charges at trial.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0071",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding BNS Section 61 defines conspiracy elements, BNSS Section 246 governs joint charges at trial.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 61"
+        }
+      ],
+      "id": "P6_DEV_015",
+      "split": "dev"
+    },
+    {
+      "question": "In a prosecution concerning perjury and giving false evidence, which statutory code provides the substantive punishment, and which code governs procedure for prosecution of perjury on complaint of court?",
+      "category": "substantive_vs_procedural",
+      "sub_category": "sub_proc_contrast_1",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE",
+        "BNSS_PROCEDURAL"
+      ],
+      "expected_issue_type": "substantive_vs_procedural_distinction",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "227",
+        "379"
+      ],
+      "expected_answer_properties": [
+        "substantive crime defined in BNS",
+        "procedure for prosecution of perjury on complaint of court governed by BNSS"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "bar_council_exam_archive",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, substantive crime defined in BNS.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 227]"
+          ],
+          "verified_section": "227",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, procedure for prosecution of perjury on complaint of court governed by BNSS.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 227]"
+          ],
+          "verified_section": "227",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In a prosecution concerning perjury and giving false evidence, which statutory code provides the substantive punishment, and which code governs procedure for prosecution of perjury on complaint of court?': Under Indian law, substantive crime defined in BNS. Under Indian law, procedure for prosecution of perjury on complaint of court governed by BNSS.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0076",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding substantive crime defined in BNS, procedure for prosecution of perjury on complaint of court governed by BNSS.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "227"
+        }
+      ],
+      "id": "P6_DEV_016",
+      "split": "dev"
+    },
+    {
+      "question": "In a prosecution concerning harassment for dowry demand, which statutory code provides the substantive punishment, and which code governs territorial jurisdiction where consequence ensued?",
+      "category": "substantive_vs_procedural",
+      "sub_category": "sub_proc_contrast_6",
+      "difficulty": "medium",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE",
+        "BNSS_PROCEDURAL"
+      ],
+      "expected_issue_type": "substantive_vs_procedural_distinction",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "85",
+        "220"
+      ],
+      "expected_answer_properties": [
+        "substantive crime defined in BNS",
+        "territorial jurisdiction where consequence ensued governed by BNSS"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "bar_council_exam_archive",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, substantive crime defined in BNS.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 85]"
+          ],
+          "verified_section": "85",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, territorial jurisdiction where consequence ensued governed by BNSS.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 85]"
+          ],
+          "verified_section": "85",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In a prosecution concerning harassment for dowry demand, which statutory code provides the substantive punishment, and which code governs territorial jurisdiction where consequence ensued?': Under Indian law, substantive crime defined in BNS. Under Indian law, territorial jurisdiction where consequence ensued governed by BNSS.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0081",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding substantive crime defined in BNS, territorial jurisdiction where consequence ensued governed by BNSS.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "85"
+        }
+      ],
+      "id": "P6_DEV_017",
+      "split": "dev"
+    },
+    {
+      "question": "In a prosecution concerning wrongful restraint of highway travelers, which statutory code provides the substantive punishment, and which code governs summary trial procedure for minor restraint?",
+      "category": "substantive_vs_procedural",
+      "sub_category": "sub_proc_contrast_11",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE",
+        "BNSS_PROCEDURAL"
+      ],
+      "expected_issue_type": "substantive_vs_procedural_distinction",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "126",
+        "283"
+      ],
+      "expected_answer_properties": [
+        "substantive crime defined in BNS",
+        "summary trial procedure for minor restraint governed by BNSS"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "bar_council_exam_archive",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, substantive crime defined in BNS.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 126]"
+          ],
+          "verified_section": "126",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, summary trial procedure for minor restraint governed by BNSS.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 126]"
+          ],
+          "verified_section": "126",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In a prosecution concerning wrongful restraint of highway travelers, which statutory code provides the substantive punishment, and which code governs summary trial procedure for minor restraint?': Under Indian law, substantive crime defined in BNS. Under Indian law, summary trial procedure for minor restraint governed by BNSS.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0086",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding substantive crime defined in BNS, summary trial procedure for minor restraint governed by BNSS.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "126"
+        }
+      ],
+      "id": "P6_DEV_018",
+      "split": "dev"
+    },
+    {
+      "question": "In a prosecution concerning stalking repeated despite warnings, which statutory code provides the substantive punishment, and which code governs bail restrictions on second conviction for stalking?",
+      "category": "substantive_vs_procedural",
+      "sub_category": "sub_proc_contrast_16",
+      "difficulty": "medium",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE",
+        "BNSS_PROCEDURAL"
+      ],
+      "expected_issue_type": "substantive_vs_procedural_distinction",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "78",
+        "480"
+      ],
+      "expected_answer_properties": [
+        "substantive crime defined in BNS",
+        "bail restrictions on second conviction for stalking governed by BNSS"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "bar_council_exam_archive",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, substantive crime defined in BNS.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 78]"
+          ],
+          "verified_section": "78",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, bail restrictions on second conviction for stalking governed by BNSS.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 78]"
+          ],
+          "verified_section": "78",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In a prosecution concerning stalking repeated despite warnings, which statutory code provides the substantive punishment, and which code governs bail restrictions on second conviction for stalking?': Under Indian law, substantive crime defined in BNS. Under Indian law, bail restrictions on second conviction for stalking governed by BNSS.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0091",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding substantive crime defined in BNS, bail restrictions on second conviction for stalking governed by BNSS.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "78"
+        }
+      ],
+      "id": "P6_DEV_019",
+      "split": "dev"
+    },
+    {
+      "question": "In a prosecution concerning culpable homicide by reckless high-speed driving, which statutory code provides the substantive punishment, and which code governs examination of witnesses by police officer?",
+      "category": "substantive_vs_procedural",
+      "sub_category": "sub_proc_contrast_21",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE",
+        "BNSS_PROCEDURAL"
+      ],
+      "expected_issue_type": "substantive_vs_procedural_distinction",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "106",
+        "184"
+      ],
+      "expected_answer_properties": [
+        "substantive crime defined in BNS",
+        "examination of witnesses by police officer governed by BNSS"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "bar_council_exam_archive",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, substantive crime defined in BNS.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 106]"
+          ],
+          "verified_section": "106",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, examination of witnesses by police officer governed by BNSS.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 106]"
+          ],
+          "verified_section": "106",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In a prosecution concerning culpable homicide by reckless high-speed driving, which statutory code provides the substantive punishment, and which code governs examination of witnesses by police officer?': Under Indian law, substantive crime defined in BNS. Under Indian law, examination of witnesses by police officer governed by BNSS.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0096",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding substantive crime defined in BNS, examination of witnesses by police officer governed by BNSS.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "106"
+        }
+      ],
+      "id": "P6_DEV_020",
+      "split": "dev"
+    },
+    {
+      "question": "In a prosecution concerning fabricating false medical injury certificate, which statutory code provides the substantive punishment, and which code governs magistrate inquiry into offence against administration of justice?",
+      "category": "substantive_vs_procedural",
+      "sub_category": "sub_proc_contrast_26",
+      "difficulty": "medium",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE",
+        "BNSS_PROCEDURAL"
+      ],
+      "expected_issue_type": "substantive_vs_procedural_distinction",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "229",
+        "379"
+      ],
+      "expected_answer_properties": [
+        "substantive crime defined in BNS",
+        "magistrate inquiry into offence against administration of justice governed by BNSS"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "bar_council_exam_archive",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, substantive crime defined in BNS.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 229]"
+          ],
+          "verified_section": "229",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, magistrate inquiry into offence against administration of justice governed by BNSS.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 229]"
+          ],
+          "verified_section": "229",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In a prosecution concerning fabricating false medical injury certificate, which statutory code provides the substantive punishment, and which code governs magistrate inquiry into offence against administration of justice?': Under Indian law, substantive crime defined in BNS. Under Indian law, magistrate inquiry into offence against administration of justice governed by BNSS.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0101",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding substantive crime defined in BNS, magistrate inquiry into offence against administration of justice governed by BNSS.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "229"
+        }
+      ],
+      "id": "P6_DEV_021",
+      "split": "dev"
+    },
+    {
+      "question": "A cybercriminal created a spoofed website of a commercial bank to extract customer login credentials. Does Section 66D of the IT Act override general cheating under Section 318 of BNS?",
+      "category": "special_vs_general",
+      "sub_category": "it_act_phishing_vs_bns_cheating",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "IT_ACT",
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "special_law_it_act_cheating",
+      "expected_evidence_type": "special_statute_provision",
+      "expected_statutes": [
+        "Information Technology Act",
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 66D",
+        "Section 318"
+      ],
+      "expected_answer_properties": [
+        "special law IT Act Section 66D overrides general penal law under generalia specialibus non derogant",
+        "IT Act Section 81 gives overriding effect"
+      ],
+      "gold_evidence_ids": [
+        "Information Technology Act",
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "critical",
+      "source_origin": "supreme_court_it_act_precedent",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, special law IT Act Section 66D overrides general penal law under generalia specialibus non derogant.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 66D]"
+          ],
+          "verified_section": "Section 66D",
+          "verified_statute": "Information Technology Act"
+        },
+        {
+          "claim_text": "Under Indian law, IT Act Section 81 gives overriding effect.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 66D]"
+          ],
+          "verified_section": "Section 66D",
+          "verified_statute": "Information Technology Act"
+        }
+      ],
+      "generated_answer": "Regarding 'A cybercriminal created a spoofed website of a commercial bank to extract customer login credentials. Does Section 66D of the IT Act override general cheating under Section 318 of BNS?': Under Indian law, special law IT Act Section 66D overrides general penal law under generalia specialibus non derogant. Under Indian law, IT Act Section 81 gives overriding effect.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_INFO_0106",
+          "text": "Official Excerpt: Information Technology Act. Provisions regarding special law IT Act Section 66D overrides general penal law under generalia specialibus non derogant, IT Act Section 81 gives overriding effect.",
+          "document_name": "Information Technology Act",
+          "section_number": "Section 66D"
+        }
+      ],
+      "id": "P6_DEV_022",
+      "split": "dev"
+    },
+    {
+      "question": "In a legal dispute involving theft of trade secrets via email, how does the special regime under IT Act Section 43 interact with BNS Section 303 regarding unauthorized electronic data extraction versus general theft?",
+      "category": "special_vs_general",
+      "sub_category": "special_general_conflict_1",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "IT_ACT",
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "special_vs_general_jurisdiction",
+      "expected_evidence_type": "special_statute_provision",
+      "expected_statutes": [
+        "Information Technology Act"
+      ],
+      "expected_sections": [
+        "Section 43"
+      ],
+      "expected_answer_properties": [
+        "special statute provisions prevail over general provisions to the extent of inconsistency"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "bar_council_criminal_law_curriculum",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, special statute provisions prevail over general provisions to the extent of inconsistency.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 43]"
+          ],
+          "verified_section": "Section 43",
+          "verified_statute": "Information Technology Act"
+        }
+      ],
+      "generated_answer": "Regarding 'In a legal dispute involving theft of trade secrets via email, how does the special regime under IT Act Section 43 interact with BNS Section 303 regarding unauthorized electronic data extraction versus general theft?': Under Indian law, special statute provisions prevail over general provisions to the extent of inconsistency.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_INFO_0111",
+          "text": "Official Excerpt: Information Technology Act. Provisions regarding special statute provisions prevail over general provisions to the extent of inconsistency.",
+          "document_name": "Information Technology Act",
+          "section_number": "Section 43"
+        }
+      ],
+      "id": "P6_DEV_023",
+      "split": "dev"
+    },
+    {
+      "question": "In a legal dispute involving telecom wiretapping without authorization, how does the special regime under Telegraph Act Section 25 interact with IT Act Section 69 regarding special telegraph penal code versus IT interception rules?",
+      "category": "special_vs_general",
+      "sub_category": "special_general_conflict_6",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "GENERAL",
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "special_vs_general_jurisdiction",
+      "expected_evidence_type": "special_statute_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 318"
+      ],
+      "expected_answer_properties": [
+        "special statute provisions prevail over general provisions to the extent of inconsistency"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "bar_council_criminal_law_curriculum",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, special statute provisions prevail over general provisions to the extent of inconsistency.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 318]"
+          ],
+          "verified_section": "Section 318",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In a legal dispute involving telecom wiretapping without authorization, how does the special regime under Telegraph Act Section 25 interact with IT Act Section 69 regarding special telegraph penal code versus IT interception rules?': Under Indian law, special statute provisions prevail over general provisions to the extent of inconsistency.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0116",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding special statute provisions prevail over general provisions to the extent of inconsistency.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 318"
+        }
+      ],
+      "id": "P6_DEV_024",
+      "split": "dev"
+    },
+    {
+      "question": "In a legal dispute involving refusal to disclose procurement contracts, how does the special regime under RTI Act Section 19 interact with BNS Section 223 regarding statutory information commission appeal versus disobeying public order?",
+      "category": "special_vs_general",
+      "sub_category": "special_general_conflict_11",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "GENERAL",
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "special_vs_general_jurisdiction",
+      "expected_evidence_type": "special_statute_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 318"
+      ],
+      "expected_answer_properties": [
+        "special statute provisions prevail over general provisions to the extent of inconsistency"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "bar_council_criminal_law_curriculum",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, special statute provisions prevail over general provisions to the extent of inconsistency.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 318]"
+          ],
+          "verified_section": "Section 318",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In a legal dispute involving refusal to disclose procurement contracts, how does the special regime under RTI Act Section 19 interact with BNS Section 223 regarding statutory information commission appeal versus disobeying public order?': Under Indian law, special statute provisions prevail over general provisions to the extent of inconsistency.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0121",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding special statute provisions prevail over general provisions to the extent of inconsistency.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 318"
+        }
+      ],
+      "id": "P6_DEV_025",
+      "split": "dev"
+    },
+    {
+      "question": "In a legal dispute involving commercial piracy of Bollywood feature film, how does the special regime under Copyright Act Section 63 interact with BNS Section 318 regarding copyright infringement versus general cheating?",
+      "category": "special_vs_general",
+      "sub_category": "special_general_conflict_16",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "GENERAL",
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "special_vs_general_jurisdiction",
+      "expected_evidence_type": "special_statute_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 318"
+      ],
+      "expected_answer_properties": [
+        "special statute provisions prevail over general provisions to the extent of inconsistency"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "bar_council_criminal_law_curriculum",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, special statute provisions prevail over general provisions to the extent of inconsistency.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 318]"
+          ],
+          "verified_section": "Section 318",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In a legal dispute involving commercial piracy of Bollywood feature film, how does the special regime under Copyright Act Section 63 interact with BNS Section 318 regarding copyright infringement versus general cheating?': Under Indian law, special statute provisions prevail over general provisions to the extent of inconsistency.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0126",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding special statute provisions prevail over general provisions to the extent of inconsistency.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 318"
+        }
+      ],
+      "id": "P6_DEV_026",
+      "split": "dev"
+    },
+    {
+      "question": "In a legal dispute involving defrauding airline passengers by selling bogus tickets, how does the special regime under Civil Aviation Act interact with BNS Section 318 regarding aviation security penalties versus penal cheating?",
+      "category": "special_vs_general",
+      "sub_category": "special_general_conflict_21",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "GENERAL",
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "special_vs_general_jurisdiction",
+      "expected_evidence_type": "special_statute_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 318"
+      ],
+      "expected_answer_properties": [
+        "special statute provisions prevail over general provisions to the extent of inconsistency"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "high",
+      "source_origin": "bar_council_criminal_law_curriculum",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, special statute provisions prevail over general provisions to the extent of inconsistency.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 318]"
+          ],
+          "verified_section": "Section 318",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In a legal dispute involving defrauding airline passengers by selling bogus tickets, how does the special regime under Civil Aviation Act interact with BNS Section 318 regarding aviation security penalties versus penal cheating?': Under Indian law, special statute provisions prevail over general provisions to the extent of inconsistency.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0131",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding special statute provisions prevail over general provisions to the extent of inconsistency.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 318"
+        }
+      ],
+      "id": "P6_DEV_027",
+      "split": "dev"
+    },
+    {
+      "question": "A senior software architect was blackmailed by an extortion syndicate via encrypted Telegram messages and deepfake video clips. What substantive penal provisions under BNS, procedural arrest safeguards under BNSS, electronic certification rules under BSA, and cyber penalties under the IT Act apply concurrently?",
+      "category": "multi_statute",
+      "sub_category": "cyber_extortion_quad_statute",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE",
+        "BNSS_PROCEDURAL",
+        "BSA_EVIDENCE",
+        "IT_ACT"
+      ],
+      "expected_issue_type": "multi_statute_cyber_extortion",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023",
+        "Bharatiya Sakshya Adhiniyam, 2023",
+        "Information Technology Act"
+      ],
+      "expected_sections": [
+        "Section 308",
+        "Section 35",
+        "Section 63",
+        "Section 66E"
+      ],
+      "expected_answer_properties": [
+        "substantive extortion and privacy violation",
+        "procedural arrest notice and magistrate remand",
+        "electronic evidence certification for Telegram logs"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023",
+        "Bharatiya Sakshya Adhiniyam, 2023",
+        "Information Technology Act"
+      ],
+      "risk_level": "critical",
+      "source_origin": "cyber_crime_cell_inquiry",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, substantive extortion and privacy violation.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 308]"
+          ],
+          "verified_section": "Section 308",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, procedural arrest notice and magistrate remand.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 308]"
+          ],
+          "verified_section": "Section 308",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, electronic evidence certification for Telegram logs.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 308]"
+          ],
+          "verified_section": "Section 308",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'A senior software architect was blackmailed by an extortion syndicate via encrypted Telegram messages and deepfake video clips. What substantive penal provisions under BNS, procedural arrest safeguards under BNSS, electronic certification rules under BSA, and cyber penalties under the IT Act apply concurrently?': Under Indian law, substantive extortion and privacy violation. Under Indian law, procedural arrest notice and magistrate remand. Under Indian law, electronic evidence certification for Telegram logs.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0136",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding substantive extortion and privacy violation, procedural arrest notice and magistrate remand, electronic evidence certification for Telegram logs.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 308"
+        }
+      ],
+      "id": "P6_DEV_028",
+      "split": "dev"
+    },
+    {
+      "question": "In an event involving selling counterfeit pharmaceuticals causing patient organ failure, which legal mechanisms under Consumer Protection Act + BNS 2023 + BSA 2023 apply concurrently?",
+      "category": "multi_statute",
+      "sub_category": "multi_statute_combination_3",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "CONSUMER_PROTECTION",
+        "BNS_SUBSTANTIVE",
+        "BSA_EVIDENCE"
+      ],
+      "expected_issue_type": "multi_statute_intersection",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 316",
+        "Section 35"
+      ],
+      "expected_answer_properties": [
+        "concurrent application of substantive criminal provisions, procedural safeguards, and special remedies"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "critical",
+      "source_origin": "high_court_criminal_appeal_record",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 316]"
+          ],
+          "verified_section": "Section 316",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In an event involving selling counterfeit pharmaceuticals causing patient organ failure, which legal mechanisms under Consumer Protection Act + BNS 2023 + BSA 2023 apply concurrently?': Under Indian law, concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0141",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 316"
+        }
+      ],
+      "id": "P6_DEV_029",
+      "split": "dev"
+    },
+    {
+      "question": "In an event involving counterfeiting currency notes distributed via dark-web e-commerce, which legal mechanisms under BNS 2023 + IT Act 2000 + BNSS 2023 apply concurrently?",
+      "category": "multi_statute",
+      "sub_category": "multi_statute_combination_8",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE",
+        "IT_ACT",
+        "BNSS_PROCEDURAL"
+      ],
+      "expected_issue_type": "multi_statute_intersection",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 316",
+        "Section 35"
+      ],
+      "expected_answer_properties": [
+        "concurrent application of substantive criminal provisions, procedural safeguards, and special remedies"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "critical",
+      "source_origin": "high_court_criminal_appeal_record",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 316]"
+          ],
+          "verified_section": "Section 316",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In an event involving counterfeiting currency notes distributed via dark-web e-commerce, which legal mechanisms under BNS 2023 + IT Act 2000 + BNSS 2023 apply concurrently?': Under Indian law, concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0146",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 316"
+        }
+      ],
+      "id": "P6_DEV_030",
+      "split": "dev"
+    },
+    {
+      "question": "In an event involving unauthorized electronic interception of business rival trade secrets, which legal mechanisms under IT Act 2000 + BNS 2023 + BSA 2023 apply concurrently?",
+      "category": "multi_statute",
+      "sub_category": "multi_statute_combination_13",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "IT_ACT",
+        "BNS_SUBSTANTIVE",
+        "BSA_EVIDENCE"
+      ],
+      "expected_issue_type": "multi_statute_intersection",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 316",
+        "Section 35"
+      ],
+      "expected_answer_properties": [
+        "concurrent application of substantive criminal provisions, procedural safeguards, and special remedies"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "critical",
+      "source_origin": "high_court_criminal_appeal_record",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 316]"
+          ],
+          "verified_section": "Section 316",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In an event involving unauthorized electronic interception of business rival trade secrets, which legal mechanisms under IT Act 2000 + BNS 2023 + BSA 2023 apply concurrently?': Under Indian law, concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0151",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 316"
+        }
+      ],
+      "id": "P6_DEV_031",
+      "split": "dev"
+    },
+    {
+      "question": "In an event involving death of factory worker due to defective unguarded machinery, which legal mechanisms under Consumer Protection Act + BNS 2023 + POSH/Labour apply concurrently?",
+      "category": "multi_statute",
+      "sub_category": "multi_statute_combination_18",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "CONSUMER_PROTECTION",
+        "BNS_SUBSTANTIVE",
+        "POSH_LABOUR"
+      ],
+      "expected_issue_type": "multi_statute_intersection",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 316",
+        "Section 35"
+      ],
+      "expected_answer_properties": [
+        "concurrent application of substantive criminal provisions, procedural safeguards, and special remedies"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "critical",
+      "source_origin": "high_court_criminal_appeal_record",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 316]"
+          ],
+          "verified_section": "Section 316",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In an event involving death of factory worker due to defective unguarded machinery, which legal mechanisms under Consumer Protection Act + BNS 2023 + POSH/Labour apply concurrently?': Under Indian law, concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0156",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 316"
+        }
+      ],
+      "id": "P6_DEV_032",
+      "split": "dev"
+    },
+    {
+      "question": "In an event involving cyber attack shutting down regional electric power grid, which legal mechanisms under IT Act 2000 + BNS 2023 + BNSS 2023 apply concurrently?",
+      "category": "multi_statute",
+      "sub_category": "multi_statute_combination_23",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "IT_ACT",
+        "BNS_SUBSTANTIVE",
+        "BNSS_PROCEDURAL"
+      ],
+      "expected_issue_type": "multi_statute_intersection",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 316",
+        "Section 35"
+      ],
+      "expected_answer_properties": [
+        "concurrent application of substantive criminal provisions, procedural safeguards, and special remedies"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023",
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "critical",
+      "source_origin": "high_court_criminal_appeal_record",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 316]"
+          ],
+          "verified_section": "Section 316",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'In an event involving cyber attack shutting down regional electric power grid, which legal mechanisms under IT Act 2000 + BNS 2023 + BNSS 2023 apply concurrently?': Under Indian law, concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0161",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding concurrent application of substantive criminal provisions, procedural safeguards, and special remedies.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 316"
+        }
+      ],
+      "id": "P6_DEV_033",
+      "split": "dev"
+    },
+    {
+      "question": "What does Section 35 prescribe?",
+      "category": "retrieval_ambiguity",
+      "sub_category": "homonymous_section_35",
+      "difficulty": "hard",
+      "temporal_context": "ambiguous_date",
+      "legal_regimes_expected": [
+        "BNSS_PROCEDURAL",
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "ambiguous_section_retrieval",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 35"
+      ],
+      "expected_answer_properties": [
+        "Section 35 of BNSS prescribes arrest without warrant by police",
+        "query lacks enactment title causing ambiguity"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "medium",
+      "source_origin": "retrieval_stress_bank",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, Section 35 of BNSS prescribes arrest without warrant by police.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [
+            "[Bharatiya Nagarik Suraksha Sanhita, 2023 \u00a7 Section 35]"
+          ],
+          "verified_section": "Section 35",
+          "verified_statute": "Bharatiya Nagarik Suraksha Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, query lacks enactment title causing ambiguity.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [
+            "[Bharatiya Nagarik Suraksha Sanhita, 2023 \u00a7 Section 35]"
+          ],
+          "verified_section": "Section 35",
+          "verified_statute": "Bharatiya Nagarik Suraksha Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'What does Section 35 prescribe?': Under Indian law, Section 35 of BNSS prescribes arrest without warrant by police. Under Indian law, query lacks enactment title causing ambiguity.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0166",
+          "text": "Official Excerpt: Bharatiya Nagarik Suraksha Sanhita, 2023. Provisions regarding Section 35 of BNSS prescribes arrest without warrant by police, query lacks enactment title causing ambiguity.",
+          "document_name": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section_number": "Section 35"
+        }
+      ],
+      "id": "P6_DEV_034",
+      "split": "dev"
+    },
+    {
+      "question": "What legal matter is governed by Section 14 without specifying the statute (IBC moratorium vs POCSO child pornography vs Constitution equality)?",
+      "category": "retrieval_ambiguity",
+      "sub_category": "section_homonym_1",
+      "difficulty": "hard",
+      "temporal_context": "ambiguous_date",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "homonymous_section_collision",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023",
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "14"
+      ],
+      "expected_answer_properties": [
+        "query contains ambiguous section number requiring statutory disambiguation (IBC moratorium vs POCSO child pornography vs Constitution equality)"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "medium",
+      "source_origin": "retrieval_stress_bank",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, query contains ambiguous section number requiring statutory disambiguation (IBC moratorium vs POCSO child pornography vs Constitution equality).",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [
+            "[Bharatiya Nagarik Suraksha Sanhita, 2023 \u00a7 14]"
+          ],
+          "verified_section": "14",
+          "verified_statute": "Bharatiya Nagarik Suraksha Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'What legal matter is governed by Section 14 without specifying the statute (IBC moratorium vs POCSO child pornography vs Constitution equality)?': Under Indian law, query contains ambiguous section number requiring statutory disambiguation (IBC moratorium vs POCSO child pornography vs Constitution equality).",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0171",
+          "text": "Official Excerpt: Bharatiya Nagarik Suraksha Sanhita, 2023. Provisions regarding query contains ambiguous section number requiring statutory disambiguation (IBC moratorium vs POCSO child pornography vs Constitution equality).",
+          "document_name": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section_number": "14"
+        }
+      ],
+      "id": "P6_DEV_035",
+      "split": "dev"
+    },
+    {
+      "question": "What legal matter is governed by Section 111 without specifying the statute (BNS organized crime vs BNSS order of magistrate)?",
+      "category": "retrieval_ambiguity",
+      "sub_category": "section_homonym_6",
+      "difficulty": "hard",
+      "temporal_context": "ambiguous_date",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "homonymous_section_collision",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023",
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "111"
+      ],
+      "expected_answer_properties": [
+        "query contains ambiguous section number requiring statutory disambiguation (BNS organized crime vs BNSS order of magistrate)"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "medium",
+      "source_origin": "retrieval_stress_bank",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, query contains ambiguous section number requiring statutory disambiguation (BNS organized crime vs BNSS order of magistrate).",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [
+            "[Bharatiya Nagarik Suraksha Sanhita, 2023 \u00a7 111]"
+          ],
+          "verified_section": "111",
+          "verified_statute": "Bharatiya Nagarik Suraksha Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'What legal matter is governed by Section 111 without specifying the statute (BNS organized crime vs BNSS order of magistrate)?': Under Indian law, query contains ambiguous section number requiring statutory disambiguation (BNS organized crime vs BNSS order of magistrate).",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0176",
+          "text": "Official Excerpt: Bharatiya Nagarik Suraksha Sanhita, 2023. Provisions regarding query contains ambiguous section number requiring statutory disambiguation (BNS organized crime vs BNSS order of magistrate).",
+          "document_name": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section_number": "111"
+        }
+      ],
+      "id": "P6_DEV_036",
+      "split": "dev"
+    },
+    {
+      "question": "What legal matter is governed by Section 187 without specifying the statute (BNSS police remand procedure vs BNS omitting to assist public servant)?",
+      "category": "retrieval_ambiguity",
+      "sub_category": "section_homonym_11",
+      "difficulty": "hard",
+      "temporal_context": "ambiguous_date",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "homonymous_section_collision",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023",
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "187"
+      ],
+      "expected_answer_properties": [
+        "query contains ambiguous section number requiring statutory disambiguation (BNSS police remand procedure vs BNS omitting to assist public servant)"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "medium",
+      "source_origin": "retrieval_stress_bank",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, query contains ambiguous section number requiring statutory disambiguation (BNSS police remand procedure vs BNS omitting to assist public servant).",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [
+            "[Bharatiya Nagarik Suraksha Sanhita, 2023 \u00a7 187]"
+          ],
+          "verified_section": "187",
+          "verified_statute": "Bharatiya Nagarik Suraksha Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'What legal matter is governed by Section 187 without specifying the statute (BNSS police remand procedure vs BNS omitting to assist public servant)?': Under Indian law, query contains ambiguous section number requiring statutory disambiguation (BNSS police remand procedure vs BNS omitting to assist public servant).",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0181",
+          "text": "Official Excerpt: Bharatiya Nagarik Suraksha Sanhita, 2023. Provisions regarding query contains ambiguous section number requiring statutory disambiguation (BNSS police remand procedure vs BNS omitting to assist public servant).",
+          "document_name": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section_number": "187"
+        }
+      ],
+      "id": "P6_DEV_037",
+      "split": "dev"
+    },
+    {
+      "question": "What legal matter is governed by Section 318 without specifying the statute (BNS cheating vs legacy IPC concealing birth by secret disposal)?",
+      "category": "retrieval_ambiguity",
+      "sub_category": "section_homonym_16",
+      "difficulty": "hard",
+      "temporal_context": "ambiguous_date",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "homonymous_section_collision",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023",
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "318"
+      ],
+      "expected_answer_properties": [
+        "query contains ambiguous section number requiring statutory disambiguation (BNS cheating vs legacy IPC concealing birth by secret disposal)"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "medium",
+      "source_origin": "retrieval_stress_bank",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, query contains ambiguous section number requiring statutory disambiguation (BNS cheating vs legacy IPC concealing birth by secret disposal).",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [
+            "[Bharatiya Nagarik Suraksha Sanhita, 2023 \u00a7 318]"
+          ],
+          "verified_section": "318",
+          "verified_statute": "Bharatiya Nagarik Suraksha Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'What legal matter is governed by Section 318 without specifying the statute (BNS cheating vs legacy IPC concealing birth by secret disposal)?': Under Indian law, query contains ambiguous section number requiring statutory disambiguation (BNS cheating vs legacy IPC concealing birth by secret disposal).",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0186",
+          "text": "Official Excerpt: Bharatiya Nagarik Suraksha Sanhita, 2023. Provisions regarding query contains ambiguous section number requiring statutory disambiguation (BNS cheating vs legacy IPC concealing birth by secret disposal).",
+          "document_name": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section_number": "318"
+        }
+      ],
+      "id": "P6_DEV_038",
+      "split": "dev"
+    },
+    {
+      "question": "What legal matter is governed by Section 482 without specifying the statute (BNSS anticipatory bail vs legacy CrPC inherent powers of High Court)?",
+      "category": "retrieval_ambiguity",
+      "sub_category": "section_homonym_21",
+      "difficulty": "hard",
+      "temporal_context": "ambiguous_date",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "homonymous_section_collision",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023",
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "482"
+      ],
+      "expected_answer_properties": [
+        "query contains ambiguous section number requiring statutory disambiguation (BNSS anticipatory bail vs legacy CrPC inherent powers of High Court)"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "medium",
+      "source_origin": "retrieval_stress_bank",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, query contains ambiguous section number requiring statutory disambiguation (BNSS anticipatory bail vs legacy CrPC inherent powers of High Court).",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [
+            "[Bharatiya Nagarik Suraksha Sanhita, 2023 \u00a7 482]"
+          ],
+          "verified_section": "482",
+          "verified_statute": "Bharatiya Nagarik Suraksha Sanhita, 2023"
+        }
+      ],
+      "generated_answer": "Regarding 'What legal matter is governed by Section 482 without specifying the statute (BNSS anticipatory bail vs legacy CrPC inherent powers of High Court)?': Under Indian law, query contains ambiguous section number requiring statutory disambiguation (BNSS anticipatory bail vs legacy CrPC inherent powers of High Court).",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0191",
+          "text": "Official Excerpt: Bharatiya Nagarik Suraksha Sanhita, 2023. Provisions regarding query contains ambiguous section number requiring statutory disambiguation (BNSS anticipatory bail vs legacy CrPC inherent powers of High Court).",
+          "document_name": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section_number": "482"
+        }
+      ],
+      "id": "P6_DEV_039",
+      "split": "dev"
+    },
+    {
+      "question": "What is the maximum punishment for theft under BNS Section 303, and does it permit the court to order life imprisonment for stealing a loaf of bread?",
+      "category": "claim_grounding_failures",
+      "sub_category": "theft_extreme_punishment_hallucination",
+      "difficulty": "easy",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "claim_unsupported_quantum",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 303"
+      ],
+      "expected_answer_properties": [
+        "maximum punishment is 3 years imprisonment or fine",
+        "petty theft punishable with community service",
+        "life imprisonment is legally unsupported and contradicted"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "critical",
+      "source_origin": "synthetic_safety_probe",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, maximum punishment is 3 years imprisonment or fine.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, petty theft punishable with community service.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, life imprisonment is legally unsupported and contradicted.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "The police may detain the suspect indefinitely without judicial oversight.",
+          "claim_type": "PROCEDURAL_RIGHT",
+          "ground_truth_status": "CONTRADICTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Fabricated Police Act \u00a7 999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        },
+        {
+          "claim_text": "Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+          "claim_type": "PUNISHMENT",
+          "ground_truth_status": "UNSUPPORTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Unknown Statute \u00a7 9999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        }
+      ],
+      "generated_answer": "Regarding 'What is the maximum punishment for theft under BNS Section 303, and does it permit the court to order life imprisonment for stealing a loaf of bread?': Under Indian law, maximum punishment is 3 years imprisonment or fine. Under Indian law, petty theft punishable with community service. Under Indian law, life imprisonment is legally unsupported and contradicted. The police may detain the suspect indefinitely without judicial oversight. Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0196",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding maximum punishment is 3 years imprisonment or fine, petty theft punishable with community service, life imprisonment is legally unsupported and contradicted.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 303"
+        }
+      ],
+      "id": "P6_DEV_040",
+      "split": "dev"
+    },
+    {
+      "question": "Regarding BNS Section 103 for murder: is it true that under Indian law 'imprisonment for 6 months', or is the actual statutory rule that 'punishment is death or life imprisonment'?",
+      "category": "claim_grounding_failures",
+      "sub_category": "grounding_adversarial_pair_1",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "claim_grounding_verification",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 103"
+      ],
+      "expected_answer_properties": [
+        "punishment is death or life imprisonment",
+        "the proposition that 'imprisonment for 6 months' is completely unsupported and contradicted by statutory text"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nyaya Sanhita, 2023"
+      ],
+      "risk_level": "critical",
+      "source_origin": "synthetic_safety_probe",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, punishment is death or life imprisonment.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 103]"
+          ],
+          "verified_section": "Section 103",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, the proposition that 'imprisonment for 6 months' is completely unsupported and contradicted by statutory text.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nyaya Sanhita, 2023 \u00a7 Section 103]"
+          ],
+          "verified_section": "Section 103",
+          "verified_statute": "Bharatiya Nyaya Sanhita, 2023"
+        },
+        {
+          "claim_text": "The police may detain the suspect indefinitely without judicial oversight.",
+          "claim_type": "PROCEDURAL_RIGHT",
+          "ground_truth_status": "CONTRADICTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Fabricated Police Act \u00a7 999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        },
+        {
+          "claim_text": "Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+          "claim_type": "PUNISHMENT",
+          "ground_truth_status": "UNSUPPORTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Unknown Statute \u00a7 9999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        }
+      ],
+      "generated_answer": "Regarding 'Regarding BNS Section 103 for murder: is it true that under Indian law 'imprisonment for 6 months', or is the actual statutory rule that 'punishment is death or life imprisonment'?': Under Indian law, punishment is death or life imprisonment. Under Indian law, the proposition that 'imprisonment for 6 months' is completely unsupported and contradicted by statutory text. The police may detain the suspect indefinitely without judicial oversight. Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0201",
+          "text": "Official Excerpt: Bharatiya Nyaya Sanhita, 2023. Provisions regarding punishment is death or life imprisonment, the proposition that 'imprisonment for 6 months' is completely unsupported and contradicted by statutory text.",
+          "document_name": "Bharatiya Nyaya Sanhita, 2023",
+          "section_number": "Section 103"
+        }
+      ],
+      "id": "P6_DEV_041",
+      "split": "dev"
+    },
+    {
+      "question": "Regarding Consumer Protection Act Section 34: is it true that under Indian law 'jurisdiction up to five hundred billion dollars', or is the actual statutory rule that 'pecuniary jurisdiction up to 50 lakh rupees'?",
+      "category": "claim_grounding_failures",
+      "sub_category": "grounding_adversarial_pair_6",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "claim_grounding_verification",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Information Technology Act"
+      ],
+      "expected_sections": [
+        "Section 303"
+      ],
+      "expected_answer_properties": [
+        "pecuniary jurisdiction up to 50 lakh rupees",
+        "the proposition that 'jurisdiction up to five hundred billion dollars' is completely unsupported and contradicted by statutory text"
+      ],
+      "gold_evidence_ids": [
+        "Information Technology Act"
+      ],
+      "risk_level": "critical",
+      "source_origin": "synthetic_safety_probe",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, pecuniary jurisdiction up to 50 lakh rupees.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Information Technology Act"
+        },
+        {
+          "claim_text": "Under Indian law, the proposition that 'jurisdiction up to five hundred billion dollars' is completely unsupported and contradicted by statutory text.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Information Technology Act"
+        },
+        {
+          "claim_text": "The police may detain the suspect indefinitely without judicial oversight.",
+          "claim_type": "PROCEDURAL_RIGHT",
+          "ground_truth_status": "CONTRADICTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Fabricated Police Act \u00a7 999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        },
+        {
+          "claim_text": "Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+          "claim_type": "PUNISHMENT",
+          "ground_truth_status": "UNSUPPORTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Unknown Statute \u00a7 9999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        }
+      ],
+      "generated_answer": "Regarding 'Regarding Consumer Protection Act Section 34: is it true that under Indian law 'jurisdiction up to five hundred billion dollars', or is the actual statutory rule that 'pecuniary jurisdiction up to 50 lakh rupees'?': Under Indian law, pecuniary jurisdiction up to 50 lakh rupees. Under Indian law, the proposition that 'jurisdiction up to five hundred billion dollars' is completely unsupported and contradicted by statutory text. The police may detain the suspect indefinitely without judicial oversight. Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_INFO_0206",
+          "text": "Official Excerpt: Information Technology Act. Provisions regarding pecuniary jurisdiction up to 50 lakh rupees, the proposition that 'jurisdiction up to five hundred billion dollars' is completely unsupported and contradicted by statutory text.",
+          "document_name": "Information Technology Act",
+          "section_number": "Section 303"
+        }
+      ],
+      "id": "P6_DEV_042",
+      "split": "dev"
+    },
+    {
+      "question": "Regarding IBC Section 14: is it true that under Indian law 'mandatory immediate demolition of company factory', or is the actual statutory rule that 'moratorium against execution of court decrees'?",
+      "category": "claim_grounding_failures",
+      "sub_category": "grounding_adversarial_pair_11",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "claim_grounding_verification",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Information Technology Act"
+      ],
+      "expected_sections": [
+        "Section 303"
+      ],
+      "expected_answer_properties": [
+        "moratorium against execution of court decrees",
+        "the proposition that 'mandatory immediate demolition of company factory' is completely unsupported and contradicted by statutory text"
+      ],
+      "gold_evidence_ids": [
+        "Information Technology Act"
+      ],
+      "risk_level": "critical",
+      "source_origin": "synthetic_safety_probe",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, moratorium against execution of court decrees.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Information Technology Act"
+        },
+        {
+          "claim_text": "Under Indian law, the proposition that 'mandatory immediate demolition of company factory' is completely unsupported and contradicted by statutory text.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Information Technology Act"
+        },
+        {
+          "claim_text": "The police may detain the suspect indefinitely without judicial oversight.",
+          "claim_type": "PROCEDURAL_RIGHT",
+          "ground_truth_status": "CONTRADICTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Fabricated Police Act \u00a7 999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        },
+        {
+          "claim_text": "Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+          "claim_type": "PUNISHMENT",
+          "ground_truth_status": "UNSUPPORTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Unknown Statute \u00a7 9999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        }
+      ],
+      "generated_answer": "Regarding 'Regarding IBC Section 14: is it true that under Indian law 'mandatory immediate demolition of company factory', or is the actual statutory rule that 'moratorium against execution of court decrees'?': Under Indian law, moratorium against execution of court decrees. Under Indian law, the proposition that 'mandatory immediate demolition of company factory' is completely unsupported and contradicted by statutory text. The police may detain the suspect indefinitely without judicial oversight. Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_INFO_0211",
+          "text": "Official Excerpt: Information Technology Act. Provisions regarding moratorium against execution of court decrees, the proposition that 'mandatory immediate demolition of company factory' is completely unsupported and contradicted by statutory text.",
+          "document_name": "Information Technology Act",
+          "section_number": "Section 303"
+        }
+      ],
+      "id": "P6_DEV_043",
+      "split": "dev"
+    },
+    {
+      "question": "Regarding BSA Section 116: is it true that under Indian law 'presumption applies to marriages over 60 years', or is the actual statutory rule that 'presumption of abetment of suicide within seven years'?",
+      "category": "claim_grounding_failures",
+      "sub_category": "grounding_adversarial_pair_16",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "claim_grounding_verification",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Information Technology Act"
+      ],
+      "expected_sections": [
+        "Section 303"
+      ],
+      "expected_answer_properties": [
+        "presumption of abetment of suicide within seven years",
+        "the proposition that 'presumption applies to marriages over 60 years' is completely unsupported and contradicted by statutory text"
+      ],
+      "gold_evidence_ids": [
+        "Information Technology Act"
+      ],
+      "risk_level": "critical",
+      "source_origin": "synthetic_safety_probe",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, presumption of abetment of suicide within seven years.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Information Technology Act"
+        },
+        {
+          "claim_text": "Under Indian law, the proposition that 'presumption applies to marriages over 60 years' is completely unsupported and contradicted by statutory text.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Information Technology Act"
+        },
+        {
+          "claim_text": "The police may detain the suspect indefinitely without judicial oversight.",
+          "claim_type": "PROCEDURAL_RIGHT",
+          "ground_truth_status": "CONTRADICTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Fabricated Police Act \u00a7 999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        },
+        {
+          "claim_text": "Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+          "claim_type": "PUNISHMENT",
+          "ground_truth_status": "UNSUPPORTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Unknown Statute \u00a7 9999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        }
+      ],
+      "generated_answer": "Regarding 'Regarding BSA Section 116: is it true that under Indian law 'presumption applies to marriages over 60 years', or is the actual statutory rule that 'presumption of abetment of suicide within seven years'?': Under Indian law, presumption of abetment of suicide within seven years. Under Indian law, the proposition that 'presumption applies to marriages over 60 years' is completely unsupported and contradicted by statutory text. The police may detain the suspect indefinitely without judicial oversight. Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_INFO_0216",
+          "text": "Official Excerpt: Information Technology Act. Provisions regarding presumption of abetment of suicide within seven years, the proposition that 'presumption applies to marriages over 60 years' is completely unsupported and contradicted by statutory text.",
+          "document_name": "Information Technology Act",
+          "section_number": "Section 303"
+        }
+      ],
+      "id": "P6_DEV_044",
+      "split": "dev"
+    },
+    {
+      "question": "Regarding BNSS Section 187: is it true that under Indian law 'police custody up to 5 years without chargesheet', or is the actual statutory rule that 'police custody up to 15 days in whole or parts'?",
+      "category": "claim_grounding_failures",
+      "sub_category": "grounding_adversarial_pair_21",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "BNS_SUBSTANTIVE"
+      ],
+      "expected_issue_type": "claim_grounding_verification",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "expected_sections": [
+        "Section 303"
+      ],
+      "expected_answer_properties": [
+        "police custody up to 15 days in whole or parts",
+        "the proposition that 'police custody up to 5 years without chargesheet' is completely unsupported and contradicted by statutory text"
+      ],
+      "gold_evidence_ids": [
+        "Bharatiya Nagarik Suraksha Sanhita, 2023"
+      ],
+      "risk_level": "critical",
+      "source_origin": "synthetic_safety_probe",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, police custody up to 15 days in whole or parts.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nagarik Suraksha Sanhita, 2023 \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Bharatiya Nagarik Suraksha Sanhita, 2023"
+        },
+        {
+          "claim_text": "Under Indian law, the proposition that 'police custody up to 5 years without chargesheet' is completely unsupported and contradicted by statutory text.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Bharatiya Nagarik Suraksha Sanhita, 2023 \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Bharatiya Nagarik Suraksha Sanhita, 2023"
+        },
+        {
+          "claim_text": "The police may detain the suspect indefinitely without judicial oversight.",
+          "claim_type": "PROCEDURAL_RIGHT",
+          "ground_truth_status": "CONTRADICTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Fabricated Police Act \u00a7 999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        },
+        {
+          "claim_text": "Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+          "claim_type": "PUNISHMENT",
+          "ground_truth_status": "UNSUPPORTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Unknown Statute \u00a7 9999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        }
+      ],
+      "generated_answer": "Regarding 'Regarding BNSS Section 187: is it true that under Indian law 'police custody up to 5 years without chargesheet', or is the actual statutory rule that 'police custody up to 15 days in whole or parts'?': Under Indian law, police custody up to 15 days in whole or parts. Under Indian law, the proposition that 'police custody up to 5 years without chargesheet' is completely unsupported and contradicted by statutory text. The police may detain the suspect indefinitely without judicial oversight. Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_BHAR_0221",
+          "text": "Official Excerpt: Bharatiya Nagarik Suraksha Sanhita, 2023. Provisions regarding police custody up to 15 days in whole or parts, the proposition that 'police custody up to 5 years without chargesheet' is completely unsupported and contradicted by statutory text.",
+          "document_name": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section_number": "Section 303"
+        }
+      ],
+      "id": "P6_DEV_045",
+      "split": "dev"
+    },
+    {
+      "question": "Regarding RTI Act Section 8: is it true that under Indian law 'all cabinet papers must be posted on public billboards', or is the actual statutory rule that 'exemptions from disclosure for state security'?",
+      "category": "claim_grounding_failures",
+      "sub_category": "grounding_adversarial_pair_26",
+      "difficulty": "hard",
+      "temporal_context": "post_july_2024",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "claim_grounding_verification",
+      "expected_evidence_type": "statutory_provision",
+      "expected_statutes": [
+        "Information Technology Act"
+      ],
+      "expected_sections": [
+        "Section 303"
+      ],
+      "expected_answer_properties": [
+        "exemptions from disclosure for state security",
+        "the proposition that 'all cabinet papers must be posted on public billboards' is completely unsupported and contradicted by statutory text"
+      ],
+      "gold_evidence_ids": [
+        "Information Technology Act"
+      ],
+      "risk_level": "critical",
+      "source_origin": "synthetic_safety_probe",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, exemptions from disclosure for state security.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Information Technology Act"
+        },
+        {
+          "claim_text": "Under Indian law, the proposition that 'all cabinet papers must be posted on public billboards' is completely unsupported and contradicted by statutory text.",
+          "claim_type": "STATUTORY_RULE",
+          "ground_truth_status": "SUPPORTED",
+          "risk_level": "HIGH",
+          "attached_citations": [
+            "[Information Technology Act \u00a7 Section 303]"
+          ],
+          "verified_section": "Section 303",
+          "verified_statute": "Information Technology Act"
+        },
+        {
+          "claim_text": "The police may detain the suspect indefinitely without judicial oversight.",
+          "claim_type": "PROCEDURAL_RIGHT",
+          "ground_truth_status": "CONTRADICTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Fabricated Police Act \u00a7 999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        },
+        {
+          "claim_text": "Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+          "claim_type": "PUNISHMENT",
+          "ground_truth_status": "UNSUPPORTED",
+          "risk_level": "CRITICAL",
+          "attached_citations": [
+            "[Unknown Statute \u00a7 9999]"
+          ],
+          "verified_section": null,
+          "verified_statute": null
+        }
+      ],
+      "generated_answer": "Regarding 'Regarding RTI Act Section 8: is it true that under Indian law 'all cabinet papers must be posted on public billboards', or is the actual statutory rule that 'exemptions from disclosure for state security'?': Under Indian law, exemptions from disclosure for state security. Under Indian law, the proposition that 'all cabinet papers must be posted on public billboards' is completely unsupported and contradicted by statutory text. The police may detain the suspect indefinitely without judicial oversight. Under Section 9999 of the Penal Code, mandatory capital punishment applies.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_INFO_0226",
+          "text": "Official Excerpt: Information Technology Act. Provisions regarding exemptions from disclosure for state security, the proposition that 'all cabinet papers must be posted on public billboards' is completely unsupported and contradicted by statutory text.",
+          "document_name": "Information Technology Act",
+          "section_number": "Section 303"
+        }
+      ],
+      "id": "P6_DEV_046",
+      "split": "dev"
+    },
+    {
+      "question": "What are the mandatory elements of burglary under Section 459 of the California Penal Code?",
+      "category": "out_of_scope",
+      "sub_category": "california_burglary",
+      "difficulty": "easy",
+      "temporal_context": "not_applicable",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "out_of_scope_foreign_law",
+      "expected_evidence_type": "non_legal",
+      "expected_statutes": [],
+      "expected_sections": [],
+      "expected_answer_properties": [
+        "foreign jurisdiction outside Indian legal corpus",
+        "abstain or inform user"
+      ],
+      "gold_evidence_ids": [],
+      "risk_level": "low",
+      "source_origin": "negative_test_suite",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, foreign jurisdiction outside Indian legal corpus.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "UNSUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [],
+          "verified_section": null,
+          "verified_statute": null
+        },
+        {
+          "claim_text": "Under Indian law, abstain or inform user.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "UNSUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [],
+          "verified_section": null,
+          "verified_statute": null
+        }
+      ],
+      "generated_answer": "Regarding 'What are the mandatory elements of burglary under Section 459 of the California Penal Code?': Under Indian law, foreign jurisdiction outside Indian legal corpus. Under Indian law, abstain or inform user.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_OOS_0231",
+          "text": "Official Excerpt: Non-statutory passage. Provisions regarding foreign jurisdiction outside Indian legal corpus, abstain or inform user.",
+          "document_name": "None",
+          "section_number": ""
+        }
+      ],
+      "id": "P6_DEV_047",
+      "split": "dev"
+    },
+    {
+      "question": "What is the legal punishment for treason in the United Kingdom under the Treason Felony Act 1848?",
+      "category": "out_of_scope",
+      "sub_category": "uk_treason_felony",
+      "difficulty": "easy",
+      "temporal_context": "not_applicable",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "out_of_scope_foreign_law",
+      "expected_evidence_type": "non_legal",
+      "expected_statutes": [],
+      "expected_sections": [],
+      "expected_answer_properties": [
+        "UK statutory law is outside the Indian jurisprudence corpus"
+      ],
+      "gold_evidence_ids": [],
+      "risk_level": "low",
+      "source_origin": "negative_test_suite",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, UK statutory law is outside the Indian jurisprudence corpus.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "UNSUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [],
+          "verified_section": null,
+          "verified_statute": null
+        }
+      ],
+      "generated_answer": "Regarding 'What is the legal punishment for treason in the United Kingdom under the Treason Felony Act 1848?': Under Indian law, UK statutory law is outside the Indian jurisprudence corpus.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_OOS_0236",
+          "text": "Official Excerpt: Non-statutory passage. Provisions regarding UK statutory law is outside the Indian jurisprudence corpus.",
+          "document_name": "None",
+          "section_number": ""
+        }
+      ],
+      "id": "P6_DEV_048",
+      "split": "dev"
+    },
+    {
+      "question": "What are the rules governing inheritance of agricultural land under the Civil Code of Japan?",
+      "category": "out_of_scope",
+      "sub_category": "japanese_civil_code",
+      "difficulty": "easy",
+      "temporal_context": "not_applicable",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "out_of_scope_foreign_law",
+      "expected_evidence_type": "non_legal",
+      "expected_statutes": [],
+      "expected_sections": [],
+      "expected_answer_properties": [
+        "Japanese civil law outside Indian statutory corpus"
+      ],
+      "gold_evidence_ids": [],
+      "risk_level": "low",
+      "source_origin": "negative_test_suite",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, Japanese civil law outside Indian statutory corpus.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "UNSUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [],
+          "verified_section": null,
+          "verified_statute": null
+        }
+      ],
+      "generated_answer": "Regarding 'What are the rules governing inheritance of agricultural land under the Civil Code of Japan?': Under Indian law, Japanese civil law outside Indian statutory corpus.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_OOS_0241",
+          "text": "Official Excerpt: Non-statutory passage. Provisions regarding Japanese civil law outside Indian statutory corpus.",
+          "document_name": "None",
+          "section_number": ""
+        }
+      ],
+      "id": "P6_DEV_049",
+      "split": "dev"
+    },
+    {
+      "question": "What were the primary tactical military decisions during the Battle of Waterloo in 1815?",
+      "category": "out_of_scope",
+      "sub_category": "history_battle_waterloo",
+      "difficulty": "easy",
+      "temporal_context": "not_applicable",
+      "legal_regimes_expected": [
+        "GENERAL"
+      ],
+      "expected_issue_type": "out_of_scope_non_legal",
+      "expected_evidence_type": "non_legal",
+      "expected_statutes": [],
+      "expected_sections": [],
+      "expected_answer_properties": [
+        "non-legal European military history inquiry"
+      ],
+      "gold_evidence_ids": [],
+      "risk_level": "low",
+      "source_origin": "negative_test_suite",
+      "annotated_claims": [
+        {
+          "claim_text": "Under Indian law, non-legal European military history inquiry.",
+          "claim_type": "LEGAL_PRINCIPLE",
+          "ground_truth_status": "UNSUPPORTED",
+          "risk_level": "MEDIUM",
+          "attached_citations": [],
+          "verified_section": null,
+          "verified_statute": null
+        }
+      ],
+      "generated_answer": "Regarding 'What were the primary tactical military decisions during the Battle of Waterloo in 1815?': Under Indian law, non-legal European military history inquiry.",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "CHUNK_OOS_0246",
+          "text": "Official Excerpt: Non-statutory passage. Provisions regarding non-legal European military history inquiry.",
+          "document_name": "None",
+          "section_number": ""
+        }
+      ],
+      "id": "P6_DEV_050",
+      "split": "dev"
+    }
+  ]
+}
