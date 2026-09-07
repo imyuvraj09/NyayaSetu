@@ -1,0 +1,90 @@
+{
+  "benchmark": "evaluation/compatibility/compatibility_questions.json",
+  "total_queries": 30,
+  "configurations": [
+    {
+      "configuration": "Baseline C \u2014 Hybrid RAG (No Filtering)",
+      "compatibility_precision": 0.35,
+      "compatibility_recall": 0.65,
+      "incompatible_evidence_rejection_rate": 0.0,
+      "false_rejection_rate": 0.0,
+      "ranking_improvement_delta": 0.0,
+      "compatible_evidence_at_k": 0.7333,
+      "incompatible_evidence_at_k": 0.2667,
+      "regime_coherence": 0.4821,
+      "multi_statute_coverage": 0.0,
+      "temporal_compatibility_accuracy": 0.4,
+      "average_compatibility_latency_ms": 0.0
+    },
+    {
+      "configuration": "Phase 3 \u2014 Routing + Hybrid RAG (No Compat Filter)",
+      "compatibility_precision": 0.42,
+      "compatibility_recall": 0.68,
+      "incompatible_evidence_rejection_rate": 0.15,
+      "false_rejection_rate": 0.0,
+      "ranking_improvement_delta": 0.1111,
+      "compatible_evidence_at_k": 0.8667,
+      "incompatible_evidence_at_k": 0.1333,
+      "regime_coherence": 0.7812,
+      "multi_statute_coverage": 0.0,
+      "temporal_compatibility_accuracy": 0.5,
+      "average_compatibility_latency_ms": 0.0
+    },
+    {
+      "configuration": "Phase 4A \u2014 Regime Only",
+      "compatibility_precision": 0.4793,
+      "compatibility_recall": 0.7,
+      "incompatible_evidence_rejection_rate": 0.4667,
+      "false_rejection_rate": 0.0,
+      "ranking_improvement_delta": 0.2963,
+      "compatible_evidence_at_k": 1.0,
+      "incompatible_evidence_at_k": 0.0,
+      "regime_coherence": 1.0,
+      "multi_statute_coverage": 0.0,
+      "temporal_compatibility_accuracy": 1.0,
+      "average_compatibility_latency_ms": 5.9773
+    },
+    {
+      "configuration": "Phase 4B \u2014 Regime + Issue",
+      "compatibility_precision": 0.4793,
+      "compatibility_recall": 0.7167,
+      "incompatible_evidence_rejection_rate": 0.4667,
+      "false_rejection_rate": 0.0,
+      "ranking_improvement_delta": 0.6667,
+      "compatible_evidence_at_k": 1.0,
+      "incompatible_evidence_at_k": 0.0,
+      "regime_coherence": 1.0,
+      "multi_statute_coverage": 0.3333,
+      "temporal_compatibility_accuracy": 1.0,
+      "average_compatibility_latency_ms": 5.1024
+    },
+    {
+      "configuration": "Phase 4C \u2014 Regime + Issue + Role",
+      "compatibility_precision": 0.4793,
+      "compatibility_recall": 0.7,
+      "incompatible_evidence_rejection_rate": 0.4667,
+      "false_rejection_rate": 0.0,
+      "ranking_improvement_delta": 0.3704,
+      "compatible_evidence_at_k": 1.0,
+      "incompatible_evidence_at_k": 0.0,
+      "regime_coherence": 1.0,
+      "multi_statute_coverage": 0.0,
+      "temporal_compatibility_accuracy": 1.0,
+      "average_compatibility_latency_ms": 5.8299
+    },
+    {
+      "configuration": "Phase 4D \u2014 Full Compatibility",
+      "compatibility_precision": 0.4793,
+      "compatibility_recall": 0.7,
+      "incompatible_evidence_rejection_rate": 0.4667,
+      "false_rejection_rate": 0.0,
+      "ranking_improvement_delta": 0.3333,
+      "compatible_evidence_at_k": 1.0,
+      "incompatible_evidence_at_k": 0.0,
+      "regime_coherence": 0.5927,
+      "multi_statute_coverage": 0.0,
+      "temporal_compatibility_accuracy": 1.0,
+      "average_compatibility_latency_ms": 24.4187
+    }
+  ]
+}

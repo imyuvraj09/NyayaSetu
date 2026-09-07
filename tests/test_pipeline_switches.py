@@ -84,6 +84,7 @@ class TestPipelineSwitches(unittest.TestCase):
         response = self.pipeline.query("What is theft under BNS?")
         self.assertEqual(response.status, "success")
         self.assertNotIn("fact_first_routing", response.retrieval_metadata)
+        self.assertNotIn("evidence_compatibility", response.retrieval_metadata)
 
     def test_use_fact_routing_true_attaches_metadata(self):
         """Verify use_fact_routing=True executes router and attaches metadata."""
@@ -98,6 +99,26 @@ class TestPipelineSwitches(unittest.TestCase):
         self.assertIn("routing_mode", r_meta)
         self.assertIn("confidence", r_meta)
 
+    def test_default_use_evidence_compatibility_is_false(self):
+        """Verify default call has use_evidence_compatibility=False and does not attach evidence_compatibility."""
+        response = self.pipeline.query("What is the penalty for cheating?")
+        self.assertEqual(response.status, "success")
+        self.assertNotIn("evidence_compatibility", response.retrieval_metadata)
+
+    def test_use_evidence_compatibility_true_attaches_metadata(self):
+        """Verify use_evidence_compatibility=True executes compatibility engine and attaches metadata."""
+        response = self.pipeline.query(
+            "What is theft under Section 303 of BNS?",
+            use_evidence_compatibility=True,
+        )
+        self.assertEqual(response.status, "success")
+        self.assertIn("evidence_compatibility", response.retrieval_metadata)
+        c_meta = response.retrieval_metadata["evidence_compatibility"]
+        self.assertIn("compatible_count", c_meta)
+        self.assertIn("decisions", c_meta)
+        self.assertIn("regime_coherence_score", c_meta)
+
 
 if __name__ == "__main__":
     unittest.main()
+

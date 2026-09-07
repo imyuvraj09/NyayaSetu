@@ -1,0 +1,48 @@
+# NyayaSetu Phase 4: Evidence Compatibility Filtering Configuration
+# Evaluates multi-dimensional doctrinal and evidentiary compatibility between user queries and retrieved legal texts.
+
+# General Switch for Strict Hard Exclusion (Default must be False to prevent catastrophic document loss)
+allow_hard_exclusion: false
+
+# Dimensional Scoring Weights (Must sum to 1.0)
+scoring:
+  weights:
+    regime: 0.25          # Alignment with routed legal regime(s)
+    issue: 0.25           # Alignment with identified legal issue vs superficial topical similarity
+    legal_role: 0.20      # Substantive vs procedural vs evidentiary role appropriateness
+    temporal: 0.15        # Temporal validity, effective dates, repeal status, Article 20(1)
+    special_general: 0.10 # Lex specialis preference for specialized statutes
+    relationship: 0.05    # Synergistic co-occurrence of complementary provisions
+
+  thresholds:
+    compatible: 0.80             # Normalized score >= 0.80 -> COMPATIBLE
+    partially_compatible: 0.55   # Normalized score >= 0.55 -> PARTIALLY_COMPATIBLE
+    hard_exclusion: 0.25         # Hard exclusion threshold (only active if allow_hard_exclusion is true)
+
+  soft_ranking:
+    min_multiplier: 0.35         # Minimum soft multiplier applied to incompatible evidence
+    max_multiplier: 1.20         # Maximum soft multiplier applied to highly compatible evidence
+
+# Dimension-Specific Parameters
+regime_checker:
+  competing_regime_penalty: 0.50
+  related_regime_weight: 0.85
+
+issue_checker:
+  topical_distractor_penalty: 0.45
+
+legal_role_checker:
+  role_mismatch_penalty: 0.35
+
+temporal_checker:
+  superseded_statute_penalty: 0.60
+  ex_post_facto_penalty: 0.70
+  missing_date_behavior: "NEUTRAL_UNKNOWN" # Zero hallucination: do not invent dates
+
+special_general_checker:
+  general_law_discount_when_special_applies: 0.25
+
+relationship_analyzer:
+  synergy_boost: 0.02
+  temporal_conflict_penalty: 0.15
+  duplicate_penalty: 0.10

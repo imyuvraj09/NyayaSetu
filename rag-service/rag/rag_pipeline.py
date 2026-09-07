@@ -186,6 +186,7 @@ class LegalRAGPipeline:
         max_per_document: Optional[int] = None,
         request_id: Optional[str] = None,
         use_fact_routing: bool = False,
+        use_evidence_compatibility: bool = False,
     ) -> RAGResponse:
         """Process a legal inquiry and return a grounded, cited response.
 
@@ -196,6 +197,7 @@ class LegalRAGPipeline:
             max_per_document: Document diversity limit override.
             request_id: Unique correlation ID for request tracing.
             use_fact_routing: Optional research switch for Fact-First Legal Issue Routing.
+            use_evidence_compatibility: Optional research switch for Phase 4 Evidence Compatibility Filtering.
 
         Returns:
             RAGResponse object with synthesized answer, citations, and provenance.
@@ -208,12 +210,14 @@ class LegalRAGPipeline:
 
         # Optional Fact-First Legal Issue Routing
         routing_info = None
-        if use_fact_routing:
+        r_decision = None
+        if use_fact_routing or use_evidence_compatibility:
             try:
                 from research.issue_router import get_fact_first_router
                 router = get_fact_first_router()
                 r_decision = router.route_query(query_text)
-                routing_info = r_decision.to_dict()
+                if use_fact_routing:
+                    routing_info = r_decision.to_dict()
                 logger.info(
                     "[LegalRAGPipeline] Fact-First Routing: mode=%s, regimes=%s, fallback=%s",
                     r_decision.routing_mode.value,
@@ -234,6 +238,31 @@ class LegalRAGPipeline:
         )
 
         statutory_chunks = list(retrieval_result.results)
+
+        # Optional Evidence Compatibility Filtering (Phase 4)
+        compatibility_info = None
+        if use_evidence_compatibility:
+            try:
+                from research.evidence_compatibility.engine import get_evidence_compatibility_engine
+                compat_engine = get_evidence_compatibility_engine()
+                facts = r_decision.normalized_facts.raw_facts if r_decision and r_decision.normalized_facts else None
+                statutory_chunks, comp_res = compat_engine.filter_and_rank_candidates(
+                    query=query_text,
+                    candidates=statutory_chunks,
+                    routing_decision=r_decision,
+                    facts=facts,
+                    top_k=len(statutory_chunks),
+                )
+                compatibility_info = comp_res.to_dict()
+                logger.info(
+                    "[LegalRAGPipeline] Evidence Compatibility Filtering applied: %d compatible, %d partially, %d incompatible",
+                    comp_res.compatible_count,
+                    comp_res.partially_compatible_count,
+                    comp_res.incompatible_count,
+                )
+            except Exception as c_err:
+                logger.warning("[LegalRAGPipeline] Evidence Compatibility Filtering failed gracefully: %s", c_err)
+
         q_analysis = retrieval_result.query_analysis or {}
         raw_auth_req = q_analysis.get("authority_requirement", "STATUTE") if isinstance(q_analysis, dict) else getattr(q_analysis, "authority_requirement", "STATUTE")
         auth_req_val = raw_auth_req.value if hasattr(raw_auth_req, "value") else str(raw_auth_req)
@@ -326,6 +355,8 @@ class LegalRAGPipeline:
         }
         if routing_info is not None:
             retrieval_meta["fact_first_routing"] = routing_info
+        if compatibility_info is not None:
+            retrieval_meta["evidence_compatibility"] = compatibility_info
 
         # Step 2: Check for empty retrieval results
         if not ranked_chunks:

@@ -18,7 +18,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 
 class FailureCategory(str, Enum):
-    """Failure categories for legal retrieval diagnosis."""
+    """Failure categories for legal retrieval and compatibility diagnosis."""
 
     LEXICAL_MISMATCH = "LEXICAL_MISMATCH"
     SEMANTIC_MISMATCH = "SEMANTIC_MISMATCH"
@@ -33,6 +33,17 @@ class FailureCategory(str, Enum):
     MULTI_REGIME_MISROUTING = "MULTI_REGIME_MISROUTING"
     FALLBACK_REQUIRED = "FALLBACK_REQUIRED"
     CROSS_STATUTE_CONFUSION_REDUCED = "CROSS_STATUTE_CONFUSION_REDUCED"
+    # Phase 4 Evidence Compatibility Categories
+    COMPATIBILITY_FALSE_POSITIVE = "COMPATIBILITY_FALSE_POSITIVE"
+    COMPATIBILITY_FALSE_NEGATIVE = "COMPATIBILITY_FALSE_NEGATIVE"
+    TEMPORAL_MISCLASSIFICATION = "TEMPORAL_MISCLASSIFICATION"
+    LEGAL_ROLE_MISCLASSIFICATION = "LEGAL_ROLE_MISCLASSIFICATION"
+    REGIME_COMPATIBILITY_ERROR = "REGIME_COMPATIBILITY_ERROR"
+    ISSUE_COMPATIBILITY_ERROR = "ISSUE_COMPATIBILITY_ERROR"
+    MULTI_STATUTE_RELATIONSHIP_ERROR = "MULTI_STATUTE_RELATIONSHIP_ERROR"
+    OVER_FILTERING = "OVER_FILTERING"
+    UNDER_FILTERING = "UNDER_FILTERING"
+    UNKNOWN_TEMPORAL_CONTEXT = "UNKNOWN_TEMPORAL_CONTEXT"
     UNKNOWN = "UNKNOWN"
 
 
@@ -52,6 +63,13 @@ class QueryErrorRecord:
     routing_mode: Optional[str] = None
     routing_selected_regimes: Optional[List[str]] = None
     routing_fallback_used: Optional[bool] = None
+    # Compatibility audit fields
+    baseline_rank: Optional[int] = None
+    phase4_rank: Optional[int] = None
+    compatibility_decision: Optional[str] = None
+    detected_violation: Optional[str] = None
+    reason: Optional[str] = None
+    filter_impact: Optional[str] = None  # "improved", "harmed", "neutral"
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -259,7 +277,102 @@ def analyze_experiment_errors(
 
     return error_records
 
-    return error_records
+
+def analyze_compatibility_errors(
+    baseline_predictions: List[Dict[str, Any]],
+    phase4_predictions: List[Dict[str, Any]],
+    baseline_name: str = "baseline_hybrid_rag",
+    phase4_name: str = "phase4d_full_compatibility",
+) -> List[QueryErrorRecord]:
+    """Compare baseline vs Phase 4 predictions and classify compatibility-specific error dynamics."""
+    base_map = {p.get("query_id"): p for p in baseline_predictions}
+    p4_map = {p.get("query_id"): p for p in phase4_predictions}
+
+    records: List[QueryErrorRecord] = []
+
+    for qid, p4 in p4_map.items():
+        base = base_map.get(qid, {})
+        qtext = p4.get("query") or base.get("query", "")
+        exp_doc = p4.get("expected_document") or base.get("expected_document", "")
+        is_neg = p4.get("is_negative_or_out_of_scope", False)
+
+        if is_neg:
+            continue
+
+        b_docs = base.get("retrieved_documents", [])
+        p4_docs = p4.get("retrieved_documents", [])
+
+        # Ranks of first relevant
+        b_rank = next((i + 1 for i, d in enumerate(b_docs) if is_statute_match(d, exp_doc)), None)
+        p4_rank = next((i + 1 for i, d in enumerate(p4_docs) if is_statute_match(d, exp_doc)), None)
+
+        compat_meta = p4.get("evidence_compatibility") or {}
+        decisions = compat_meta.get("decisions", [])
+        top_decision = decisions[0] if decisions else {}
+
+        # Determine filter impact
+        if b_rank is None and p4_rank is not None:
+            impact = "improved"
+        elif b_rank is not None and p4_rank is None:
+            impact = "harmed"
+        elif b_rank is not None and p4_rank is not None:
+            if p4_rank < b_rank:
+                impact = "improved"
+            elif p4_rank > b_rank:
+                impact = "harmed"
+            else:
+                impact = "neutral"
+        else:
+            impact = "neutral"
+
+        # Check if query was degraded or has compatibility failure
+        if impact == "harmed" or (p4_rank and p4_rank > 1) or p4_rank is None:
+            viols = top_decision.get("violations", [])
+            v_desc = "; ".join(v.get("message", "") for v in viols) if viols else "No violations flagged"
+            dec_status = top_decision.get("compatibility_status", "UNKNOWN")
+
+            # Determine compatibility failure category
+            if viols and any(v.get("dimension") == "temporal" for v in viols):
+                cat = FailureCategory.TEMPORAL_MISCLASSIFICATION
+            elif viols and any(v.get("dimension") == "legal_role" for v in viols):
+                cat = FailureCategory.LEGAL_ROLE_MISCLASSIFICATION
+            elif viols and any(v.get("dimension") == "regime" for v in viols):
+                cat = FailureCategory.REGIME_COMPATIBILITY_ERROR
+            elif viols and any(v.get("dimension") == "issue" for v in viols):
+                cat = FailureCategory.ISSUE_COMPATIBILITY_ERROR
+            elif impact == "harmed":
+                cat = FailureCategory.OVER_FILTERING
+            elif p4_rank and p4_rank > 1:
+                cat = FailureCategory.UNDER_FILTERING
+            else:
+                cat = FailureCategory.SEMANTIC_MISMATCH
+
+            reason_text = (
+                f"Baseline rank: {b_rank}, Phase 4 rank: {p4_rank}. Filter impact: {impact}. "
+                f"Compatibility decision: {dec_status}. Violations: {v_desc}."
+            )
+
+            records.append(
+                QueryErrorRecord(
+                    query_id=qid,
+                    question=qtext,
+                    expected_target=exp_doc,
+                    retrieved_top_5=p4_docs[:5],
+                    rank_of_first_relevant_result=p4_rank,
+                    baseline_configuration=phase4_name,
+                    failure_category=cat.value,
+                    notes=reason_text,
+                    analysis_type="COMPATIBILITY_ERROR_ANALYSIS",
+                    baseline_rank=b_rank,
+                    phase4_rank=p4_rank,
+                    compatibility_decision=dec_status,
+                    detected_violation=v_desc,
+                    reason=reason_text,
+                    filter_impact=impact,
+                )
+            )
+
+    return records
 
 
 def summarize_failure_categories(records: List[QueryErrorRecord]) -> Dict[str, int]:

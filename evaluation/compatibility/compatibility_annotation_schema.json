@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EvidenceCompatibilityBenchmarkSchema",
+  "description": "Validation schema for NyayaSetu Phase 4 Evidence Compatibility Benchmark Questions.",
+  "type": "object",
+  "required": [
+    "metadata",
+    "queries"
+  ],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": [
+        "benchmark_name",
+        "version",
+        "total_queries",
+        "classification"
+      ],
+      "properties": {
+        "benchmark_name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "total_queries": {
+          "type": "integer"
+        },
+        "classification": {
+          "type": "string"
+        },
+        "review_status": {
+          "type": "string"
+        }
+      }
+    },
+    "queries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "query_id",
+          "query",
+          "failure_mode_category",
+          "extracted_issues",
+          "expected_compatible_statutes",
+          "compatible_legal_roles",
+          "incompatible_evidence",
+          "temporal_context",
+          "compatibility_notes",
+          "review_status"
+        ],
+        "properties": {
+          "query_id": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "failure_mode_category": {
+            "type": "string",
+            "enum": [
+              "bns_vs_bnss_confusion",
+              "it_act_vs_general_criminal_law",
+              "substantive_vs_procedural",
+              "evidence_law_vs_substantive_offense",
+              "pre_2024_vs_post_2024_applicability",
+              "special_law_vs_general_law_overlap",
+              "legitimate_multi_statute_question",
+              "ambiguous_temporal_information",
+              "out_of_scope_question",
+              "topical_similarity_unrelated_evidence"
+            ]
+          },
+          "extracted_issues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_compatible_statutes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "compatible_legal_roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "incompatible_evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "statute": {
+                  "type": "string"
+                },
+                "section": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "incompatibility_dimension": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "temporal_context": {
+            "type": ["string", "null"]
+          },
+          "compatibility_notes": {
+            "type": "string"
+          },
+          "review_status": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

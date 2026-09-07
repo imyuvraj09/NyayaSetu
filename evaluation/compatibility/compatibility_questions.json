@@ -1,0 +1,582 @@
+{
+  "metadata": {
+    "benchmark_name": "NyayaSetu Phase 4 Evidence Compatibility Benchmark",
+    "version": "1.0.0-research",
+    "total_queries": 30,
+    "classification": "RESEARCH BENCHMARK — EVIDENCE COMPATIBILITY",
+    "review_status": "provisional_research",
+    "description": "Evaluation benchmark targeting the 10 core doctrinal and evidentiary failure modes in multi-statute Indian legal retrieval."
+  },
+  "queries": [
+    {
+      "query_id": "COMPAT_001",
+      "query": "What punishment is prescribed for theft under the Bharatiya Nyaya Sanhita?",
+      "failure_mode_category": "bns_vs_bnss_confusion",
+      "extracted_issues": ["substantive_theft_offence"],
+      "expected_compatible_statutes": ["Bharatiya Nyaya Sanhita, 2023"],
+      "compatible_legal_roles": ["SUBSTANTIVE"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 35",
+          "reason": "Procedural arrest provision retrieved instead of substantive punishment section",
+          "incompatibility_dimension": "legal_role"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Procedural arrest powers must not displace substantive Section 303 penal provision.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_002",
+      "query": "Under what circumstances can police arrest an accused for theft without a warrant?",
+      "failure_mode_category": "bns_vs_bnss_confusion",
+      "extracted_issues": ["procedural_police_arrest_powers"],
+      "expected_compatible_statutes": ["Bharatiya Nagarik Suraksha Sanhita, 2023"],
+      "compatible_legal_roles": ["PROCEDURAL"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "reason": "Substantive punishment section does not govern warrantless police arrest procedure",
+          "incompatibility_dimension": "legal_role"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Inquiry seeks procedural arrest rules under BNSS Section 35, not penal definitions.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_003",
+      "query": "What is the procedure for registering an FIR for cognizable theft?",
+      "failure_mode_category": "bns_vs_bnss_confusion",
+      "extracted_issues": ["procedural_bail_investigation"],
+      "expected_compatible_statutes": ["Bharatiya Nagarik Suraksha Sanhita, 2023"],
+      "compatible_legal_roles": ["PROCEDURAL"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "reason": "Defines substantive theft but contains zero FIR registration mechanisms",
+          "incompatibility_dimension": "legal_role"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "FIR registration is governed by Section 173 BNSS.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_004",
+      "query": "What is the legal penalty for cyber identity theft using a computer password?",
+      "failure_mode_category": "it_act_vs_general_criminal_law",
+      "extracted_issues": ["cyber_identity_theft_personation"],
+      "expected_compatible_statutes": ["Information Technology Act, 2000"],
+      "compatible_legal_roles": ["SPECIAL_LAW"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "reason": "General physical theft does not cover electronic password/identity theft under computer resources",
+          "incompatibility_dimension": "issue"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Section 66C/66D IT Act must take priority over generic movable property theft.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_005",
+      "query": "What are the legal consequences for unauthorized access and hacking into a computer system?",
+      "failure_mode_category": "it_act_vs_general_criminal_law",
+      "extracted_issues": ["cyber_unauthorized_access"],
+      "expected_compatible_statutes": ["Information Technology Act, 2000"],
+      "compatible_legal_roles": ["SPECIAL_LAW"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 329",
+          "reason": "Criminal trespass to land/building is incompatible with virtual computer intrusion",
+          "incompatibility_dimension": "issue"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Section 43 and Section 66 IT Act are the primary governing provisions.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_006",
+      "query": "Can someone be prosecuted under IT Act for cheating by personation using digital devices?",
+      "failure_mode_category": "it_act_vs_general_criminal_law",
+      "extracted_issues": ["cyber_identity_theft_personation"],
+      "expected_compatible_statutes": ["Information Technology Act, 2000"],
+      "compatible_legal_roles": ["SPECIAL_LAW", "SUBSTANTIVE"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section": "Section 1",
+          "reason": "Short title commencement excerpt retrieved due to keyword overlap on personation",
+          "incompatibility_dimension": "issue"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Governed by Section 66D of the IT Act.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_007",
+      "query": "What is the statutory sentence of imprisonment for murder under BNS?",
+      "failure_mode_category": "substantive_vs_procedural",
+      "extracted_issues": ["substantive_homicide_murder"],
+      "expected_compatible_statutes": ["Bharatiya Nyaya Sanhita, 2023"],
+      "compatible_legal_roles": ["SUBSTANTIVE"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 482",
+          "reason": "High Court inherent procedural powers retrieved instead of murder sentencing",
+          "incompatibility_dimension": "legal_role"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Query asks for substantive sentence (Section 103 BNS), not procedural inherent powers.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_008",
+      "query": "What are the legal conditions for granting anticipatory bail during an investigation?",
+      "failure_mode_category": "substantive_vs_procedural",
+      "extracted_issues": ["procedural_bail_investigation"],
+      "expected_compatible_statutes": ["Bharatiya Nagarik Suraksha Sanhita, 2023"],
+      "compatible_legal_roles": ["PROCEDURAL"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 61",
+          "reason": "Criminal conspiracy definition retrieved because bail petition argued lack of conspiracy",
+          "incompatibility_dimension": "legal_role"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Governed by procedural bail sections under BNSS Section 482/484.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_009",
+      "query": "What is the legal definition and punishment for organized crime syndicates?",
+      "failure_mode_category": "substantive_vs_procedural",
+      "extracted_issues": ["substantive_organized_crime"],
+      "expected_compatible_statutes": ["Bharatiya Nyaya Sanhita, 2023"],
+      "compatible_legal_roles": ["SUBSTANTIVE"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 107",
+          "reason": "Security for keeping peace procedural bond retrieved instead of substantive definition",
+          "incompatibility_dimension": "legal_role"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Governed by Section 111 of BNS 2023.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_010",
+      "query": "How is an electronic record admitted into evidence under Bharatiya Sakshya Adhiniyam?",
+      "failure_mode_category": "evidence_law_vs_substantive_offense",
+      "extracted_issues": ["evidentiary_electronic_records_admissibility"],
+      "expected_compatible_statutes": ["Bharatiya Sakshya Adhiniyam, 2023"],
+      "compatible_legal_roles": ["EVIDENTIARY"],
+      "incompatible_evidence": [
+        {
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 66",
+          "reason": "Substantive hacking offense retrieved instead of evidentiary certificate requirements",
+          "incompatibility_dimension": "issue"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Governed by Section 62 and 63 of Bharatiya Sakshya Adhiniyam.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_011",
+      "query": "What are the legal rules governing dying declarations in court proceedings?",
+      "failure_mode_category": "evidence_law_vs_substantive_offense",
+      "extracted_issues": ["evidentiary_dying_declaration"],
+      "expected_compatible_statutes": ["Bharatiya Sakshya Adhiniyam, 2023"],
+      "compatible_legal_roles": ["EVIDENTIARY"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 101",
+          "reason": "Substantive culpable homicide offense retrieved instead of evidentiary admissibility rule",
+          "incompatibility_dimension": "legal_role"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Section 26 of Bharatiya Sakshya Adhiniyam governs dying declarations.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_012",
+      "query": "Who bears the burden of proof in a criminal trial under Bharatiya Sakshya Adhiniyam?",
+      "failure_mode_category": "evidence_law_vs_substantive_offense",
+      "extracted_issues": ["evidentiary_electronic_records_admissibility"],
+      "expected_compatible_statutes": ["Bharatiya Sakshya Adhiniyam, 2023"],
+      "compatible_legal_roles": ["EVIDENTIARY"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 35",
+          "reason": "Police arrest powers retrieved instead of statutory burden of proof",
+          "incompatibility_dimension": "legal_role"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Governed by Chapter on Burden of Proof in BSA.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_013",
+      "query": "For a theft committed in August 2025, what statutory law governs the offense and punishment?",
+      "failure_mode_category": "pre_2024_vs_post_2024_applicability",
+      "extracted_issues": ["substantive_theft_offence"],
+      "expected_compatible_statutes": ["Bharatiya Nyaya Sanhita, 2023"],
+      "compatible_legal_roles": ["SUBSTANTIVE"],
+      "incompatible_evidence": [
+        {
+          "statute": "Indian Penal Code, 1860",
+          "section": "Section 379",
+          "reason": "Repealed Indian Penal Code is inapplicable to offenses committed post 1 July 2024",
+          "incompatibility_dimension": "temporal"
+        }
+      ],
+      "temporal_context": "post-2024",
+      "compatibility_notes": "Incident date (August 2025) is strictly post-2024; IPC 1860 is superseded by BNS 2023.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_014",
+      "query": "An offense of cheating occurred in January 2022. Which substantive penal statute applies?",
+      "failure_mode_category": "pre_2024_vs_post_2024_applicability",
+      "extracted_issues": ["substantive_theft_offence"],
+      "expected_compatible_statutes": ["Indian Penal Code, 1860"],
+      "compatible_legal_roles": ["SUBSTANTIVE"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 318",
+          "reason": "Article 20(1) bars retrospective ex-post facto application of BNS 2023 to a 2022 incident",
+          "incompatibility_dimension": "temporal"
+        }
+      ],
+      "temporal_context": "pre-2024",
+      "compatibility_notes": "Offense in 2022 precedes BNS enactment; governed by IPC 1860 Section 420.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_015",
+      "query": "In post-2024 criminal proceedings, what enactment governs police investigation procedure?",
+      "failure_mode_category": "pre_2024_vs_post_2024_applicability",
+      "extracted_issues": ["procedural_police_arrest_powers"],
+      "expected_compatible_statutes": ["Bharatiya Nagarik Suraksha Sanhita, 2023"],
+      "compatible_legal_roles": ["PROCEDURAL"],
+      "incompatible_evidence": [
+        {
+          "statute": "Code of Criminal Procedure, 1973",
+          "section": "Section 41",
+          "reason": "CrPC 1973 is repealed and replaced by BNSS 2023 for new investigations",
+          "incompatibility_dimension": "temporal"
+        }
+      ],
+      "temporal_context": "post-2024",
+      "compatibility_notes": "Investigation in post-2024 timeline must reference BNSS 2023.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_016",
+      "query": "A woman faces sexual harassment at her office by a manager. What internal redressal applies?",
+      "failure_mode_category": "special_law_vs_general_law_overlap",
+      "extracted_issues": ["workplace_sexual_harassment_protection"],
+      "expected_compatible_statutes": ["Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013"],
+      "compatible_legal_roles": ["SPECIAL_LAW"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 75",
+          "reason": "Generic penal provision lacks Internal Complaints Committee inquiry mechanisms",
+          "incompatibility_dimension": "special_general"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "POSH Act 2013 provides the dedicated workplace inquiry framework.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_017",
+      "query": "What special court protections apply to child victims of sexual abuse under Indian law?",
+      "failure_mode_category": "special_law_vs_general_law_overlap",
+      "extracted_issues": ["child_sexual_abuse_protection"],
+      "expected_compatible_statutes": ["Protection of Children from Sexual Offences Act, 2012"],
+      "compatible_legal_roles": ["SPECIAL_LAW"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 64",
+          "reason": "General penal rape provisions lack mandatory POCSO in-camera child trial protections",
+          "incompatibility_dimension": "special_general"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "POCSO Act 2012 constitutes the specialized governing statute.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_018",
+      "query": "A consumer buys a defective electronic gadget with refused refund. Where to file complaint?",
+      "failure_mode_category": "special_law_vs_general_law_overlap",
+      "extracted_issues": ["consumer_dispute_deficiency"],
+      "expected_compatible_statutes": ["Consumer Protection Act, 2019"],
+      "compatible_legal_roles": ["SPECIAL_LAW"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 318",
+          "reason": "Criminal cheating under BNS does not provide statutory consumer forum redressal",
+          "incompatibility_dimension": "special_general"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "CPA 2019 establishes District Consumer Commission remedies.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_019",
+      "query": "If an accused is charged with theft, what substantive offense and arrest rules apply?",
+      "failure_mode_category": "legitimate_multi_statute_question",
+      "extracted_issues": ["substantive_theft_offence", "procedural_police_arrest_powers"],
+      "expected_compatible_statutes": ["Bharatiya Nyaya Sanhita, 2023", "Bharatiya Nagarik Suraksha Sanhita, 2023"],
+      "compatible_legal_roles": ["SUBSTANTIVE", "PROCEDURAL"],
+      "incompatible_evidence": [
+        {
+          "statute": "Consumer Protection Act, 2019",
+          "section": "Section 35",
+          "reason": "Consumer complaint procedure is completely unrelated to criminal theft and arrest",
+          "incompatibility_dimension": "regime"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Legitimate multi-statute inquiry: BNS Section 303 (substantive) + BNSS Section 35 (procedural).",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_020",
+      "query": "To prosecute an online cheating case, what substantive offense and electronic proof rules apply?",
+      "failure_mode_category": "legitimate_multi_statute_question",
+      "extracted_issues": ["cyber_identity_theft_personation", "evidentiary_electronic_records_admissibility"],
+      "expected_compatible_statutes": ["Information Technology Act, 2000", "Bharatiya Sakshya Adhiniyam, 2023"],
+      "compatible_legal_roles": ["SPECIAL_LAW", "EVIDENTIARY"],
+      "incompatible_evidence": [
+        {
+          "statute": "Motor Vehicles Act, 1988",
+          "section": "Section 185",
+          "reason": "Drunk driving transport offense is completely unrelated to cyber cheating and electronic proof",
+          "incompatibility_dimension": "regime"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Legitimate multi-statute bridge: IT Act Section 66D + BSA Section 63 certificate.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_021",
+      "query": "Can police unlawfully detain a citizen without magistrate remand, violating Article 21?",
+      "failure_mode_category": "legitimate_multi_statute_question",
+      "extracted_issues": ["procedural_police_arrest_powers", "constitutional_fundamental_rights"],
+      "expected_compatible_statutes": ["Bharatiya Nagarik Suraksha Sanhita, 2023", "Constitution of India"],
+      "compatible_legal_roles": ["PROCEDURAL", "CONSTITUTIONAL"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section": "Section 1",
+          "reason": "Short title commencement does not address illegal detention or constitutional rights",
+          "incompatibility_dimension": "issue"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Multi-statute coherence: BNSS remand rules paired with Article 21 / 22 constitutional guarantees.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_022",
+      "query": "What is the legal punishment for committing theft in a house?",
+      "failure_mode_category": "ambiguous_temporal_information",
+      "extracted_issues": ["substantive_theft_offence"],
+      "expected_compatible_statutes": ["Bharatiya Nyaya Sanhita, 2023"],
+      "compatible_legal_roles": ["SUBSTANTIVE"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 35",
+          "reason": "Arrest procedural rule retrieved instead of house theft punishment",
+          "incompatibility_dimension": "legal_role"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Temporal context is missing; system must NOT hallucinate date and must assume active BNS 2023.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_023",
+      "query": "Can a confession made to a police officer be used against the accused in court?",
+      "failure_mode_category": "ambiguous_temporal_information",
+      "extracted_issues": ["evidentiary_electronic_records_admissibility"],
+      "expected_compatible_statutes": ["Bharatiya Sakshya Adhiniyam, 2023"],
+      "compatible_legal_roles": ["EVIDENTIARY"],
+      "incompatible_evidence": [
+        {
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 43",
+          "reason": "Civil compensation for computer damage retrieved instead of confession admissibility",
+          "incompatibility_dimension": "regime"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Temporal context absent; BSA Section 23/24 governs confession to police.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_024",
+      "query": "What constitutes the offense of criminal conspiracy?",
+      "failure_mode_category": "ambiguous_temporal_information",
+      "extracted_issues": ["substantive_criminal_conspiracy"],
+      "expected_compatible_statutes": ["Bharatiya Nyaya Sanhita, 2023"],
+      "compatible_legal_roles": ["SUBSTANTIVE"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 43",
+          "reason": "Arrest by private person procedure retrieved instead of substantive conspiracy elements",
+          "incompatibility_dimension": "legal_role"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Temporal context absent; current law BNS Section 61 governs criminal conspiracy.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_025",
+      "query": "How do I calculate federal income tax under the United States Internal Revenue Code?",
+      "failure_mode_category": "out_of_scope_question",
+      "extracted_issues": ["general_legal_inquiry"],
+      "expected_compatible_statutes": [],
+      "compatible_legal_roles": [],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "reason": "Indian penal theft section retrieved for foreign US tax inquiry",
+          "incompatibility_dimension": "regime"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Out of scope non-Indian statutory inquiry.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_026",
+      "query": "What is the best recipe for baking chocolate cake at home?",
+      "failure_mode_category": "out_of_scope_question",
+      "extracted_issues": ["general_legal_inquiry"],
+      "expected_compatible_statutes": [],
+      "compatible_legal_roles": [],
+      "incompatible_evidence": [
+        {
+          "statute": "Constitution of India",
+          "section": "Article 21",
+          "reason": "Constitutional life and liberty excerpt retrieved for culinary inquiry",
+          "incompatibility_dimension": "regime"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Completely non-legal inquiry.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_027",
+      "query": "How to register a trademark under United Kingdom intellectual property regulations?",
+      "failure_mode_category": "out_of_scope_question",
+      "extracted_issues": ["general_legal_inquiry"],
+      "expected_compatible_statutes": [],
+      "compatible_legal_roles": [],
+      "incompatible_evidence": [
+        {
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 66",
+          "reason": "Indian cyber offense provision retrieved for UK trademark registration",
+          "incompatibility_dimension": "regime"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Foreign jurisdiction inquiry outside Indian statutory corpus.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_028",
+      "query": "Someone hacked into my email and stole my digital identity. What punishment applies?",
+      "failure_mode_category": "topical_similarity_unrelated_evidence",
+      "extracted_issues": ["cyber_identity_theft_personation"],
+      "expected_compatible_statutes": ["Information Technology Act, 2000"],
+      "compatible_legal_roles": ["SPECIAL_LAW"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "reason": "Movable property theft has superficial lexical overlap on 'stole' but is doctrinally incompatible with cyber identity hacking",
+          "incompatibility_dimension": "issue"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Superficial lexical trigger on 'stole' must not prioritize physical theft over IT Act Section 66C.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_029",
+      "query": "A person pretended to be another citizen online to deceive victims. What penal section applies?",
+      "failure_mode_category": "topical_similarity_unrelated_evidence",
+      "extracted_issues": ["cyber_identity_theft_personation"],
+      "expected_compatible_statutes": ["Information Technology Act, 2000"],
+      "compatible_legal_roles": ["SPECIAL_LAW"],
+      "incompatible_evidence": [
+        {
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 1",
+          "reason": "Preliminary commencement excerpt mentioning definitions retrieved due to word overlap",
+          "incompatibility_dimension": "issue"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Section 66D IT Act governs cheating by personation using computer resource.",
+      "review_status": "provisional_research"
+    },
+    {
+      "query_id": "COMPAT_030",
+      "query": "What are the rules regarding the admissibility of WhatsApp chat records in a criminal court?",
+      "failure_mode_category": "topical_similarity_unrelated_evidence",
+      "extracted_issues": ["evidentiary_electronic_records_admissibility"],
+      "expected_compatible_statutes": ["Bharatiya Sakshya Adhiniyam, 2023"],
+      "compatible_legal_roles": ["EVIDENTIARY"],
+      "incompatible_evidence": [
+        {
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 43",
+          "reason": "Civil compensation for unauthorized computer damage retrieved instead of statutory evidentiary certification",
+          "incompatibility_dimension": "legal_role"
+        }
+      ],
+      "temporal_context": null,
+      "compatibility_notes": "Admissibility requires Section 63 certificate under Bharatiya Sakshya Adhiniyam.",
+      "review_status": "provisional_research"
+    }
+  ]
+}
