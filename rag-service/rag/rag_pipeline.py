@@ -187,6 +187,7 @@ class LegalRAGPipeline:
         request_id: Optional[str] = None,
         use_fact_routing: bool = False,
         use_evidence_compatibility: bool = False,
+        use_claim_grounding: bool = False,
     ) -> RAGResponse:
         """Process a legal inquiry and return a grounded, cited response.
 
@@ -198,6 +199,7 @@ class LegalRAGPipeline:
             request_id: Unique correlation ID for request tracing.
             use_fact_routing: Optional research switch for Fact-First Legal Issue Routing.
             use_evidence_compatibility: Optional research switch for Phase 4 Evidence Compatibility Filtering.
+            use_claim_grounding: Optional research switch for Phase 5 Answer Claim Grounding & Citation Verification.
 
         Returns:
             RAGResponse object with synthesized answer, citations, and provenance.
@@ -651,6 +653,41 @@ class LegalRAGPipeline:
         raw_answer = self._sanitize_meta_chat_and_formatting(raw_answer)
 
         warnings_combined = list(val_result.warnings) + case_warnings
+
+        # Step 8f: Optional Phase 5 Answer Claim Grounding & Citation Verification
+        claim_grounding_metadata = None
+        if use_claim_grounding:
+            try:
+                from research.claim_grounding.engine import get_claim_grounding_engine
+                from research.claim_grounding.models import GenerationMetadata
+                grounding_engine = get_claim_grounding_engine()
+                gen_meta = GenerationMetadata(
+                    generation_provider=str(model_meta.get("provider", "unknown")),
+                    generation_mode="deterministic_fallback" if is_deterministic_fallback else "llm_synthesis",
+                    fallback_used=bool(is_deterministic_fallback),
+                    fallback_reason=str(generation_error_category) if generation_error_category else None,
+                    is_mock_generation=bool(model_meta.get("mock", False)),
+                )
+                grounding_res = grounding_engine.verify_and_qualify_answer(
+                    answer=raw_answer,
+                    evidence_chunks=sources,
+                    generation_metadata=gen_meta,
+                )
+                raw_answer = grounding_res.validated_answer
+                claim_grounding_metadata = grounding_res.to_dict()
+                if grounding_res.modifications_made:
+                    warnings_combined.append(
+                        f"Claim grounding notice: {grounding_res.unsupported_claim_count} ungrounded claims qualified."
+                    )
+                logger.info(
+                    "[LegalRAGPipeline] Claim Grounding applied: score=%.2f, unsupported=%d, contradicted=%d, latency=%.2fms",
+                    grounding_res.grounding_score,
+                    grounding_res.unsupported_claim_count,
+                    grounding_res.contradicted_claim_count,
+                    grounding_res.latency_ms,
+                )
+            except Exception as cg_err:
+                logger.warning("[LegalRAGPipeline] Claim Grounding failed gracefully: %s", cg_err)
         if is_deterministic_fallback:
             if generation_error_category in ("RATE_LIMIT", "QUOTA_EXCEEDED"):
                 warnings_combined.append(
@@ -680,6 +717,10 @@ class LegalRAGPipeline:
             len(warnings_combined),
         )
 
+        final_claim_metrics = dict(facet_val_result.claim_metrics if facet_val_result else {})
+        if claim_grounding_metadata:
+            final_claim_metrics["phase5_grounding"] = claim_grounding_metadata
+
         return RAGResponse(
             query=query_text,
             answer=raw_answer,
@@ -691,7 +732,7 @@ class LegalRAGPipeline:
             requested_facets=requested_facets,
             facet_coverage=facet_coverage,
             facet_validation=facet_val_result.to_dict() if facet_val_result else {},
-            claim_validation=facet_val_result.claim_metrics if facet_val_result else {},
+            claim_validation=final_claim_metrics,
             quality_status=facet_val_result.quality_status.value if facet_val_result else ("PARTIALLY_COMPLETE" if is_deterministic_fallback else "COMPLETE"),
             case_law_status=case_law_status,
             evidence_graph=evidence_graph.to_dict(),

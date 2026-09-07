@@ -119,6 +119,26 @@ class TestPipelineSwitches(unittest.TestCase):
         self.assertIn("regime_coherence_score", c_meta)
 
 
+    def test_default_use_claim_grounding_is_false(self):
+        """Verify default call has use_claim_grounding=False and does not attach phase5_grounding."""
+        response = self.pipeline.query("What is theft?")
+        self.assertEqual(response.status, "success")
+        self.assertNotIn("phase5_grounding", response.claim_validation)
+
+    def test_use_claim_grounding_true_attaches_metadata(self):
+        """Verify use_claim_grounding=True executes grounding engine and attaches metadata."""
+        response = self.pipeline.query(
+            "What is theft under Section 303 of BNS?",
+            use_claim_grounding=True,
+        )
+        self.assertEqual(response.status, "success")
+        self.assertIn("phase5_grounding", response.claim_validation)
+        g_meta = response.claim_validation["phase5_grounding"]
+        self.assertIn("grounding_score", g_meta)
+        self.assertIn("claims", g_meta)
+        self.assertIn("decisions", g_meta)
+
+
 if __name__ == "__main__":
     unittest.main()
 

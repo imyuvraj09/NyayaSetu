@@ -1,0 +1,8 @@
+# Phase 5B: Citation Verification
+experiment_name: "phase5b_citation_verification"
+description: "Verifies source existence, statute alignment, section alignment, and relevance of attached citations."
+ablation_mode: "citation_verification"
+use_fact_routing: true
+use_evidence_compatibility: true
+use_claim_grounding: true
+grounding_config: "configs/claim_grounding_config.yaml"
