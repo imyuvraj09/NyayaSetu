@@ -1,0 +1,8 @@
+# Phase 5C: Claim-Evidence Grounding
+experiment_name: "phase5c_claim_evidence"
+description: "Verifies whether atomic claims are substantively supported by retrieved evidence without citation auditing."
+ablation_mode: "claim_evidence"
+use_fact_routing: true
+use_evidence_compatibility: true
+use_claim_grounding: true
+grounding_config: "configs/claim_grounding_config.yaml"

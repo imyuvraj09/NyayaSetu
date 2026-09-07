@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Phase 5 Claim Grounding Benchmark Annotation Schema",
+  "description": "Validation schema for answer-level claim grounding and citation verification research questions.",
+  "type": "object",
+  "required": ["metadata", "test_cases"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["benchmark_name", "version", "classification", "total_cases"],
+      "properties": {
+        "benchmark_name": {"type": "string"},
+        "version": {"type": "string"},
+        "classification": {"type": "string"},
+        "total_cases": {"type": "integer"}
+      }
+    },
+    "test_cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "case_id",
+          "query",
+          "generated_answer",
+          "category",
+          "retrieved_evidence",
+          "annotated_claims",
+          "review_status"
+        ],
+        "properties": {
+          "case_id": {"type": "string"},
+          "query": {"type": "string"},
+          "generated_answer": {"type": "string"},
+          "category": {"type": "string"},
+          "retrieved_evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["chunk_id", "statute", "section", "text"],
+              "properties": {
+                "chunk_id": {"type": "string"},
+                "statute": {"type": "string"},
+                "section": {"type": "string"},
+                "text": {"type": "string"}
+              }
+            }
+          },
+          "annotated_claims": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "claim_text",
+                "expected_claim_type",
+                "expected_support_status",
+                "expected_citation_status"
+              ],
+              "properties": {
+                "claim_text": {"type": "string"},
+                "expected_claim_type": {"type": "string"},
+                "expected_support_status": {
+                  "type": "string",
+                  "enum": [
+                    "SUPPORTED",
+                    "PARTIALLY_SUPPORTED",
+                    "UNSUPPORTED",
+                    "CONTRADICTED",
+                    "INSUFFICIENT_EVIDENCE"
+                  ]
+                },
+                "expected_citation_status": {
+                  "type": "string",
+                  "enum": [
+                    "VALID_CITATION",
+                    "MISALIGNED_CITATION",
+                    "UNSUPPORTED_CITATION",
+                    "MISSING_CITATION",
+                    "INVALID_SOURCE"
+                  ]
+                },
+                "notes": {"type": "string"}
+              }
+            }
+          },
+          "review_status": {"type": "string"}
+        }
+      }
+    }
+  }
+}

@@ -117,6 +117,14 @@ def validate_configuration(config: Dict[str, Any]) -> None:
         assert not pipeline.get("use_compatibility_filter"), "routing_only must have use_compatibility_filter=False"
         assert not pipeline.get("use_reranker"), "routing_only must have use_reranker=False"
 
+    elif exp_id.startswith("phase4"):
+        assert pipeline.get("use_dense_retrieval"), f"{exp_id} must have use_dense_retrieval=True"
+        assert pipeline.get("use_bm25"), f"{exp_id} must have use_bm25=True"
+        assert pipeline.get("use_hybrid_fusion"), f"{exp_id} must have use_hybrid_fusion=True"
+        assert pipeline.get("use_fact_routing"), f"{exp_id} must have use_fact_routing=True"
+        assert pipeline.get("use_compatibility_filter"), f"{exp_id} must have use_compatibility_filter=True"
+        assert not pipeline.get("use_reranker"), f"{exp_id} must have use_reranker=False"
+
 
 def reciprocal_rank_fusion(
     ranked_lists: List[List[RetrievedChunk]],
@@ -232,6 +240,12 @@ def run_experiment(
         log("Initializing Fact-First Legal Issue Router...")
         router = get_fact_first_router()
 
+    compat_engine = None
+    if pipeline_cfg.get("use_compatibility_filter"):
+        from research.evidence_compatibility.engine import get_evidence_compatibility_engine
+        log("Initializing Evidence Compatibility Engine...")
+        compat_engine = get_evidence_compatibility_engine(config.get("compatibility", {}).get("config_path"))
+
     # Track B / Generation LLM Setup & Audit
     llm_provider = None
     generation_provider = "none"
@@ -341,11 +355,29 @@ def run_experiment(
                 candidates = reciprocal_rank_fusion(
                     [dense_candidates, bm25_candidates],
                     k_const=retrieval_cfg.get("rrf_constant_k", 60),
-                    top_k=initial_k if pipeline_cfg.get("use_reranker") else top_k,
+                    top_k=initial_k if (pipeline_cfg.get("use_reranker") or pipeline_cfg.get("use_compatibility_filter")) else top_k,
                     routing_boosts=routing_boosts,
                 )
             else:
                 candidates = dense_candidates
+
+            # Optional Evidence Compatibility Filtering (Phase 4)
+            compatibility_time = 0.0
+            compat_result_dict = None
+            if pipeline_cfg.get("use_compatibility_filter") and compat_engine:
+                c_t0 = time.perf_counter()
+                facts = routing_decision.normalized_facts.raw_facts if routing_decision and routing_decision.normalized_facts else None
+                dim_filter = pipeline_cfg.get("compatibility_dimension", None)
+                candidates, comp_res = compat_engine.filter_and_rank_candidates(
+                    query=qtext,
+                    candidates=candidates,
+                    routing_decision=routing_decision,
+                    facts=facts,
+                    top_k=initial_k if pipeline_cfg.get("use_reranker") else top_k,
+                    dimension_filter=dim_filter,
+                )
+                compatibility_time = time.perf_counter() - c_t0
+                compat_result_dict = comp_res.to_dict()
 
             # Reranking
             reranked_tuples = None
@@ -483,6 +515,8 @@ def run_experiment(
             "routing_fallback_used": routing_decision.fallback_used if routing_decision else None,
             "routing_selected_regimes": routing_decision.selected_regimes if routing_decision else None,
             "routing_confidence": round(routing_decision.confidence, 4) if routing_decision else None,
+            "compatibility_latency_sec": round(compatibility_time, 6) if pipeline_cfg.get("use_compatibility_filter") else None,
+            "evidence_compatibility": compat_result_dict,
             "retrieval_latency_sec": round(retrieval_time, 4),
             "total_latency_sec": round(e2e_time, 4),
             "production_total_latency_sec": prod_e2e_time,
@@ -528,6 +562,11 @@ def run_experiment(
         "average_routing_latency_sec": (
             round(sum(it["routing_latency_sec"] for it in predictions if it["routing_latency_sec"] is not None) / len(predictions), 4)
             if pipeline_cfg.get("use_fact_routing") and predictions
+            else None
+        ),
+        "average_compatibility_latency_sec": (
+            round(sum(it["compatibility_latency_sec"] for it in predictions if it["compatibility_latency_sec"] is not None) / len(predictions), 6)
+            if pipeline_cfg.get("use_compatibility_filter") and predictions
             else None
         ),
         "average_total_latency_sec": round(sum(it["total_latency_sec"] for it in predictions) / len(predictions), 4) if predictions else 0.0,

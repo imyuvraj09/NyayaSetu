@@ -1,0 +1,8 @@
+# Phase 5A: Citation Presence Baseline
+experiment_name: "phase5a_citation_presence"
+description: "Baseline checking solely whether claims contain statutory citations without full entailment verification."
+ablation_mode: "citation_presence"
+use_fact_routing: true
+use_evidence_compatibility: true
+use_claim_grounding: true
+grounding_config: "configs/claim_grounding_config.yaml"

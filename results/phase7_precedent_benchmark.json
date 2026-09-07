@@ -1,0 +1,348 @@
+{
+  "benchmark_metadata": {
+    "version": "Phase 7 v1.0",
+    "date": "2026-09-07",
+    "total_scenarios": 5,
+    "controlling_case_accuracy": 1.0,
+    "overruling_resolution_rate": 1.0,
+    "statute_transition_concordance_rate": 1.0,
+    "mean_latency_ms": 12258.39,
+    "min_latency_ms": 67.41,
+    "max_latency_ms": 60971.07
+  },
+  "scenarios": [
+    {
+      "scenario_id": "P7-SCEN-01",
+      "query": "Is right to privacy a fundamental right under Article 21 and due process?",
+      "top_retrieved_case": "Navtej Singh Johar v. Union of India",
+      "expected_controlling_case": "Justice K.S. Puttaswamy (Retd.) v. Union of India / Navtej Singh Johar v. Union of India / Maneka Gandhi v. Union of India",
+      "controlling_match": true,
+      "latency_ms": 60971.07,
+      "precedents_count": 5,
+      "conflicts_count": 6,
+      "relationships_count": 12,
+      "ranking_decisions": [
+        {
+          "chunk_id": "sc_2018_navtej_johar_p0268",
+          "case_name": "Navtej Singh Johar v. Union of India",
+          "original_score": 0.85,
+          "authority_multiplier": 1.4375,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.15,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.15,
+          "final_score": 1.7775,
+          "rank_before": 1,
+          "rank_after": 1,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Navtej Singh Johar v. Union of India' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative HOLDING.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction.",
+            "Statutory compatibility (1.15x): Direct statutory concordance: precedent explicitly interprets target section(s) ['article 21']."
+          ]
+        },
+        {
+          "chunk_id": "sc_1978_maneka_gandhi_p0056",
+          "case_name": "Maneka Gandhi v. Union of India",
+          "original_score": 0.85,
+          "authority_multiplier": 1.4375,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.15,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.15,
+          "final_score": 1.7775,
+          "rank_before": 2,
+          "rank_after": 2,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Maneka Gandhi v. Union of India' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative HOLDING.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction.",
+            "Statutory compatibility (1.15x): Direct statutory concordance: precedent explicitly interprets target section(s) ['article 21']."
+          ]
+        },
+        {
+          "chunk_id": "sc_2017_puttaswamy_p0652",
+          "case_name": "Justice K.S. Puttaswamy (Retd.) v. Union of India",
+          "original_score": 0.85,
+          "authority_multiplier": 1.4375,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.15,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.15,
+          "final_score": 1.7775,
+          "rank_before": 4,
+          "rank_after": 3,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Justice K.S. Puttaswamy (Retd.) v. Union of India' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative HOLDING.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction.",
+            "Statutory compatibility (1.15x): Direct statutory concordance: precedent explicitly interprets target section(s) ['article 21']."
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "P7-SCEN-02",
+      "query": "What constitutes consent and false promise of marriage under Section 375 IPC and Section 63 BNS?",
+      "top_retrieved_case": "Pramod Suryabhan Pawar v. State of Maharashtra",
+      "expected_controlling_case": "Pramod Suryabhan Pawar v. State of Maharashtra",
+      "controlling_match": true,
+      "latency_ms": 97.23,
+      "precedents_count": 5,
+      "conflicts_count": 4,
+      "relationships_count": 8,
+      "ranking_decisions": [
+        {
+          "chunk_id": "sc_2019_pramod_suryabhan_pawar_p0018",
+          "case_name": "Pramod Suryabhan Pawar v. State of Maharashtra",
+          "original_score": 0.85,
+          "authority_multiplier": 1.2075,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.15,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.15,
+          "final_score": 1.6723,
+          "rank_before": 7,
+          "rank_after": 1,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Pramod Suryabhan Pawar v. State of Maharashtra' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative HOLDING.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction.",
+            "Statutory compatibility (1.15x): Direct statutory concordance: precedent explicitly interprets target section(s) ['63', '375']."
+          ]
+        },
+        {
+          "chunk_id": "sc_2019_pramod_suryabhan_pawar_p0016",
+          "case_name": "Pramod Suryabhan Pawar v. State of Maharashtra",
+          "original_score": 0.85,
+          "authority_multiplier": 1.2075,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.15,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.1,
+          "final_score": 1.5996,
+          "rank_before": 6,
+          "rank_after": 2,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Pramod Suryabhan Pawar v. State of Maharashtra' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative LEGAL_TEST.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction.",
+            "Statutory compatibility (1.15x): Direct statutory concordance: precedent explicitly interprets target section(s) ['63', '375']."
+          ]
+        },
+        {
+          "chunk_id": "sc_2019_pramod_suryabhan_pawar_p0014",
+          "case_name": "Pramod Suryabhan Pawar v. State of Maharashtra",
+          "original_score": 0.85,
+          "authority_multiplier": 1.2075,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.15,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.08,
+          "final_score": 1.5705,
+          "rank_before": 5,
+          "rank_after": 3,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Pramod Suryabhan Pawar v. State of Maharashtra' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative STATUTORY_INTERPRETATION.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction.",
+            "Statutory compatibility (1.15x): Direct statutory concordance: precedent explicitly interprets target section(s) ['63', '375']."
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "P7-SCEN-03",
+      "query": "Is Section 377 IPC constitutional for consensual sexual acts between adults, and is Suresh Koushal good law?",
+      "top_retrieved_case": "Navtej Singh Johar v. Union of India",
+      "expected_controlling_case": "Navtej Singh Johar v. Union of India",
+      "controlling_match": true,
+      "latency_ms": 88.63,
+      "precedents_count": 5,
+      "conflicts_count": 8,
+      "relationships_count": 16,
+      "ranking_decisions": [
+        {
+          "chunk_id": "sc_2018_navtej_johar_p0268",
+          "case_name": "Navtej Singh Johar v. Union of India",
+          "original_score": 0.85,
+          "authority_multiplier": 1.4375,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.15,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.15,
+          "final_score": 1.7775,
+          "rank_before": 1,
+          "rank_after": 1,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Navtej Singh Johar v. Union of India' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative HOLDING.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction.",
+            "Statutory compatibility (1.15x): Direct statutory concordance: precedent explicitly interprets target section(s) ['article 21', '377']."
+          ]
+        },
+        {
+          "chunk_id": "sc_1978_maneka_gandhi_p0056",
+          "case_name": "Maneka Gandhi v. Union of India",
+          "original_score": 0.85,
+          "authority_multiplier": 1.4375,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.15,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.15,
+          "final_score": 1.7775,
+          "rank_before": 3,
+          "rank_after": 2,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Maneka Gandhi v. Union of India' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative HOLDING.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction.",
+            "Statutory compatibility (1.15x): Direct statutory concordance: precedent explicitly interprets target section(s) ['article 21']."
+          ]
+        },
+        {
+          "chunk_id": "sc_2017_puttaswamy_p0652",
+          "case_name": "Justice K.S. Puttaswamy (Retd.) v. Union of India",
+          "original_score": 0.85,
+          "authority_multiplier": 1.4375,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.15,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.15,
+          "final_score": 1.7775,
+          "rank_before": 5,
+          "rank_after": 3,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Justice K.S. Puttaswamy (Retd.) v. Union of India' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative HOLDING.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction.",
+            "Statutory compatibility (1.15x): Direct statutory concordance: precedent explicitly interprets target section(s) ['article 21']."
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "P7-SCEN-04",
+      "query": "Can evaluated answer scripts be obtained by students under RTI Section 8(1)(e) fiduciary relationship?",
+      "top_retrieved_case": "Central Board of Secondary Education v. Aditya Bandopadhyay",
+      "expected_controlling_case": "Central Board of Secondary Education v. Aditya Bandopadhyay",
+      "controlling_match": true,
+      "latency_ms": 67.62,
+      "precedents_count": 5,
+      "conflicts_count": 4,
+      "relationships_count": 4,
+      "ranking_decisions": [
+        {
+          "chunk_id": "sc_2011_aditya_bandopadhyay_p0022",
+          "case_name": "Central Board of Secondary Education v. Aditya Bandopadhyay",
+          "original_score": 0.85,
+          "authority_multiplier": 1.2075,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.15,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.15,
+          "final_score": 1.4931,
+          "rank_before": 1,
+          "rank_after": 1,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Central Board of Secondary Education v. Aditya Bandopadhyay' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative HOLDING.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction.",
+            "Statutory compatibility (1.15x): Direct statutory concordance: precedent explicitly interprets target section(s) ['6', '8(1)(e)', '3']."
+          ]
+        },
+        {
+          "chunk_id": "sc_1978_maneka_gandhi_p0056",
+          "case_name": "Maneka Gandhi v. Union of India",
+          "original_score": 0.5785,
+          "authority_multiplier": 1.4375,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.0,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.15,
+          "final_score": 1.052,
+          "rank_before": 7,
+          "rank_after": 2,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Maneka Gandhi v. Union of India' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative HOLDING.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction."
+          ]
+        },
+        {
+          "chunk_id": "sc_1984_sharad_birdhichand_sarda_p0154",
+          "case_name": "Sharad Birdhichand Sarda v. State of Maharashtra",
+          "original_score": 0.5716,
+          "authority_multiplier": 1.3225,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.0,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.15,
+          "final_score": 1.0328,
+          "rank_before": 9,
+          "rank_after": 3,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Sharad Birdhichand Sarda v. State of Maharashtra' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative HOLDING.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction."
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "P7-SCEN-05",
+      "query": "Does previous consensual relationship or promiscuity imply consent in subsequent sexual offences?",
+      "top_retrieved_case": "Pramod Suryabhan Pawar v. State of Maharashtra",
+      "expected_controlling_case": "Pramod Suryabhan Pawar v. State of Maharashtra",
+      "controlling_match": true,
+      "latency_ms": 67.41,
+      "precedents_count": 5,
+      "conflicts_count": 4,
+      "relationships_count": 7,
+      "ranking_decisions": [
+        {
+          "chunk_id": "sc_2019_pramod_suryabhan_pawar_p0018",
+          "case_name": "Pramod Suryabhan Pawar v. State of Maharashtra",
+          "original_score": 0.85,
+          "authority_multiplier": 1.2075,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.15,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.15,
+          "final_score": 1.6723,
+          "rank_before": 7,
+          "rank_after": 1,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Pramod Suryabhan Pawar v. State of Maharashtra' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative HOLDING.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction.",
+            "Statutory compatibility (1.15x): Direct statutory concordance: precedent explicitly interprets target section(s) ['63', '375']."
+          ]
+        },
+        {
+          "chunk_id": "sc_2019_pramod_suryabhan_pawar_p0016",
+          "case_name": "Pramod Suryabhan Pawar v. State of Maharashtra",
+          "original_score": 0.85,
+          "authority_multiplier": 1.2075,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.15,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.1,
+          "final_score": 1.5996,
+          "rank_before": 6,
+          "rank_after": 2,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Pramod Suryabhan Pawar v. State of Maharashtra' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative LEGAL_TEST.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction.",
+            "Statutory compatibility (1.15x): Direct statutory concordance: precedent explicitly interprets target section(s) ['63', '375']."
+          ]
+        },
+        {
+          "chunk_id": "sc_2019_pramod_suryabhan_pawar_p0014",
+          "case_name": "Pramod Suryabhan Pawar v. State of Maharashtra",
+          "original_score": 0.85,
+          "authority_multiplier": 1.2075,
+          "jurisdiction_multiplier": 1.1,
+          "compatibility_multiplier": 1.15,
+          "temporal_multiplier": 1.0,
+          "passage_multiplier": 1.08,
+          "final_score": 1.5705,
+          "rank_before": 5,
+          "rank_after": 3,
+          "adjustment_reasons": [
+            "Authority boost (BINDING): Supreme Court of India decision in 'Pramod Suryabhan Pawar v. State of Maharashtra' is BINDING across all courts in India under Article 141 of the Constitution. Passage contains operative STATUTORY_INTERPRETATION.",
+            "Jurisdiction adjustment (DIRECTLY_RELEVANT): Supreme Court of India possesses nationwide territorial jurisdiction.",
+            "Statutory compatibility (1.15x): Direct statutory concordance: precedent explicitly interprets target section(s) ['63', '375']."
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+# Phase 7B — Case Retrieval + Authority Ranking Ablation Config
+ablation_name: "phase7b_authority_ranking"
+description: "Evaluates raw precedent retrieval with court-level and Article 141 authority re-ranking."
+
+retrieval:
+  collection_name: "nyayasetu_case_law"
+  top_k: 5
+  use_tree_index: true
+  use_dense_vector: true
+
+ranking:
+  authority_weight: 1.0
+  jurisdiction_weight: 1.0
+  compatibility_weight: 0.0
+  temporal_weight: 0.0
+
+features:
+  enable_authority_ranking: true
+  enable_relationships: false
+  enable_conflicts: false
+  enable_synthesis: false

@@ -23,6 +23,8 @@ logger = get_logger(__name__)
 class ChromaStore:
     """Persistent ChromaDB vector store wrapper for legal document chunks."""
 
+    _client_cache: Dict[str, Any] = {}
+
     def __init__(
         self,
         persist_directory: Optional[Union[str, Path]] = None,
@@ -42,10 +44,15 @@ class ChromaStore:
             self.collection_name,
         )
 
-        self._client = chromadb.PersistentClient(
-            path=self.persist_directory,
-            settings=ChromaSettings(anonymized_telemetry=False),
-        )
+        if self.persist_directory in ChromaStore._client_cache:
+            self._client = ChromaStore._client_cache[self.persist_directory]
+        else:
+            self._client = chromadb.PersistentClient(
+                path=self.persist_directory,
+                settings=ChromaSettings(anonymized_telemetry=False),
+            )
+            ChromaStore._client_cache[self.persist_directory] = self._client
+
         self._collection = self._client.get_or_create_collection(
             name=self.collection_name,
             metadata={"description": "NyayaSetu Indian Legal Documents Collection", "hnsw:space": "cosine"},

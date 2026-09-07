@@ -186,6 +186,9 @@ class LegalRAGPipeline:
         max_per_document: Optional[int] = None,
         request_id: Optional[str] = None,
         use_fact_routing: bool = False,
+        use_evidence_compatibility: bool = False,
+        use_claim_grounding: bool = False,
+        use_precedent_reasoning: bool = False,
     ) -> RAGResponse:
         """Process a legal inquiry and return a grounded, cited response.
 
@@ -196,6 +199,9 @@ class LegalRAGPipeline:
             max_per_document: Document diversity limit override.
             request_id: Unique correlation ID for request tracing.
             use_fact_routing: Optional research switch for Fact-First Legal Issue Routing.
+            use_evidence_compatibility: Optional research switch for Phase 4 Evidence Compatibility Filtering.
+            use_claim_grounding: Optional research switch for Phase 5 Answer Claim Grounding & Citation Verification.
+            use_precedent_reasoning: Optional research switch for Phase 7 Judicial Precedent & Authority-Aware Reasoning.
 
         Returns:
             RAGResponse object with synthesized answer, citations, and provenance.
@@ -208,12 +214,14 @@ class LegalRAGPipeline:
 
         # Optional Fact-First Legal Issue Routing
         routing_info = None
-        if use_fact_routing:
+        r_decision = None
+        if use_fact_routing or use_evidence_compatibility:
             try:
                 from research.issue_router import get_fact_first_router
                 router = get_fact_first_router()
                 r_decision = router.route_query(query_text)
-                routing_info = r_decision.to_dict()
+                if use_fact_routing:
+                    routing_info = r_decision.to_dict()
                 logger.info(
                     "[LegalRAGPipeline] Fact-First Routing: mode=%s, regimes=%s, fallback=%s",
                     r_decision.routing_mode.value,
@@ -234,6 +242,31 @@ class LegalRAGPipeline:
         )
 
         statutory_chunks = list(retrieval_result.results)
+
+        # Optional Evidence Compatibility Filtering (Phase 4)
+        compatibility_info = None
+        if use_evidence_compatibility:
+            try:
+                from research.evidence_compatibility.engine import get_evidence_compatibility_engine
+                compat_engine = get_evidence_compatibility_engine()
+                facts = r_decision.normalized_facts.raw_facts if r_decision and r_decision.normalized_facts else None
+                statutory_chunks, comp_res = compat_engine.filter_and_rank_candidates(
+                    query=query_text,
+                    candidates=statutory_chunks,
+                    routing_decision=r_decision,
+                    facts=facts,
+                    top_k=len(statutory_chunks),
+                )
+                compatibility_info = comp_res.to_dict()
+                logger.info(
+                    "[LegalRAGPipeline] Evidence Compatibility Filtering applied: %d compatible, %d partially, %d incompatible",
+                    comp_res.compatible_count,
+                    comp_res.partially_compatible_count,
+                    comp_res.incompatible_count,
+                )
+            except Exception as c_err:
+                logger.warning("[LegalRAGPipeline] Evidence Compatibility Filtering failed gracefully: %s", c_err)
+
         q_analysis = retrieval_result.query_analysis or {}
         raw_auth_req = q_analysis.get("authority_requirement", "STATUTE") if isinstance(q_analysis, dict) else getattr(q_analysis, "authority_requirement", "STATUTE")
         auth_req_val = raw_auth_req.value if hasattr(raw_auth_req, "value") else str(raw_auth_req)
@@ -292,6 +325,91 @@ class LegalRAGPipeline:
                 case_law_status = CaseLawStatus.CORPUS_UNAVAILABLE.value
                 case_warnings.append("The current indexed corpus does not contain verified judicial decisions sufficient to substantiate judicial principles on this issue.")
 
+        # Step 1C: Phase 7 Precedent Reasoning & Authority-Aware Re-ranking
+        precedent_reasoning_info = None
+        if use_precedent_reasoning:
+            try:
+                from research.precedent_reasoning.engine import get_precedent_reasoning_engine
+                from schemas.retrieval import RerankedChunk
+                p_engine = get_precedent_reasoning_engine()
+                target_secs = q_analysis.get("section_candidates", []) if isinstance(q_analysis, dict) else getattr(q_analysis, "section_candidates", [])
+                target_stats = q_analysis.get("statutes", []) if isinstance(q_analysis, dict) else getattr(q_analysis, "statutes", [])
+                r_regime = r_decision.selected_regimes[0] if (r_decision and r_decision.selected_regimes) else None
+
+                p_res = p_engine.reason_over_precedents(
+                    query=query_text,
+                    target_sections=target_secs,
+                    target_statutes=target_stats,
+                    routed_regime=r_regime,
+                    top_k=5,
+                )
+                precedent_reasoning_info = p_res.to_dict()
+
+                # Map authority-ranked precedents into RerankedChunk instances
+                p_chunks: List[RerankedChunk] = []
+                for p_rank, p in enumerate(p_res.ranked_precedents, start=1):
+                    sec_display = ", ".join(p.sections_referred) if p.sections_referred else ""
+                    statute_display = ", ".join(p.statutes_referred) if p.statutes_referred else "Indian Law"
+                    auth_meta = p_res.authority_assessments.get(p.chunk_id)
+                    auth_val = auth_meta.authority_status.value if auth_meta else "UNKNOWN"
+                    auth_score = auth_meta.authority_score if auth_meta else 1.0
+
+                    rc = RerankedChunk(
+                        rank=p_rank,
+                        chunk_id=p.chunk_id,
+                        document_name=f"{p.case_name} ({p.citation})",
+                        document_type="Case Law",
+                        source_filename=f"{p.document_id}.pdf",
+                        page_numbers=[1],
+                        text=p.text,
+                        similarity_score=min(1.0, max(0.0, p.retrieval_score / 2.0)),
+                        reranker_score=round(float(p.retrieval_score), 4),
+                        metadata={
+                            "evidence_type": "CASE_LAW",
+                            "case_name": p.case_name,
+                            "court": p.court,
+                            "court_level": p.court_level.value if hasattr(p.court_level, "value") else str(p.court_level),
+                            "citation": p.citation,
+                            "judgment_date": p.judgment_date,
+                            "passage_type": p.passage_type,
+                            "is_holding_or_ratio": p.is_holding_or_ratio,
+                            "authority_status": auth_val,
+                            "authority_score": auth_score,
+                            "article_141_binding": auth_meta.article_141_binding if auth_meta else False,
+                            "statutes_referred": p.statutes_referred,
+                            "sections_referred": p.sections_referred,
+                            "topics": p.topics,
+                        },
+                        section_number=sec_display,
+                        section_title=f"{p.passage_type} · {p.case_name}",
+                        act_short_name=statute_display,
+                        evidence_type="CASE_LAW",
+                        case_name=p.case_name,
+                        court=p.court,
+                        citation=p.citation,
+                        judgment_date=p.judgment_date,
+                        paragraph_number="1",
+                        is_holding_or_ratio=p.is_holding_or_ratio,
+                        topic_compatibility="DIRECT",
+                    )
+                    p_chunks.append(rc)
+
+                if p_chunks:
+                    case_chunks = p_chunks
+                    case_law_status = CaseLawStatus.FOUND.value
+                elif requires_case_law and not case_chunks:
+                    case_law_status = CaseLawStatus.NOT_FOUND.value
+                    case_warnings.append("The current indexed corpus does not contain verified judicial decisions sufficient to substantiate judicial principles on this issue.")
+
+                logger.info(
+                    "[LegalRAGPipeline] Phase 7 Precedent Reasoning integrated: %d ranked chunks, %d controlling, %d conflicts",
+                    len(p_chunks),
+                    len(p_res.controlling_precedents),
+                    len(p_res.conflicts),
+                )
+            except Exception as pr_err:
+                logger.warning("[LegalRAGPipeline] Precedent reasoning integration failed: %s", pr_err)
+
         # Combine & Enforce Evidence Topic Compatibility and Budget (Rule 7 & 9: 2–5 sources)
         active_q_analysis = retrieval_result.query_analysis if hasattr(retrieval_result, "query_analysis") else q_analysis
         ranked_chunks = TopicCompatibilityEngine().filter_and_budget(
@@ -326,6 +444,10 @@ class LegalRAGPipeline:
         }
         if routing_info is not None:
             retrieval_meta["fact_first_routing"] = routing_info
+        if compatibility_info is not None:
+            retrieval_meta["evidence_compatibility"] = compatibility_info
+        if precedent_reasoning_info is not None:
+            retrieval_meta["precedent_reasoning"] = precedent_reasoning_info
 
         # Step 2: Check for empty retrieval results
         if not ranked_chunks:
@@ -620,6 +742,41 @@ class LegalRAGPipeline:
         raw_answer = self._sanitize_meta_chat_and_formatting(raw_answer)
 
         warnings_combined = list(val_result.warnings) + case_warnings
+
+        # Step 8f: Optional Phase 5 Answer Claim Grounding & Citation Verification
+        claim_grounding_metadata = None
+        if use_claim_grounding:
+            try:
+                from research.claim_grounding.engine import get_claim_grounding_engine
+                from research.claim_grounding.models import GenerationMetadata
+                grounding_engine = get_claim_grounding_engine()
+                gen_meta = GenerationMetadata(
+                    generation_provider=str(model_meta.get("provider", "unknown")),
+                    generation_mode="deterministic_fallback" if is_deterministic_fallback else "llm_synthesis",
+                    fallback_used=bool(is_deterministic_fallback),
+                    fallback_reason=str(generation_error_category) if generation_error_category else None,
+                    is_mock_generation=bool(model_meta.get("mock", False)),
+                )
+                grounding_res = grounding_engine.verify_and_qualify_answer(
+                    answer=raw_answer,
+                    evidence_chunks=sources,
+                    generation_metadata=gen_meta,
+                )
+                raw_answer = grounding_res.validated_answer
+                claim_grounding_metadata = grounding_res.to_dict()
+                if grounding_res.modifications_made:
+                    warnings_combined.append(
+                        f"Claim grounding notice: {grounding_res.unsupported_claim_count} ungrounded claims qualified."
+                    )
+                logger.info(
+                    "[LegalRAGPipeline] Claim Grounding applied: score=%.2f, unsupported=%d, contradicted=%d, latency=%.2fms",
+                    grounding_res.grounding_score,
+                    grounding_res.unsupported_claim_count,
+                    grounding_res.contradicted_claim_count,
+                    grounding_res.latency_ms,
+                )
+            except Exception as cg_err:
+                logger.warning("[LegalRAGPipeline] Claim Grounding failed gracefully: %s", cg_err)
         if is_deterministic_fallback:
             if generation_error_category in ("RATE_LIMIT", "QUOTA_EXCEEDED"):
                 warnings_combined.append(
@@ -649,6 +806,10 @@ class LegalRAGPipeline:
             len(warnings_combined),
         )
 
+        final_claim_metrics = dict(facet_val_result.claim_metrics if facet_val_result else {})
+        if claim_grounding_metadata:
+            final_claim_metrics["phase5_grounding"] = claim_grounding_metadata
+
         return RAGResponse(
             query=query_text,
             answer=raw_answer,
@@ -660,7 +821,7 @@ class LegalRAGPipeline:
             requested_facets=requested_facets,
             facet_coverage=facet_coverage,
             facet_validation=facet_val_result.to_dict() if facet_val_result else {},
-            claim_validation=facet_val_result.claim_metrics if facet_val_result else {},
+            claim_validation=final_claim_metrics,
             quality_status=facet_val_result.quality_status.value if facet_val_result else ("PARTIALLY_COMPLETE" if is_deterministic_fallback else "COMPLETE"),
             case_law_status=case_law_status,
             evidence_graph=evidence_graph.to_dict(),

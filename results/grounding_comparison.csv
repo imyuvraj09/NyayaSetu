@@ -1,0 +1,6 @@
+configuration,claim_support_precision,claim_support_recall,claim_support_f1,unsupported_claim_detection_rate,contradiction_detection_rate,citation_accuracy,citation_completeness,citation_entailment_accuracy,grounding_score,high_risk_claim_error_rate,qualification_appropriateness,false_unsupported_rate,average_verification_latency_ms
+Unverified Generation (No Verification),0.4,1.0,0.25,0.0,0.0,0.0,0.4,0.0,1.0,0.35,0.0,0.0,0.0
+Phase 5A — Citation Presence Baseline,0.52,0.82,0.34,0.1667,0.0,0.0,0.76,0.0,0.76,0.2051,0.0,0.3704,0.9461
+Phase 5B — Citation Verification,0.66,0.82,0.48,0.6667,0.0,0.7342,0.62,0.8101,0.62,0.1538,0.0,0.3704,1.2073
+Phase 5C — Claim-Evidence Grounding,0.8,0.78,0.58,0.6667,0.125,0.0,0.72,0.0,0.57,0.1282,0.0,0.2963,1.1417
+Phase 5D — Full Claim Grounding,0.8,0.78,0.58,0.6667,0.125,0.7089,0.72,0.7848,0.57,0.1282,0.32,0.2963,1.2585

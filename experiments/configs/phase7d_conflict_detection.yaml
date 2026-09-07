@@ -1,0 +1,21 @@
+# Phase 7D — Relationship Analysis + Conflict Detection Ablation Config
+ablation_name: "phase7d_conflict_detection"
+description: "Evaluates precedent retrieval, authority ranking, relationships, and conflict detection & resolution."
+
+retrieval:
+  collection_name: "nyayasetu_case_law"
+  top_k: 5
+  use_tree_index: true
+  use_dense_vector: true
+
+ranking:
+  authority_weight: 1.0
+  jurisdiction_weight: 1.0
+  compatibility_weight: 1.0
+  temporal_weight: 1.0
+
+features:
+  enable_authority_ranking: true
+  enable_relationships: true
+  enable_conflicts: true
+  enable_synthesis: false

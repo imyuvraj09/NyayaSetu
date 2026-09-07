@@ -1,0 +1,7 @@
+component_configuration,recall_at_5,mrr,grounding_score,high_risk_error_rate,delta_recall_at_5_vs_baseline
+baseline_dense,0.6211,0.5803,0.45,0.35,+0.0
+baseline_hybrid,0.6511,0.5993,0.65,0.35,+0.03
+baseline_hybrid_rrf,0.6233,0.5906,0.65,0.35,+0.0022
+phase3_routing,0.5911,0.5732,0.52,0.2,-0.03
+phase4_compatibility,0.5844,0.5718,0.65,0.2,-0.0367
+phase5_full_pipeline,0.5844,0.5718,0.1797,0.44,-0.0367

@@ -1,0 +1,23 @@
+experiment_id: "phase6_phase5_grounding"
+description: "Phase 6: Phase 4 Compatibility + Phase 5 Claim Grounding and Citation Verification"
+benchmark:
+  file: "evaluation/phase6/benchmark_test.json"
+  eval_generation_metrics: false
+pipeline:
+  use_retrieval: true
+  use_dense_retrieval: true
+  use_bm25: true
+  use_hybrid_fusion: true
+  use_reranker: false
+  use_fact_routing: true
+  use_compatibility_filter: true
+  use_claim_grounding: true
+retrieval:
+  top_k: 5
+  initial_k: 20
+  rrf_constant_k: 60
+  embedding_model: "BAAI/bge-small-en-v1.5"
+compatibility:
+  config_path: "configs/evidence_compatibility_config.yaml"
+claim_grounding:
+  config_path: "configs/claim_grounding_config.yaml"

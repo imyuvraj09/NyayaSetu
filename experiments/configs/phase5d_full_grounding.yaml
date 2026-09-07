@@ -1,0 +1,8 @@
+# Phase 5D: Full Claim Grounding & Verification
+experiment_name: "phase5d_full_grounding"
+description: "Combines atomic claim extraction, classification, evidence matching, entailment verification, citation auditing, and risk-aware qualification."
+ablation_mode: "full"
+use_fact_routing: true
+use_evidence_compatibility: true
+use_claim_grounding: true
+grounding_config: "configs/claim_grounding_config.yaml"

@@ -1,0 +1,38 @@
+# Experiment: Phase 4D — Full Evidence Compatibility Filtering on Hybrid RAG
+experiment_id: phase4d_full_compatibility
+display_name: "Phase 4D: Full Evidence Compatibility Filtering"
+description: "Fact-First Routing with Full Multi-Dimensional Evidence Compatibility Filtering (Regime + Issue + Role + Temporal + Special Law + Cross-Chunk Relationships) on Hybrid RAG."
+
+pipeline:
+  use_retrieval: true
+  use_dense_retrieval: true
+  use_bm25: true
+  use_hybrid_fusion: true
+  use_reranker: false
+  use_fact_routing: true
+  use_compatibility_filter: true
+  compatibility_dimension: "full"
+  use_claim_repair: false
+
+retrieval:
+  top_k: 5
+  initial_k: 20
+  embedding_model: "BAAI/bge-small-en-v1.5"
+  bm25_k1: 1.5
+  bm25_b: 0.75
+  fusion_method: "RRF"
+  rrf_constant_k: 60
+  statute_purity_boost: 0.0
+
+routing:
+  config_path: "configs/routing_config.yaml"
+  high_confidence_boost: 1.35
+  medium_confidence_boost: 1.15
+
+compatibility:
+  config_path: "configs/evidence_compatibility_config.yaml"
+
+benchmark:
+  file: "evaluation/development/existing_questions.json"
+  eval_retrieval_metrics: true
+  eval_generation_metrics: false

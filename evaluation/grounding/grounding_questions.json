@@ -1,0 +1,1275 @@
+{
+  "metadata": {
+    "benchmark_name": "NyayaSetu Phase 5 Claim Grounding Benchmark",
+    "version": "1.0.0-research",
+    "classification": "PROVISIONAL_RESEARCH_BENCHMARK",
+    "total_cases": 50,
+    "description": "50 targeted legal answers across 15 failure and validation categories for atomic claim grounding and citation verification."
+  },
+  "test_cases": [
+    {
+      "case_id": "GROUND_001",
+      "query": "What is the punishment for theft under Section 303 of Bharatiya Nyaya Sanhita?",
+      "generated_answer": "Under Section 303(2) of the Bharatiya Nyaya Sanhita, whoever commits theft shall be punished with imprisonment for a term which may extend to three years, or with fine, or with both.",
+      "category": "correctly_supported_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_303",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "text": "Section 303. (1) Whoever, intending to take dishonestly any movable property... (2) Whoever commits theft shall be punished with imprisonment of either description for a term which may extend to three years, or with fine, or with both."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Section 303(2) of the Bharatiya Nyaya Sanhita, whoever commits theft shall be punished with imprisonment for a term which may extend to three years, or with fine, or with both.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Accurate statutory citation and exact penal duration."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_002",
+      "query": "What constitutes cheating under Bharatiya Nyaya Sanhita?",
+      "generated_answer": "Section 318 of Bharatiya Nyaya Sanhita defines cheating as dishonestly deceiving any person to deliver property.",
+      "category": "correctly_supported_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_318",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 318",
+          "text": "Section 318. Cheating. (1) Whoever, by deceiving any person, fraudulently or dishonestly induces the person so deceived to deliver any property to any person..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Section 318 of Bharatiya Nyaya Sanhita defines cheating as dishonestly deceiving any person to deliver property.",
+          "expected_claim_type": "STATUTORY_PROVISION",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Direct statutory definition accurately supported."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_003",
+      "query": "What is unauthorized computer damage under Information Technology Act?",
+      "generated_answer": "Section 43 of the Information Technology Act provides civil liability for downloading or copying data without permission.",
+      "category": "correctly_supported_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "it_43",
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 43",
+          "text": "Section 43. Penalty and compensation for damage to computer, computer system, etc. If any person without permission of the owner or any other person who is incharge of a computer, accesses or secures access... downloads, copies or extracts any data..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Section 43 of the Information Technology Act provides civil liability for downloading or copying data without permission.",
+          "expected_claim_type": "STATUTORY_PROVISION",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Civil compensation correctly cited under Section 43."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_004",
+      "query": "What certificate is required for electronic evidence in court?",
+      "generated_answer": "Section 63 of Bharatiya Sakshya Adhiniyam requires a signed certificate to produce electronic records as secondary evidence.",
+      "category": "correctly_supported_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bsa_63",
+          "statute": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section": "Section 63",
+          "text": "Section 63. Admissibility of electronic records. (4) In any proceedings where it is desired to give a statement in evidence by virtue of this section, a certificate doing any of the following things... signed by a person in official charge..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Section 63 of Bharatiya Sakshya Adhiniyam requires a signed certificate to produce electronic records as secondary evidence.",
+          "expected_claim_type": "EVIDENTIARY_REQUIREMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Electronic certificate rule under BSA Section 63 accurately cited."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_005",
+      "query": "What is the fine for copyright infringement?",
+      "generated_answer": "Every corporate director is automatically subject to mandatory capital punishment for software copyright infringement under Section 303.",
+      "category": "unsupported_legal_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_303",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "text": "Section 303. Whoever commits theft shall be punished with imprisonment of either description for a term which may extend to three years, or with fine, or with both."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Every corporate director is automatically subject to mandatory capital punishment for software copyright infringement under Section 303.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "UNSUPPORTED",
+          "expected_citation_status": "UNSUPPORTED_CITATION",
+          "notes": "Fabricated capital punishment assertion unsupported by theft section."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_006",
+      "query": "Can police seize computers without reason?",
+      "generated_answer": "Under Section 999 of Cyber Security Code, police officers may seize personal computers without any registration of an offense.",
+      "category": "unsupported_legal_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bnss_105",
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 105",
+          "text": "Section 105. Recording of search and seizure through audio-video electronic means."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Section 999 of Cyber Security Code, police officers may seize personal computers without any registration of an offense.",
+          "expected_claim_type": "PROCEDURAL_REQUIREMENT",
+          "expected_support_status": "UNSUPPORTED",
+          "expected_citation_status": "INVALID_SOURCE",
+          "notes": "Non-existent statute and arbitrary warrantless seizure power."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_007",
+      "query": "What damages apply for breach of contract?",
+      "generated_answer": "Breach of contract automatically leads to mandatory imprisonment of 5 years under Section 73.",
+      "category": "unsupported_legal_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "companies_act_134",
+          "statute": "Companies Act, 2013",
+          "section": "Section 134",
+          "text": "Section 134. Financial statement, Board's report, etc."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Breach of contract automatically leads to mandatory imprisonment of 5 years under Section 73.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "UNSUPPORTED",
+          "expected_citation_status": "UNSUPPORTED_CITATION",
+          "notes": "Civil contract breach conflated with criminal penal sentence."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_008",
+      "query": "What is the penalty for exceeding speed limit?",
+      "generated_answer": "Exceeding speed limit requires mandatory freezing of all bank accounts under Motor Vehicles Act Section 112.",
+      "category": "unsupported_legal_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "mva_112",
+          "statute": "Motor Vehicles Act, 1988",
+          "section": "Section 112",
+          "text": "Section 112. Limits of speed. (1) No person shall drive a motor vehicle in any public place at a speed exceeding the maximum speed."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Exceeding speed limit requires mandatory freezing of all bank accounts under Motor Vehicles Act Section 112.",
+          "expected_claim_type": "LEGAL_CONSEQUENCE",
+          "expected_support_status": "UNSUPPORTED",
+          "expected_citation_status": "UNSUPPORTED_CITATION",
+          "notes": "Freezing bank accounts is completely unsupported for speed limit violations."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_009",
+      "query": "What punishment applies for cheating by personation?",
+      "generated_answer": "Under Section 66D of Information Technology Act, cheating by personation is punishable, and requires automatic confiscation of all electronic devices nationwide.",
+      "category": "partially_supported_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "it_66d",
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 66D",
+          "text": "Section 66D. Punishment for cheating by personation by using computer resource. Whoever, by means of any communication device or computer resource cheats by personation, shall be punished with imprisonment of either description for a term which may extend to three years and shall also be liable to fine which may extend to one lakh rupees."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Section 66D of Information Technology Act, cheating by personation is punishable, and requires automatic confiscation of all electronic devices nationwide.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "PARTIALLY_SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Offense and punishment grounded, but nationwide automatic confiscation is ungrounded extension."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_010",
+      "query": "What are the rules for filing an FIR for cognizable crimes?",
+      "generated_answer": "Under Section 173 of Bharatiya Nagarik Suraksha Sanhita, an FIR must be registered for cognizable offenses, but police must always secure high court approval prior to registration.",
+      "category": "partially_supported_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bnss_173",
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 173",
+          "text": "Section 173. Information in cognizable cases. (1) Every information relating to the commission of a cognizable offence... shall be reduced to writing by him or under his direction..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Section 173 of Bharatiya Nagarik Suraksha Sanhita, an FIR must be registered for cognizable offenses, but police must always secure high court approval prior to registration.",
+          "expected_claim_type": "PROCEDURAL_REQUIREMENT",
+          "expected_support_status": "PARTIALLY_SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "FIR registration is supported, high court prior approval condition is false."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_011",
+      "query": "What is the liability for identity theft online?",
+      "generated_answer": "Identity theft using digital signatures is punishable under Section 66C of Information Technology Act with up to three years imprisonment and lifetime deportation.",
+      "category": "partially_supported_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "it_66c",
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 66C",
+          "text": "Section 66C. Punishment for identity theft. Whoever, fraudulently or dishonestly make use of the electronic signature, password or any other unique identification feature... shall be punished with imprisonment... which may extend to three years and shall also be liable to fine which may extend to rupees one lakh."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Identity theft using digital signatures is punishable under Section 66C of Information Technology Act with up to three years imprisonment and lifetime deportation.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "PARTIALLY_SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Imprisonment quantum is accurate; lifetime deportation is unsupported."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_012",
+      "query": "What are the requirements for board meetings in a company?",
+      "generated_answer": "Under Section 173 of Companies Act, companies must hold board meetings, but all directors must attend physically without any audio-visual option.",
+      "category": "partially_supported_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "companies_act_173",
+          "statute": "Companies Act, 2013",
+          "section": "Section 173",
+          "text": "Section 173. Meetings of Board. (1) Every company shall hold the first meeting of the Board of Directors within thirty days... (2) The participation of directors in a meeting of the Board may be either in person or through video conferencing or other audio visual means."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Section 173 of Companies Act, companies must hold board meetings, but all directors must attend physically without any audio-visual option.",
+          "expected_claim_type": "STATUTORY_PROVISION",
+          "expected_support_status": "PARTIALLY_SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Mandatory board meeting is grounded; physical attendance exclusivity is contradicted by text."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_013",
+      "query": "Can police arrest without warrant for non-cognizable offenses?",
+      "generated_answer": "Under Bharatiya Nagarik Suraksha Sanhita, police officers may arrest any person for non-cognizable offenses without a warrant.",
+      "category": "contradictory_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bnss_35",
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 35",
+          "text": "Section 35. When police may arrest without warrant. (1) Any police officer may without an order from a Magistrate and without a warrant, arrest any person who commits in the presence of a police officer, a cognizable offence... No police officer shall arrest any person without an order from a Magistrate or without a warrant in a non-cognizable case."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Bharatiya Nagarik Suraksha Sanhita, police officers may arrest any person for non-cognizable offenses without a warrant.",
+          "expected_claim_type": "PROCEDURAL_REQUIREMENT",
+          "expected_support_status": "CONTRADICTED",
+          "expected_citation_status": "UNSUPPORTED_CITATION",
+          "notes": "Direct contradiction of statutory rule prohibiting warrantless arrest in non-cognizable cases."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_014",
+      "query": "What is the imprisonment term for simple theft under BNS?",
+      "generated_answer": "Theft under Section 303 of BNS is punishable with imprisonment for a term which may extend to 10 years.",
+      "category": "contradictory_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_303",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "text": "Section 303. (2) Whoever commits theft shall be punished with imprisonment of either description for a term which may extend to three years, or with fine, or with both."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Theft under Section 303 of BNS is punishable with imprisonment for a term which may extend to 10 years.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "CONTRADICTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Statute specifies three years, directly contradicting 10 years."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_015",
+      "query": "Is electronic evidence admissible without original hard drives?",
+      "generated_answer": "Under Section 63 of Bharatiya Sakshya Adhiniyam, electronic records can never be admitted into evidence under any circumstance without original hardware.",
+      "category": "contradictory_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bsa_63",
+          "statute": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section": "Section 63",
+          "text": "Section 63. Admissibility of electronic records. (1) Notwithstanding anything contained in this Adhiniyam, any information contained in an electronic record... shall be deemed to be also a document... and shall be admissible in any proceedings, without further proof or production of the original."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Section 63 of Bharatiya Sakshya Adhiniyam, electronic records can never be admitted into evidence under any circumstance without original hardware.",
+          "expected_claim_type": "EVIDENTIARY_REQUIREMENT",
+          "expected_support_status": "CONTRADICTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Direct contradiction of Section 63(1) 'without further proof or production of the original'."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_016",
+      "query": "Is cyber hacking a non-bailable offense?",
+      "generated_answer": "Section 66 of the Information Technology Act classifies hacking as a non-bailable offense requiring death penalty.",
+      "category": "contradictory_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "it_66",
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 66",
+          "text": "Section 66. Computer related offences. If any person, dishonestly or fraudulently, does any act referred to in section 43, he shall be punishable with imprisonment for a term which may extend to three years or with fine which may extend to five lakh rupees or with both."
+        },
+        {
+          "chunk_id": "it_77b",
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 77B",
+          "text": "Section 77B. Offences, with imprisonment of three years, to be bailable. Notwithstanding anything contained in the Code of Criminal Procedure, 1973, the offence punishable with imprisonment of three years and above shall be cognizable and the offence punishable with imprisonment of three years shall be bailable."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Section 66 of the Information Technology Act classifies hacking as a non-bailable offense requiring death penalty.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "CONTRADICTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Contradicts statutory bailable classification and imprisonment limit."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_017",
+      "query": "Where is identity theft codified in Indian penal law?",
+      "generated_answer": "Identity theft using computer credentials is codified under Section 66C of the Consumer Protection Act.",
+      "category": "incorrect_statute_citations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "it_66c",
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 66C",
+          "text": "Section 66C. Punishment for identity theft. Whoever, fraudulently or dishonestly make use of the electronic signature, password or any other unique identification feature..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Identity theft using computer credentials is codified under Section 66C of the Consumer Protection Act.",
+          "expected_claim_type": "STATUTORY_PROVISION",
+          "expected_support_status": "PARTIALLY_SUPPORTED",
+          "expected_citation_status": "MISALIGNED_CITATION",
+          "notes": "Section 66C belongs to Information Technology Act, not Consumer Protection Act."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_018",
+      "query": "Where are FIR filing procedures codified?",
+      "generated_answer": "FIR registration is governed by Section 173 of the Bharatiya Nyaya Sanhita.",
+      "category": "incorrect_statute_citations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bnss_173",
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 173",
+          "text": "Section 173. Information in cognizable cases. (1) Every information relating to the commission of a cognizable offence..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "FIR registration is governed by Section 173 of the Bharatiya Nyaya Sanhita.",
+          "expected_claim_type": "PROCEDURAL_REQUIREMENT",
+          "expected_support_status": "PARTIALLY_SUPPORTED",
+          "expected_citation_status": "MISALIGNED_CITATION",
+          "notes": "Section 173 is BNSS (procedural code), not BNS (substantive code)."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_019",
+      "query": "Which law regulates certificate for electronic evidence?",
+      "generated_answer": "The requirement for an electronic record certificate is governed by Section 63 of the Motor Vehicles Act.",
+      "category": "incorrect_statute_citations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bsa_63",
+          "statute": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section": "Section 63",
+          "text": "Section 63. Admissibility of electronic records... (4) a certificate signed by a person in official charge..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "The requirement for an electronic record certificate is governed by Section 63 of the Motor Vehicles Act.",
+          "expected_claim_type": "EVIDENTIARY_REQUIREMENT",
+          "expected_support_status": "PARTIALLY_SUPPORTED",
+          "expected_citation_status": "MISALIGNED_CITATION",
+          "notes": "Section 63 electronic record rule belongs to BSA, not Motor Vehicles Act."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_020",
+      "query": "Where is the definition of theft codified?",
+      "generated_answer": "Theft is defined under Section 303 of the Companies Act.",
+      "category": "incorrect_statute_citations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_303",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "text": "Section 303. Theft. (1) Whoever, intending to take dishonestly any movable property..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Theft is defined under Section 303 of the Companies Act.",
+          "expected_claim_type": "STATUTORY_PROVISION",
+          "expected_support_status": "PARTIALLY_SUPPORTED",
+          "expected_citation_status": "MISALIGNED_CITATION",
+          "notes": "Theft is codified in BNS, not Companies Act."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_021",
+      "query": "What section covers theft in Bharatiya Nyaya Sanhita?",
+      "generated_answer": "Under Section 420 of the Bharatiya Nyaya Sanhita, theft is punished with three years imprisonment.",
+      "category": "incorrect_section_citations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_303",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "text": "Section 303. (2) Whoever commits theft shall be punished with imprisonment for a term which may extend to three years..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Section 420 of the Bharatiya Nyaya Sanhita, theft is punished with three years imprisonment.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "PARTIALLY_SUPPORTED",
+          "expected_citation_status": "UNSUPPORTED_CITATION",
+          "notes": "Theft is Section 303; Section 420 is legacy IPC cheating."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_022",
+      "query": "What section covers cyber identity theft?",
+      "generated_answer": "Identity theft using electronic signatures is codified under Section 92 of Information Technology Act.",
+      "category": "incorrect_section_citations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "it_66c",
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 66C",
+          "text": "Section 66C. Punishment for identity theft. Whoever, fraudulently or dishonestly make use of the electronic signature..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Identity theft using electronic signatures is codified under Section 92 of Information Technology Act.",
+          "expected_claim_type": "STATUTORY_PROVISION",
+          "expected_support_status": "PARTIALLY_SUPPORTED",
+          "expected_citation_status": "UNSUPPORTED_CITATION",
+          "notes": "Governed by Section 66C, not Section 92."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_023",
+      "query": "What section covers warrantless arrest by police in BNSS?",
+      "generated_answer": "Police arrest without warrant is governed under Section 700 of Bharatiya Nagarik Suraksha Sanhita.",
+      "category": "incorrect_section_citations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bnss_35",
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 35",
+          "text": "Section 35. When police may arrest without warrant."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Police arrest without warrant is governed under Section 700 of Bharatiya Nagarik Suraksha Sanhita.",
+          "expected_claim_type": "PROCEDURAL_REQUIREMENT",
+          "expected_support_status": "PARTIALLY_SUPPORTED",
+          "expected_citation_status": "INVALID_SOURCE",
+          "notes": "Section 700 does not exist in BNSS (Section 35 governs)."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_024",
+      "query": "What section governs electronic records certificate in BSA?",
+      "generated_answer": "Under Section 12 of Bharatiya Sakshya Adhiniyam, a certificate is mandated for electronic evidence.",
+      "category": "incorrect_section_citations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bsa_63",
+          "statute": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section": "Section 63",
+          "text": "Section 63. Admissibility of electronic records. (4) a certificate signed by a person in official charge..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Section 12 of Bharatiya Sakshya Adhiniyam, a certificate is mandated for electronic evidence.",
+          "expected_claim_type": "EVIDENTIARY_REQUIREMENT",
+          "expected_support_status": "PARTIALLY_SUPPORTED",
+          "expected_citation_status": "UNSUPPORTED_CITATION",
+          "notes": "Governed by Section 63, not Section 12."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_025",
+      "query": "What is the penalty for stealing property?",
+      "generated_answer": "Stealing movable property is punishable with imprisonment for up to three years or fine.",
+      "category": "missing_citations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_303",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "text": "Section 303. (2) Whoever commits theft shall be punished with imprisonment of either description for a term which may extend to three years, or with fine, or with both."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Stealing movable property is punishable with imprisonment for up to three years or fine.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "MISSING_CITATION",
+          "notes": "Substantively supported by BNS 303, but statutory citation is missing."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_026",
+      "query": "Can an officer arrest an accused for murder without warrant?",
+      "generated_answer": "Police officers are legally empowered to arrest a murder suspect immediately without obtaining a judicial warrant.",
+      "category": "missing_citations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bnss_35",
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 35",
+          "text": "Section 35. When police may arrest without warrant. (1) Any police officer may without an order from a Magistrate and without a warrant, arrest any person..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Police officers are legally empowered to arrest a murder suspect immediately without obtaining a judicial warrant.",
+          "expected_claim_type": "PROCEDURAL_REQUIREMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "MISSING_CITATION",
+          "notes": "Supported by BNSS Section 35, but lacks statutory attribution."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_027",
+      "query": "What is the consequence of hacking into government servers?",
+      "generated_answer": "Hacking computer systems carries a maximum sentence of three years imprisonment.",
+      "category": "missing_citations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "it_66",
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 66",
+          "text": "Section 66. Computer related offences... he shall be punishable with imprisonment for a term which may extend to three years or with fine..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Hacking computer systems carries a maximum sentence of three years imprisonment.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "MISSING_CITATION",
+          "notes": "Supported by Section 66 IT Act, but no citation is provided."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_028",
+      "query": "How is electronic chat evidence authenticated?",
+      "generated_answer": "A certificate describing the digital device and signed by an authorized manager must accompany printed chat logs.",
+      "category": "missing_citations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bsa_63",
+          "statute": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section": "Section 63",
+          "text": "Section 63. Admissibility of electronic records... (4) a certificate doing any of the following things..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "A certificate describing the digital device and signed by an authorized manager must accompany printed chat logs.",
+          "expected_claim_type": "EVIDENTIARY_REQUIREMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "MISSING_CITATION",
+          "notes": "Supported by BSA Section 63, but citation omitted."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_029",
+      "query": "What substantive and procedural laws apply to cyber identity theft?",
+      "generated_answer": "Substantively, identity theft is penalized under Section 66C of Information Technology Act. Procedurally, arrest powers are governed by Section 35 of Bharatiya Nagarik Suraksha Sanhita.",
+      "category": "multi_statute_answers",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "it_66c",
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 66C",
+          "text": "Section 66C. Punishment for identity theft... imprisonment which may extend to three years..."
+        },
+        {
+          "chunk_id": "bnss_35",
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 35",
+          "text": "Section 35. When police may arrest without warrant..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Substantively, identity theft is penalized under Section 66C of Information Technology Act.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "First statute accurately cited and supported."
+        },
+        {
+          "claim_text": "Procedurally, arrest powers are governed by Section 35 of Bharatiya Nagarik Suraksha Sanhita.",
+          "expected_claim_type": "PROCEDURAL_REQUIREMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Second statute accurately cited and supported."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_030",
+      "query": "How is online fraud prosecuted with digital evidence?",
+      "generated_answer": "Cheating is defined under Section 318 of Bharatiya Nyaya Sanhita. Digital evidence admissibility requires a certificate under Section 63 of Bharatiya Sakshya Adhiniyam.",
+      "category": "multi_statute_answers",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_318",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 318",
+          "text": "Section 318. Cheating. (1) Whoever, by deceiving any person..."
+        },
+        {
+          "chunk_id": "bsa_63",
+          "statute": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section": "Section 63",
+          "text": "Section 63. Admissibility of electronic records..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Cheating is defined under Section 318 of Bharatiya Nyaya Sanhita.",
+          "expected_claim_type": "STATUTORY_PROVISION",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Substantive definition grounded."
+        },
+        {
+          "claim_text": "Digital evidence admissibility requires a certificate under Section 63 of Bharatiya Sakshya Adhiniyam.",
+          "expected_claim_type": "EVIDENTIARY_REQUIREMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Evidentiary rule grounded."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_031",
+      "query": "What happens if a company director commits fraud and falsifies electronic accounts?",
+      "generated_answer": "Director financial reporting is governed by Section 134 of Companies Act. Cheating is punished under Section 318 of Bharatiya Nyaya Sanhita.",
+      "category": "multi_statute_answers",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "companies_act_134",
+          "statute": "Companies Act, 2013",
+          "section": "Section 134",
+          "text": "Section 134. Financial statement, Board's report, etc."
+        },
+        {
+          "chunk_id": "bns_318",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 318",
+          "text": "Section 318. Cheating. (2) Whoever cheats shall be punished with imprisonment..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Director financial reporting is governed by Section 134 of Companies Act.",
+          "expected_claim_type": "STATUTORY_PROVISION",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Corporate rule supported."
+        },
+        {
+          "claim_text": "Cheating is punished under Section 318 of Bharatiya Nyaya Sanhita.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Penal rule supported."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_032",
+      "query": "What procedure and evidence rules apply to theft trial?",
+      "generated_answer": "Trial procedure is governed by Bharatiya Nagarik Suraksha Sanhita. The burden of proof lies on the prosecution under Bharatiya Sakshya Adhiniyam.",
+      "category": "multi_statute_answers",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bnss_proc",
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 251",
+          "text": "Section 251. Trial of warrant cases by Magistrates."
+        },
+        {
+          "chunk_id": "bsa_burden",
+          "statute": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section": "Section 104",
+          "text": "Section 104. Burden of proof. Whoever desires any Court to give judgment as to any legal right..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Trial procedure is governed by Bharatiya Nagarik Suraksha Sanhita.",
+          "expected_claim_type": "PROCEDURAL_REQUIREMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "MISSING_CITATION",
+          "notes": "Broadly supported procedural claim."
+        },
+        {
+          "claim_text": "The burden of proof lies on the prosecution under Bharatiya Sakshya Adhiniyam.",
+          "expected_claim_type": "EVIDENTIARY_REQUIREMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "MISSING_CITATION",
+          "notes": "Broadly supported evidentiary claim."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_033",
+      "query": "What penal statute applies to theft committed in August 2024?",
+      "generated_answer": "An offense committed in August 2024 is primarily governed by Section 379 of the Indian Penal Code, 1860.",
+      "category": "temporal_applicability_conflicts",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_303",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "text": "Section 303. Theft. Enacted 2023, commenced July 1, 2024."
+        },
+        {
+          "chunk_id": "ipc_379",
+          "statute": "Indian Penal Code, 1860",
+          "section": "Section 379",
+          "text": "Section 379. Punishment for theft. Repealed effective July 1, 2024."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "An offense committed in August 2024 is primarily governed by Section 379 of the Indian Penal Code, 1860.",
+          "expected_claim_type": "TEMPORAL_CLAIM",
+          "expected_support_status": "CONTRADICTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Post-July 2024 offense cannot be governed primarily by repealed IPC."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_034",
+      "query": "Which evidence statute applies to trial of an incident from 2025?",
+      "generated_answer": "Trial proceedings in 2025 are governed by the repealed Indian Evidence Act, 1872.",
+      "category": "temporal_applicability_conflicts",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bsa_commence",
+          "statute": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section": "Section 1",
+          "text": "Section 1. Short title, application and commencement. (3) It shall come into force on the 1st day of July, 2024."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Trial proceedings in 2025 are governed by the repealed Indian Evidence Act, 1872.",
+          "expected_claim_type": "TEMPORAL_CLAIM",
+          "expected_support_status": "CONTRADICTED",
+          "expected_citation_status": "UNSUPPORTED_CITATION",
+          "notes": "BSA applies in 2025; IEA was repealed July 1, 2024."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_035",
+      "query": "What law applies to an incident that took place in 2022?",
+      "generated_answer": "Under Article 20(1) of the Constitution of India, an incident that took place in 2022 is governed by the substantive provisions in force at that time.",
+      "category": "temporal_applicability_conflicts",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "const_20",
+          "statute": "Constitution of India",
+          "section": "Article 20",
+          "text": "Article 20. Protection in respect of conviction for offences. (1) No person shall be convicted of any offence except for violation of a law in force at the time of the commission of the act..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Article 20(1) of the Constitution of India, an incident that took place in 2022 is governed by the substantive provisions in force at that time.",
+          "expected_claim_type": "TEMPORAL_CLAIM",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Ex post facto constitutional protection correctly applied."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_036",
+      "query": "When did Bharatiya Nyaya Sanhita come into force?",
+      "generated_answer": "Bharatiya Nyaya Sanhita came into effect on 1st July 2024, repealing the Indian Penal Code.",
+      "category": "temporal_applicability_conflicts",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_commence",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 1",
+          "text": "Section 1. (3) It shall come into force on the 1st day of July, 2024."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Bharatiya Nyaya Sanhita came into effect on 1st July 2024, repealing the Indian Penal Code.",
+          "expected_claim_type": "TEMPORAL_CLAIM",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "MISSING_CITATION",
+          "notes": "Accurate commencement claim."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_037",
+      "query": "What is the penalty for cheating under BNS?",
+      "generated_answer": "Under Section 318(2) of Bharatiya Nyaya Sanhita, cheating is punishable with imprisonment for a term which may extend to three years, or with fine, or with both.",
+      "category": "punishment_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_318",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 318",
+          "text": "Section 318. (2) Whoever cheats shall be punished with imprisonment of either description for a term which may extend to three years, or with fine, or with both."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Section 318(2) of Bharatiya Nyaya Sanhita, cheating is punishable with imprisonment for a term which may extend to three years, or with fine, or with both.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Accurate punishment duration supported."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_038",
+      "query": "What is the penalty for identity theft under IT Act?",
+      "generated_answer": "Section 66C of Information Technology Act imposes imprisonment up to three years and fine up to one lakh rupees.",
+      "category": "punishment_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "it_66c",
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 66C",
+          "text": "Section 66C. Punishment for identity theft... imprisonment of either description for a term which may extend to three years and shall also be liable to fine which may extend to rupees one lakh."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Section 66C of Information Technology Act imposes imprisonment up to three years and fine up to one lakh rupees.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Both imprisonment and fine limits accurately supported."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_039",
+      "query": "What is the punishment for computer tampering?",
+      "generated_answer": "Tampering with computer source documents is punishable with imprisonment up to 20 years under Section 65.",
+      "category": "punishment_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "it_65",
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 65",
+          "text": "Section 65. Tampering with computer source documents. Whoever knowingly or intentionally conceals, destroys or alters... shall be punishable with imprisonment up to three years, or with fine which may extend up to two lakh rupees, or with both."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Tampering with computer source documents is punishable with imprisonment up to 20 years under Section 65.",
+          "expected_claim_type": "PUNISHMENT",
+          "expected_support_status": "CONTRADICTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "20 years contradicts statute's 3 years maximum."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_040",
+      "query": "When can an arrest be made without warrant under BNSS?",
+      "generated_answer": "Under Section 35 of Bharatiya Nagarik Suraksha Sanhita, an officer may arrest without warrant when a cognizable offense is committed in their presence.",
+      "category": "procedural_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bnss_35",
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 35",
+          "text": "Section 35. When police may arrest without warrant. (1) Any police officer may without an order from a Magistrate and without a warrant, arrest any person who commits in the presence of a police officer, a cognizable offence..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Section 35 of Bharatiya Nagarik Suraksha Sanhita, an officer may arrest without warrant when a cognizable offense is committed in their presence.",
+          "expected_claim_type": "PROCEDURAL_REQUIREMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Procedural condition accurately grounded."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_041",
+      "query": "Is police custody allowed beyond 15 days in BNSS?",
+      "generated_answer": "Section 187 of Bharatiya Nagarik Suraksha Sanhita allows police custody during the initial 40 or 60 days in whole or in parts.",
+      "category": "procedural_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bnss_187",
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 187",
+          "text": "Section 187. Procedure when investigation cannot be completed in twenty-four hours... detention in custody... for a term not exceeding fifteen days in the whole, or in parts, at any time during the initial forty days or sixty days..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Section 187 of Bharatiya Nagarik Suraksha Sanhita allows police custody during the initial 40 or 60 days in whole or in parts.",
+          "expected_claim_type": "PROCEDURAL_REQUIREMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Procedural custody modification in BNSS 187 accurately cited."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_042",
+      "query": "Can private citizens arrest anyone without a magistrate?",
+      "generated_answer": "Under Section 40 of BNSS, private persons may execute death sentences immediately upon arresting a felon.",
+      "category": "procedural_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bnss_40",
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 40",
+          "text": "Section 40. Arrest by private person and procedure on such arrest. (1) Any private person may arrest or cause to be arrested any person who in his presence commits a non-bailable and cognizable offence... and, without unnecessary delay... shall hand over to a police officer."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Section 40 of BNSS, private persons may execute death sentences immediately upon arresting a felon.",
+          "expected_claim_type": "PROCEDURAL_REQUIREMENT",
+          "expected_support_status": "CONTRADICTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Extreme procedural hallucination contradicted by duty to hand over to police."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_043",
+      "query": "What constitutes primary evidence under BSA?",
+      "generated_answer": "Section 57 of Bharatiya Sakshya Adhiniyam defines primary evidence as the document itself produced for the inspection of the Court.",
+      "category": "evidence_law_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bsa_57",
+          "statute": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section": "Section 57",
+          "text": "Section 57. Primary evidence. Primary evidence means the document itself produced for the inspection of the Court."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Section 57 of Bharatiya Sakshya Adhiniyam defines primary evidence as the document itself produced for the inspection of the Court.",
+          "expected_claim_type": "EVIDENTIARY_REQUIREMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Direct quote of primary evidence definition."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_044",
+      "query": "Is oral evidence excluded by documentary evidence in BSA?",
+      "generated_answer": "Section 94 of Bharatiya Sakshya Adhiniyam excludes oral agreement evidence to contradict a written contract.",
+      "category": "evidence_law_claims",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bsa_94",
+          "statute": "Bharatiya Sakshya Adhiniyam, 2023",
+          "section": "Section 94",
+          "text": "Section 94. Exclusion of evidence of oral agreement. When the terms of any such contract, grant or other disposition of property... have been proved... no evidence of any oral agreement or statement shall be admitted..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Section 94 of Bharatiya Sakshya Adhiniyam excludes oral agreement evidence to contradict a written contract.",
+          "expected_claim_type": "EVIDENTIARY_REQUIREMENT",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Parol evidence rule under BSA Section 94 supported."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_045",
+      "query": "A person took my car with permission but didn't return it on time. Is it theft?",
+      "generated_answer": "The initial lawful possession may indicate criminal breach of trust rather than theft, depending on whether dishonest intent existed at the inception under Section 303.",
+      "category": "ambiguous_factual_situations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_303",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "text": "Section 303. Theft. Explanation 1.\u2014A thing so long as it is attached to the earth... Explanation 2.\u2014A move effected by the same act which affects the severance may be a theft."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "The initial lawful possession may indicate criminal breach of trust rather than theft, depending on whether dishonest intent existed at the inception under Section 303.",
+          "expected_claim_type": "FACTUAL_APPLICATION",
+          "expected_support_status": "PARTIALLY_SUPPORTED",
+          "expected_citation_status": "VALID_CITATION",
+          "notes": "Factual distinction is doctrinally sound but trust section is not in evidence snippet."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_046",
+      "query": "A contractor used substandard cement. Is it cheating or civil breach?",
+      "generated_answer": "Using substandard materials constitutes cheating only if deceptive intention existed at the time of entering the contract.",
+      "category": "ambiguous_factual_situations",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_318",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 318",
+          "text": "Section 318. Cheating. (1) Whoever, by deceiving any person, fraudulently or dishonestly induces the person so deceived to deliver any property..."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Using substandard materials constitutes cheating only if deceptive intention existed at the time of entering the contract.",
+          "expected_claim_type": "LEGAL_RULE",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "MISSING_CITATION",
+          "notes": "Doctrinal mens rea threshold supported by Section 318."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_047",
+      "query": "What are the rules for adopting a child under Hindu law?",
+      "generated_answer": "Under Section 7 of Hindu Adoptions and Maintenance Act, a male Hindu of sound mind may take a child in adoption with the consent of his wife.",
+      "category": "insufficient_evidence_cases",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_gen",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 1",
+          "text": "Section 1. Short title, commencement and application."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "Under Section 7 of Hindu Adoptions and Maintenance Act, a male Hindu of sound mind may take a child in adoption with the consent of his wife.",
+          "expected_claim_type": "STATUTORY_PROVISION",
+          "expected_support_status": "INSUFFICIENT_EVIDENCE",
+          "expected_citation_status": "INVALID_SOURCE",
+          "notes": "Retrieved evidence corpus contains only BNS; family law evidence is entirely absent."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_048",
+      "query": "What is the limitation period for filing a patent application in Japan?",
+      "generated_answer": "A Japanese patent application must be submitted within twelve months under foreign intellectual property rules.",
+      "category": "insufficient_evidence_cases",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "it_act_1",
+          "statute": "Information Technology Act, 2000",
+          "section": "Section 1",
+          "text": "Section 1. Short title, extent, commencement and application."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "A Japanese patent application must be submitted within twelve months under foreign intellectual property rules.",
+          "expected_claim_type": "GENERAL_INFORMATION",
+          "expected_support_status": "INSUFFICIENT_EVIDENCE",
+          "expected_citation_status": "MISSING_CITATION",
+          "notes": "Out of jurisdiction; zero relevant evidence in retrieved indexed corpus."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_049",
+      "query": "What should I do if my phone is stolen?",
+      "generated_answer": "It is advisable to report the loss immediately to the local police station and block your SIM card.",
+      "category": "general_explanatory_statements",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bnss_173",
+          "statute": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+          "section": "Section 173",
+          "text": "Section 173. Information in cognizable cases."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "It is advisable to report the loss immediately to the local police station and block your SIM card.",
+          "expected_claim_type": "GENERAL_INFORMATION",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "MISSING_CITATION",
+          "notes": "Practical advisory statement; low-risk general advice."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    },
+    {
+      "case_id": "GROUND_050",
+      "query": "Is legal advice provided here binding?",
+      "generated_answer": "This information is provided for research purposes and does not constitute formal legal counsel.",
+      "category": "general_explanatory_statements",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "bns_303",
+          "statute": "Bharatiya Nyaya Sanhita, 2023",
+          "section": "Section 303",
+          "text": "Section 303. Theft."
+        }
+      ],
+      "annotated_claims": [
+        {
+          "claim_text": "This information is provided for research purposes and does not constitute formal legal counsel.",
+          "expected_claim_type": "GENERAL_INFORMATION",
+          "expected_support_status": "SUPPORTED",
+          "expected_citation_status": "MISSING_CITATION",
+          "notes": "Standard explanatory disclaimer."
+        }
+      ],
+      "review_status": "PROVISIONAL_RESEARCH_BENCHMARK"
+    }
+  ]
+}

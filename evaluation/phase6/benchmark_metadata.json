@@ -1,0 +1,38 @@
+{
+  "benchmark_name": "NyayaSetu Phase 6 Expanded Research Evaluation Benchmark",
+  "benchmark_version": "v3.0-expanded-phase6",
+  "total_queries": 250,
+  "split_counts": {
+    "dev_calibration": 50,
+    "validation": 50,
+    "held_out_test": 150
+  },
+  "category_distribution": {
+    "legal_regime_identification": 35,
+    "temporal_applicability": 35,
+    "substantive_vs_procedural": 35,
+    "special_vs_general": 30,
+    "multi_statute": 30,
+    "retrieval_ambiguity": 30,
+    "claim_grounding_failures": 35,
+    "out_of_scope": 20
+  },
+  "difficulty_distribution": {
+    "easy": 32,
+    "medium": 54,
+    "hard": 164
+  },
+  "temporal_distribution": {
+    "post_july_2024": 160,
+    "not_applicable": 42,
+    "pre_july_2024": 19,
+    "ambiguous_date": 27,
+    "historical_superseded": 2
+  },
+  "annotation_limitations": "Single-annotator benchmark limitation. Annotations established and verified against official gazettes, appellate court precedents, and bar examination curricula by the research team.",
+  "file_hashes": {
+    "benchmark_train_sha256": "68e66aa02072a422330e44171c400200056f202decd96daa9d62a86ffed16561",
+    "benchmark_validation_sha256": "a116d6988061822f52469113e7052fac13449724e051ef0bda81d8617e6576ec",
+    "benchmark_test_sha256": "9460231443f6bf9b7524316d3944621a1ef1f7e2bcee08fdaaab30f8c0d3c8cf"
+  }
+}

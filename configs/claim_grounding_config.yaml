@@ -1,0 +1,48 @@
+# Phase 5: Answer Claim Grounding & Citation Verification Configuration
+# NyayaSetu Legal RAG System
+
+claim_grounding:
+  enabled: false # Strictly disabled by default for zero production impact
+  deterministic_mode: true
+  min_claim_length: 15
+  ablation_mode: "full" # Options: citation_presence, citation_verification, claim_evidence, full
+
+pipeline_switches:
+  enable_claim_extraction: true
+  enable_claim_classification: true
+  enable_evidence_matching: true
+  enable_entailment_checking: true
+  enable_citation_verification: true
+  enable_answer_validation: true
+
+claim_importance_weights:
+  PUNISHMENT: 1.00
+  STATUTORY_PROVISION: 1.00
+  LEGAL_CONSEQUENCE: 0.95
+  PROCEDURAL_REQUIREMENT: 0.90
+  EVIDENTIARY_REQUIREMENT: 0.90
+  TEMPORAL_CLAIM: 0.90
+  LEGAL_INTERPRETATION: 0.80
+  FACTUAL_APPLICATION: 0.75
+  LEGAL_RULE: 0.70
+  GENERAL_INFORMATION: 0.50
+
+thresholds:
+  min_match_threshold: 0.20
+  full_support_threshold: 0.65
+  partial_support_threshold: 0.35
+  citation_match_threshold: 0.30
+
+unsupported_handling_policy:
+  excise_high_risk_unsupported: false # Safety: Do not hard-delete without review; qualify with caution note
+  qualify_unsupported_claims: true
+  flag_medium_risk_uncertain: true
+  preserve_original_answer: true
+
+grounding_scoring:
+  support_scores:
+    SUPPORTED: 1.00
+    PARTIALLY_SUPPORTED: 0.50
+    INSUFFICIENT_EVIDENCE: 0.25
+    UNSUPPORTED: 0.00
+    CONTRADICTED: -0.50

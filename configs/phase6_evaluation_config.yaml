@@ -1,0 +1,42 @@
+# NyayaSetu Phase 6 Expanded Evaluation & Statistical Testing Configuration
+random_seed: 42
+
+benchmark:
+  version: "phase6-v1"
+  dataset_root: "evaluation/phase6"
+  train_split: "evaluation/phase6/benchmark_train.json"
+  validation_split: "evaluation/phase6/benchmark_validation.json"
+  held_out_test: "evaluation/phase6/benchmark_test.json"
+  held_out_only: true
+  top_k: 5
+  initial_k: 20
+
+bootstrap:
+  iterations: 10000
+  confidence_level: 0.95
+  random_seed: 42
+
+statistical_testing:
+  alpha: 0.05
+  primary_test: "wilcoxon_signed_rank"
+  binary_test: "mcnemar"
+  multiple_comparison_corrections:
+    - "holm_bonferroni"
+    - "benjamini_hochberg"
+
+robustness:
+  dimensions:
+    - "difficulty"
+    - "legal_domain"
+    - "temporal_condition"
+    - "query_length"
+    - "retrieval_ambiguity"
+    - "multi_statute_complexity"
+
+output:
+  results_dir: "results"
+  summary_csv: "results/phase6_summary.csv"
+  summary_json: "results/phase6_summary.json"
+  statistical_json: "results/phase6_statistical_tests.json"
+  robustness_json: "results/phase6_robustness.json"
+  ablation_csv: "results/phase6_ablation_results.csv"

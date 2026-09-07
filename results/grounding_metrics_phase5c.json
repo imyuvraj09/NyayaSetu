@@ -1,0 +1,568 @@
+{
+  "benchmark_file": "evaluation/grounding/grounding_questions.json",
+  "total_cases": 50,
+  "ablation_mode": "claim_evidence",
+  "metrics": {
+    "claim_support_precision": 0.8,
+    "claim_support_recall": 0.78,
+    "claim_support_f1": 0.58,
+    "unsupported_claim_detection_rate": 0.6667,
+    "contradiction_detection_rate": 0.125,
+    "citation_accuracy": 0.0,
+    "citation_completeness": 0.72,
+    "citation_entailment_accuracy": 0.0,
+    "grounding_score": 0.57,
+    "high_risk_claim_error_rate": 0.1282,
+    "qualification_appropriateness": 0.0,
+    "false_unsupported_rate": 0.2963,
+    "average_verification_latency_ms": 1.1417
+  },
+  "bootstrap_confidence_intervals": {
+    "grounding_score": {
+      "metric": "grounding_score",
+      "mean": 0.57,
+      "ci_lower": 0.45,
+      "ci_upper": 0.69,
+      "num_queries": 50,
+      "bootstrap_samples": 2000,
+      "random_seed": 42,
+      "confidence_level": 0.95,
+      "standard_error": 0.0605
+    },
+    "claim_support_precision": {
+      "metric": "claim_support_precision",
+      "mean": 0.8,
+      "ci_lower": 0.68,
+      "ci_upper": 0.9,
+      "num_queries": 50,
+      "bootstrap_samples": 2000,
+      "random_seed": 42,
+      "confidence_level": 0.95,
+      "standard_error": 0.0566
+    },
+    "claim_support_recall": {
+      "metric": "claim_support_recall",
+      "mean": 0.78,
+      "ci_lower": 0.66,
+      "ci_upper": 0.8805,
+      "num_queries": 50,
+      "bootstrap_samples": 2000,
+      "random_seed": 42,
+      "confidence_level": 0.95,
+      "standard_error": 0.0596
+    },
+    "claim_support_f1": {
+      "metric": "claim_support_f1",
+      "mean": 0.58,
+      "ci_lower": 0.44,
+      "ci_upper": 0.72,
+      "num_queries": 50,
+      "bootstrap_samples": 2000,
+      "random_seed": 42,
+      "confidence_level": 0.95,
+      "standard_error": 0.0704
+    }
+  },
+  "per_case_audit": [
+    {
+      "case_id": "GROUND_001",
+      "category": "correctly_supported_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 6.614,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_002",
+      "category": "correctly_supported_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 8.229,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_003",
+      "category": "correctly_supported_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 1.363,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_004",
+      "category": "correctly_supported_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 1.039,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_005",
+      "category": "unsupported_legal_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 0.449,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_006",
+      "category": "unsupported_legal_claims",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 4.327,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_007",
+      "category": "unsupported_legal_claims",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 0.419,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_008",
+      "category": "unsupported_legal_claims",
+      "grounding_score": 0.5,
+      "modifications_made": false,
+      "latency_ms": 0.95,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_009",
+      "category": "partially_supported_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 0.496,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_010",
+      "category": "partially_supported_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 0.931,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_011",
+      "category": "partially_supported_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 0.55,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_012",
+      "category": "partially_supported_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 1.291,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_013",
+      "category": "contradictory_claims",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 0.657,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 1
+    },
+    {
+      "case_id": "GROUND_014",
+      "category": "contradictory_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 0.396,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_015",
+      "category": "contradictory_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 0.998,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_016",
+      "category": "contradictory_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 0.714,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_017",
+      "category": "incorrect_statute_citations",
+      "grounding_score": 0.5,
+      "modifications_made": false,
+      "latency_ms": 1.283,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_018",
+      "category": "incorrect_statute_citations",
+      "grounding_score": 0.5,
+      "modifications_made": false,
+      "latency_ms": 0.532,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_019",
+      "category": "incorrect_statute_citations",
+      "grounding_score": 0.5,
+      "modifications_made": false,
+      "latency_ms": 0.621,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_020",
+      "category": "incorrect_statute_citations",
+      "grounding_score": 0.5,
+      "modifications_made": false,
+      "latency_ms": 0.664,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_021",
+      "category": "incorrect_section_citations",
+      "grounding_score": 0.5,
+      "modifications_made": false,
+      "latency_ms": 0.438,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_022",
+      "category": "incorrect_section_citations",
+      "grounding_score": 0.5,
+      "modifications_made": false,
+      "latency_ms": 0.85,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_023",
+      "category": "incorrect_section_citations",
+      "grounding_score": 0.5,
+      "modifications_made": false,
+      "latency_ms": 0.483,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_024",
+      "category": "incorrect_section_citations",
+      "grounding_score": 0.5,
+      "modifications_made": false,
+      "latency_ms": 0.622,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_025",
+      "category": "missing_citations",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 0.231,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_026",
+      "category": "missing_citations",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 0.53,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_027",
+      "category": "missing_citations",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 0.29,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_028",
+      "category": "missing_citations",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 1.145,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_029",
+      "category": "multi_statute_answers",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 1.709,
+      "claims_count": 2,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_030",
+      "category": "multi_statute_answers",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 1.247,
+      "claims_count": 2,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_031",
+      "category": "multi_statute_answers",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 1.032,
+      "claims_count": 2,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_032",
+      "category": "multi_statute_answers",
+      "grounding_score": 0.5,
+      "modifications_made": false,
+      "latency_ms": 1.408,
+      "claims_count": 2,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_033",
+      "category": "temporal_applicability_conflicts",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 0.441,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_034",
+      "category": "temporal_applicability_conflicts",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 0.358,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_035",
+      "category": "temporal_applicability_conflicts",
+      "grounding_score": 0.5,
+      "modifications_made": false,
+      "latency_ms": 0.55,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_036",
+      "category": "temporal_applicability_conflicts",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 0.35,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_037",
+      "category": "punishment_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 0.409,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_038",
+      "category": "punishment_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 0.373,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_039",
+      "category": "punishment_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 0.8,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_040",
+      "category": "procedural_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 0.987,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_041",
+      "category": "procedural_claims",
+      "grounding_score": 0.5,
+      "modifications_made": false,
+      "latency_ms": 0.831,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_042",
+      "category": "procedural_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 1.008,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_043",
+      "category": "evidence_law_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 1.737,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_044",
+      "category": "evidence_law_claims",
+      "grounding_score": 1.0,
+      "modifications_made": false,
+      "latency_ms": 0.965,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_045",
+      "category": "ambiguous_factual_situations",
+      "grounding_score": 0.5,
+      "modifications_made": false,
+      "latency_ms": 1.328,
+      "claims_count": 1,
+      "unsupported_count": 0,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_046",
+      "category": "ambiguous_factual_situations",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 0.881,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_047",
+      "category": "insufficient_evidence_cases",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 1.008,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_048",
+      "category": "insufficient_evidence_cases",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 0.87,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_049",
+      "category": "general_explanatory_statements",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 0.913,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    },
+    {
+      "case_id": "GROUND_050",
+      "category": "general_explanatory_statements",
+      "grounding_score": 0.0,
+      "modifications_made": false,
+      "latency_ms": 0.768,
+      "claims_count": 1,
+      "unsupported_count": 1,
+      "contradicted_count": 0
+    }
+  ]
+}

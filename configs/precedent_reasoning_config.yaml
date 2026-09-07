@@ -1,0 +1,37 @@
+# Phase 7 — Precedent Reasoning & Authority-Aware Architecture Configuration
+
+enabled: true
+
+retrieval:
+  collection_name: "nyayasetu_case_law"
+  top_k: 5
+  initial_candidate_k: 15
+  use_tree_index: true
+  use_dense_vector: true
+  use_section_correlation: true
+
+court_hierarchy:
+  supreme_court_binding: true  # Article 141 Constitution of India
+  high_court_territorial: true
+  tribunal_specialized: true
+
+ranking:
+  authority_weight: 1.0
+  jurisdiction_weight: 1.0
+  compatibility_weight: 1.0
+  temporal_weight: 1.0
+  min_score_floor: 0.10
+
+temporal:
+  allow_historical_landmark: true
+  penalize_explicitly_overruled: true
+  overruled_penalty_multiplier: 0.30
+
+conflicts:
+  enable_hierarchical_resolution: true
+  enable_bench_strength_resolution: true
+  distinguish_factual_differences: true
+
+safety:
+  prevent_unsupported_overruling_claims: true
+  preserve_unknown_metadata: true

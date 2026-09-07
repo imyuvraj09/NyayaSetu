@@ -84,6 +84,7 @@ class TestPipelineSwitches(unittest.TestCase):
         response = self.pipeline.query("What is theft under BNS?")
         self.assertEqual(response.status, "success")
         self.assertNotIn("fact_first_routing", response.retrieval_metadata)
+        self.assertNotIn("evidence_compatibility", response.retrieval_metadata)
 
     def test_use_fact_routing_true_attaches_metadata(self):
         """Verify use_fact_routing=True executes router and attaches metadata."""
@@ -98,6 +99,68 @@ class TestPipelineSwitches(unittest.TestCase):
         self.assertIn("routing_mode", r_meta)
         self.assertIn("confidence", r_meta)
 
+    def test_default_use_evidence_compatibility_is_false(self):
+        """Verify default call has use_evidence_compatibility=False and does not attach evidence_compatibility."""
+        response = self.pipeline.query("What is the penalty for cheating?")
+        self.assertEqual(response.status, "success")
+        self.assertNotIn("evidence_compatibility", response.retrieval_metadata)
+
+    def test_use_evidence_compatibility_true_attaches_metadata(self):
+        """Verify use_evidence_compatibility=True executes compatibility engine and attaches metadata."""
+        response = self.pipeline.query(
+            "What is theft under Section 303 of BNS?",
+            use_evidence_compatibility=True,
+        )
+        self.assertEqual(response.status, "success")
+        self.assertIn("evidence_compatibility", response.retrieval_metadata)
+        c_meta = response.retrieval_metadata["evidence_compatibility"]
+        self.assertIn("compatible_count", c_meta)
+        self.assertIn("decisions", c_meta)
+        self.assertIn("regime_coherence_score", c_meta)
+
+
+    def test_default_use_claim_grounding_is_false(self):
+        """Verify default call has use_claim_grounding=False and does not attach phase5_grounding."""
+        response = self.pipeline.query("What is theft?")
+        self.assertEqual(response.status, "success")
+        self.assertNotIn("phase5_grounding", response.claim_validation)
+
+    def test_use_claim_grounding_true_attaches_metadata(self):
+        """Verify use_claim_grounding=True executes grounding engine and attaches metadata."""
+        response = self.pipeline.query(
+            "What is theft under Section 303 of BNS?",
+            use_claim_grounding=True,
+        )
+        self.assertEqual(response.status, "success")
+        self.assertIn("phase5_grounding", response.claim_validation)
+        g_meta = response.claim_validation["phase5_grounding"]
+        self.assertIn("grounding_score", g_meta)
+        self.assertIn("claims", g_meta)
+        self.assertIn("decisions", g_meta)
+
+    def test_default_use_precedent_reasoning_is_false(self):
+        """Verify default call has use_precedent_reasoning=False and does not attach precedent_reasoning."""
+        response = self.pipeline.query("What is right to privacy under Article 21?")
+        self.assertEqual(response.status, "success")
+        self.assertNotIn("precedent_reasoning", response.retrieval_metadata)
+
+    def test_use_precedent_reasoning_true_attaches_metadata(self):
+        """Verify use_precedent_reasoning=True executes precedent engine and attaches metadata."""
+        response = self.pipeline.query(
+            "What is right to privacy under Article 21?",
+            use_precedent_reasoning=True,
+        )
+        self.assertEqual(response.status, "success")
+        self.assertIn("precedent_reasoning", response.retrieval_metadata)
+        p_meta = response.retrieval_metadata["precedent_reasoning"]
+        self.assertIn("precedents_count", p_meta)
+        self.assertIn("ranked_precedents", p_meta)
+        self.assertIn("ranking_decisions", p_meta)
+        self.assertIn("controlling_count", p_meta)
+        self.assertIn("conflicts", p_meta)
+
 
 if __name__ == "__main__":
     unittest.main()
+
+
