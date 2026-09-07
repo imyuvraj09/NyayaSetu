@@ -188,6 +188,7 @@ class LegalRAGPipeline:
         use_fact_routing: bool = False,
         use_evidence_compatibility: bool = False,
         use_claim_grounding: bool = False,
+        use_precedent_reasoning: bool = False,
     ) -> RAGResponse:
         """Process a legal inquiry and return a grounded, cited response.
 
@@ -200,6 +201,7 @@ class LegalRAGPipeline:
             use_fact_routing: Optional research switch for Fact-First Legal Issue Routing.
             use_evidence_compatibility: Optional research switch for Phase 4 Evidence Compatibility Filtering.
             use_claim_grounding: Optional research switch for Phase 5 Answer Claim Grounding & Citation Verification.
+            use_precedent_reasoning: Optional research switch for Phase 7 Judicial Precedent & Authority-Aware Reasoning.
 
         Returns:
             RAGResponse object with synthesized answer, citations, and provenance.
@@ -323,6 +325,91 @@ class LegalRAGPipeline:
                 case_law_status = CaseLawStatus.CORPUS_UNAVAILABLE.value
                 case_warnings.append("The current indexed corpus does not contain verified judicial decisions sufficient to substantiate judicial principles on this issue.")
 
+        # Step 1C: Phase 7 Precedent Reasoning & Authority-Aware Re-ranking
+        precedent_reasoning_info = None
+        if use_precedent_reasoning:
+            try:
+                from research.precedent_reasoning.engine import get_precedent_reasoning_engine
+                from schemas.retrieval import RerankedChunk
+                p_engine = get_precedent_reasoning_engine()
+                target_secs = q_analysis.get("section_candidates", []) if isinstance(q_analysis, dict) else getattr(q_analysis, "section_candidates", [])
+                target_stats = q_analysis.get("statutes", []) if isinstance(q_analysis, dict) else getattr(q_analysis, "statutes", [])
+                r_regime = r_decision.selected_regimes[0] if (r_decision and r_decision.selected_regimes) else None
+
+                p_res = p_engine.reason_over_precedents(
+                    query=query_text,
+                    target_sections=target_secs,
+                    target_statutes=target_stats,
+                    routed_regime=r_regime,
+                    top_k=5,
+                )
+                precedent_reasoning_info = p_res.to_dict()
+
+                # Map authority-ranked precedents into RerankedChunk instances
+                p_chunks: List[RerankedChunk] = []
+                for p_rank, p in enumerate(p_res.ranked_precedents, start=1):
+                    sec_display = ", ".join(p.sections_referred) if p.sections_referred else ""
+                    statute_display = ", ".join(p.statutes_referred) if p.statutes_referred else "Indian Law"
+                    auth_meta = p_res.authority_assessments.get(p.chunk_id)
+                    auth_val = auth_meta.authority_status.value if auth_meta else "UNKNOWN"
+                    auth_score = auth_meta.authority_score if auth_meta else 1.0
+
+                    rc = RerankedChunk(
+                        rank=p_rank,
+                        chunk_id=p.chunk_id,
+                        document_name=f"{p.case_name} ({p.citation})",
+                        document_type="Case Law",
+                        source_filename=f"{p.document_id}.pdf",
+                        page_numbers=[1],
+                        text=p.text,
+                        similarity_score=min(1.0, max(0.0, p.retrieval_score / 2.0)),
+                        reranker_score=round(float(p.retrieval_score), 4),
+                        metadata={
+                            "evidence_type": "CASE_LAW",
+                            "case_name": p.case_name,
+                            "court": p.court,
+                            "court_level": p.court_level.value if hasattr(p.court_level, "value") else str(p.court_level),
+                            "citation": p.citation,
+                            "judgment_date": p.judgment_date,
+                            "passage_type": p.passage_type,
+                            "is_holding_or_ratio": p.is_holding_or_ratio,
+                            "authority_status": auth_val,
+                            "authority_score": auth_score,
+                            "article_141_binding": auth_meta.article_141_binding if auth_meta else False,
+                            "statutes_referred": p.statutes_referred,
+                            "sections_referred": p.sections_referred,
+                            "topics": p.topics,
+                        },
+                        section_number=sec_display,
+                        section_title=f"{p.passage_type} · {p.case_name}",
+                        act_short_name=statute_display,
+                        evidence_type="CASE_LAW",
+                        case_name=p.case_name,
+                        court=p.court,
+                        citation=p.citation,
+                        judgment_date=p.judgment_date,
+                        paragraph_number="1",
+                        is_holding_or_ratio=p.is_holding_or_ratio,
+                        topic_compatibility="DIRECT",
+                    )
+                    p_chunks.append(rc)
+
+                if p_chunks:
+                    case_chunks = p_chunks
+                    case_law_status = CaseLawStatus.FOUND.value
+                elif requires_case_law and not case_chunks:
+                    case_law_status = CaseLawStatus.NOT_FOUND.value
+                    case_warnings.append("The current indexed corpus does not contain verified judicial decisions sufficient to substantiate judicial principles on this issue.")
+
+                logger.info(
+                    "[LegalRAGPipeline] Phase 7 Precedent Reasoning integrated: %d ranked chunks, %d controlling, %d conflicts",
+                    len(p_chunks),
+                    len(p_res.controlling_precedents),
+                    len(p_res.conflicts),
+                )
+            except Exception as pr_err:
+                logger.warning("[LegalRAGPipeline] Precedent reasoning integration failed: %s", pr_err)
+
         # Combine & Enforce Evidence Topic Compatibility and Budget (Rule 7 & 9: 2–5 sources)
         active_q_analysis = retrieval_result.query_analysis if hasattr(retrieval_result, "query_analysis") else q_analysis
         ranked_chunks = TopicCompatibilityEngine().filter_and_budget(
@@ -359,6 +446,8 @@ class LegalRAGPipeline:
             retrieval_meta["fact_first_routing"] = routing_info
         if compatibility_info is not None:
             retrieval_meta["evidence_compatibility"] = compatibility_info
+        if precedent_reasoning_info is not None:
+            retrieval_meta["precedent_reasoning"] = precedent_reasoning_info
 
         # Step 2: Check for empty retrieval results
         if not ranked_chunks:

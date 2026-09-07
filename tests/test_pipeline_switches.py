@@ -138,7 +138,29 @@ class TestPipelineSwitches(unittest.TestCase):
         self.assertIn("claims", g_meta)
         self.assertIn("decisions", g_meta)
 
+    def test_default_use_precedent_reasoning_is_false(self):
+        """Verify default call has use_precedent_reasoning=False and does not attach precedent_reasoning."""
+        response = self.pipeline.query("What is right to privacy under Article 21?")
+        self.assertEqual(response.status, "success")
+        self.assertNotIn("precedent_reasoning", response.retrieval_metadata)
+
+    def test_use_precedent_reasoning_true_attaches_metadata(self):
+        """Verify use_precedent_reasoning=True executes precedent engine and attaches metadata."""
+        response = self.pipeline.query(
+            "What is right to privacy under Article 21?",
+            use_precedent_reasoning=True,
+        )
+        self.assertEqual(response.status, "success")
+        self.assertIn("precedent_reasoning", response.retrieval_metadata)
+        p_meta = response.retrieval_metadata["precedent_reasoning"]
+        self.assertIn("precedents_count", p_meta)
+        self.assertIn("ranked_precedents", p_meta)
+        self.assertIn("ranking_decisions", p_meta)
+        self.assertIn("controlling_count", p_meta)
+        self.assertIn("conflicts", p_meta)
+
 
 if __name__ == "__main__":
     unittest.main()
+
 

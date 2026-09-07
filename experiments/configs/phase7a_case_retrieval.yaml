@@ -1,0 +1,21 @@
+# Phase 7A — Case Retrieval Only Ablation Config
+ablation_name: "phase7a_case_retrieval"
+description: "Isolates raw precedent retrieval (dense + tree index) without authority re-ranking or conflict analysis."
+
+retrieval:
+  collection_name: "nyayasetu_case_law"
+  top_k: 5
+  use_tree_index: true
+  use_dense_vector: true
+
+ranking:
+  authority_weight: 0.0
+  jurisdiction_weight: 0.0
+  compatibility_weight: 0.0
+  temporal_weight: 0.0
+
+features:
+  enable_authority_ranking: false
+  enable_relationships: false
+  enable_conflicts: false
+  enable_synthesis: false

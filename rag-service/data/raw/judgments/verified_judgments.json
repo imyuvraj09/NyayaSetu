@@ -8,10 +8,28 @@
     "citation": "(2011) 2 SCC 550",
     "judgment_date": "2011-01-05",
     "case_number": "Criminal Appeal No. 71 of 2005",
-    "bench": ["P. Sathasivam, J.", "Dr. B.S. Chauhan, J."],
-    "statutes_referred": ["Indian Penal Code, 1860", "Code of Criminal Procedure, 1973", "Bharatiya Nyaya Sanhita, 2023"],
-    "sections_referred": ["375", "376", "63", "64"],
-    "topics": ["consent", "sexual offences", "prior relationship", "evidence", "rape"],
+    "bench": [
+      "P. Sathasivam, J.",
+      "Dr. B.S. Chauhan, J."
+    ],
+    "statutes_referred": [
+      "Indian Penal Code, 1860",
+      "Code of Criminal Procedure, 1973",
+      "Bharatiya Nyaya Sanhita, 2023"
+    ],
+    "sections_referred": [
+      "375",
+      "376",
+      "63",
+      "64"
+    ],
+    "topics": [
+      "consent",
+      "sexual offences",
+      "prior relationship",
+      "evidence",
+      "rape"
+    ],
     "source_url": "https://main.sci.gov.in/judgment/judis/37397.pdf",
     "source_name": "Supreme Court of India Official Judgments",
     "verified": true,
@@ -23,9 +41,20 @@
         "passage_type": "HOLDING",
         "is_holding_or_ratio": true,
         "text": "Even if the prosecutrix had been in a previous consensual relationship with the accused or was of promiscuous character, that by itself does not establish consent for a subsequent sexual act. Even a woman of easy virtue or someone who had engaged in consensual sexual relations in the past is entitled to the full protection of the law. Every woman possesses an absolute right to privacy and bodily integrity, and she has the unequivocal right to say 'no' at any point of time. A prior relationship cannot operate as a license or establish an automatic, continuing presumption of consent for any subsequent sexual intercourse.",
-        "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023"],
-        "sections_referred": ["375", "63"],
-        "topics": ["consent", "prior consensual relationship", "bodily integrity", "sexual offences"]
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Bharatiya Nyaya Sanhita, 2023"
+        ],
+        "sections_referred": [
+          "375",
+          "63"
+        ],
+        "topics": [
+          "consent",
+          "prior consensual relationship",
+          "bodily integrity",
+          "sexual offences"
+        ]
       },
       {
         "paragraph_number": "15",
@@ -33,9 +62,19 @@
         "passage_type": "RATIO",
         "is_holding_or_ratio": true,
         "text": "Consent for the purpose of the penal law must be an unequivocal, voluntary agreement when the woman, by words, gestures, or any form of verbal or non-verbal communication, communicates willingness to participate in the specific sexual act. Consent given on one occasion or within an intimate relationship does not imply consent on any subsequent occasion. The court must evaluate consent specifically with reference to the date, time, and circumstances of the alleged offence, independently of past intimacy.",
-        "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023"],
-        "sections_referred": ["375", "63"],
-        "topics": ["unequivocal agreement", "act-specific consent", "intimate relationship"]
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Bharatiya Nyaya Sanhita, 2023"
+        ],
+        "sections_referred": [
+          "375",
+          "63"
+        ],
+        "topics": [
+          "unequivocal agreement",
+          "act-specific consent",
+          "intimate relationship"
+        ]
       }
     ]
   },
@@ -48,10 +87,29 @@
     "citation": "(2019) 9 SCC 608",
     "judgment_date": "2019-08-21",
     "case_number": "Criminal Appeal No. 1165 of 2019",
-    "bench": ["Dr. D.Y. Chandrachud, J.", "Indira Banerjee, J."],
-    "statutes_referred": ["Indian Penal Code, 1860", "Code of Criminal Procedure, 1973", "Bharatiya Nyaya Sanhita, 2023"],
-    "sections_referred": ["375", "90", "415", "63", "27"],
-    "topics": ["consent", "misconception of fact", "promise to marry", "rape", "consensual relationship"],
+    "bench": [
+      "Dr. D.Y. Chandrachud, J.",
+      "Indira Banerjee, J."
+    ],
+    "statutes_referred": [
+      "Indian Penal Code, 1860",
+      "Code of Criminal Procedure, 1973",
+      "Bharatiya Nyaya Sanhita, 2023"
+    ],
+    "sections_referred": [
+      "375",
+      "90",
+      "415",
+      "63",
+      "27"
+    ],
+    "topics": [
+      "consent",
+      "misconception of fact",
+      "promise to marry",
+      "rape",
+      "consensual relationship"
+    ],
     "source_url": "https://main.sci.gov.in/supremecourt/2019/18987/18987_2019_9_1501_16155_Judgement_21-Aug-2019.pdf",
     "source_name": "Supreme Court of India Official Judgments (e-SCR)",
     "verified": true,
@@ -63,9 +121,21 @@
         "passage_type": "STATUTORY_INTERPRETATION",
         "is_holding_or_ratio": false,
         "text": "Under Section 375 of the Indian Penal Code (and Section 63 of Bharatiya Nyaya Sanhita, 2023), consent is defined as an unequivocal voluntary agreement when the woman by words, gestures or any form of verbal or non-verbal communication, communicates willingness to participate in the specific sexual act. Explanation 2 explicitly provides that a woman who does not physically resist to the act of penetration shall not for that reason only be regarded as consenting. Section 90 of the IPC (Section 27 of BNS) further provides that consent given by a person under a misconception of fact is not a consent in law.",
-        "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023"],
-        "sections_referred": ["375", "90", "63", "27"],
-        "topics": ["definition of consent", "statutory provisions", "misconception of fact"]
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Bharatiya Nyaya Sanhita, 2023"
+        ],
+        "sections_referred": [
+          "375",
+          "90",
+          "63",
+          "27"
+        ],
+        "topics": [
+          "definition of consent",
+          "statutory provisions",
+          "misconception of fact"
+        ]
       },
       {
         "paragraph_number": "16",
@@ -73,9 +143,22 @@
         "passage_type": "LEGAL_TEST",
         "is_holding_or_ratio": true,
         "text": "Where the consent of the prosecutrix is alleged to have been vitiated by a promise to marry, the court must satisfy itself that the following dual conditions are satisfied: (i) the promise of marriage was the immediate cause of the consent, and the misconception of fact arising out of the promise was the sole or primary reason which motivated the woman to engage in the sexual act; and (ii) the accused had no intention of fulfilling the promise to marry from the very inception of making that promise. It is the initial fraudulent intent that vitiates consent and converts the act into an offence.",
-        "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023"],
-        "sections_referred": ["375", "90", "63", "27"],
-        "topics": ["judicial test", "misconception of fact", "false promise to marry", "consent"]
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Bharatiya Nyaya Sanhita, 2023"
+        ],
+        "sections_referred": [
+          "375",
+          "90",
+          "63",
+          "27"
+        ],
+        "topics": [
+          "judicial test",
+          "misconception of fact",
+          "false promise to marry",
+          "consent"
+        ]
       },
       {
         "paragraph_number": "18",
@@ -83,9 +166,21 @@
         "passage_type": "HOLDING",
         "is_holding_or_ratio": true,
         "text": "To establish the offence of rape on the ground of a false promise to marry, there is a clear distinction between a false promise made which is false from its inception, and a breach of a promise made in good faith which could not be fulfilled subsequently due to subsequent unforeseen events. Where two consenting adults enter into a consensual relationship over a prolonged duration, the failure of marriage negotiations or subsequent discord cannot retrospectively convert a consensual intimate relationship into the heinous offence of rape under Indian law.",
-        "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023"],
-        "sections_referred": ["375", "90", "63"],
-        "topics": ["holding", "breach of promise", "consensual relationship", "retrospective illegality"]
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Bharatiya Nyaya Sanhita, 2023"
+        ],
+        "sections_referred": [
+          "375",
+          "90",
+          "63"
+        ],
+        "topics": [
+          "holding",
+          "breach of promise",
+          "consensual relationship",
+          "retrospective illegality"
+        ]
       }
     ]
   },
@@ -98,10 +193,27 @@
     "citation": "(2013) 9 SCC 113",
     "judgment_date": "2013-08-27",
     "case_number": "Criminal Appeal No. 1297 of 2013",
-    "bench": ["K.S. Radhakrishnan, J.", "A.K. Sikri, J."],
-    "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023"],
-    "sections_referred": ["375", "376", "90", "63", "27"],
-    "topics": ["consent", "rape", "misconception of fact", "mental will"],
+    "bench": [
+      "K.S. Radhakrishnan, J.",
+      "A.K. Sikri, J."
+    ],
+    "statutes_referred": [
+      "Indian Penal Code, 1860",
+      "Bharatiya Nyaya Sanhita, 2023"
+    ],
+    "sections_referred": [
+      "375",
+      "376",
+      "90",
+      "63",
+      "27"
+    ],
+    "topics": [
+      "consent",
+      "rape",
+      "misconception of fact",
+      "mental will"
+    ],
     "source_url": "https://main.sci.gov.in/judgment/judis/40700.pdf",
     "source_name": "Supreme Court of India Official Judgments",
     "verified": true,
@@ -113,9 +225,21 @@
         "passage_type": "RATIO",
         "is_holding_or_ratio": true,
         "text": "'Consent' involves an active will in the mind of the person to permit the doing of the act complained of. It is an act of reason accompanied with deliberation, the mind weighing, as in a balance, the good and evil on each side. A consent obtained by force, coercion, fear of injury, or misconception of fact is no consent at all in the contemplation of penal law. There is a fundamental difference between consent and submission: every consent involves a submission, but it by no means follows that a mere submission involves consent.",
-        "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023"],
-        "sections_referred": ["375", "90", "63", "27"],
-        "topics": ["active mental will", "consent vs submission", "penal law definition"]
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Bharatiya Nyaya Sanhita, 2023"
+        ],
+        "sections_referred": [
+          "375",
+          "90",
+          "63",
+          "27"
+        ],
+        "topics": [
+          "active mental will",
+          "consent vs submission",
+          "penal law definition"
+        ]
       }
     ]
   },
@@ -128,10 +252,26 @@
     "citation": "(2019) 13 SCC 1",
     "judgment_date": "2019-04-09",
     "case_number": "Criminal Appeal No. 629 of 2019",
-    "bench": ["L. Nageswara Rao, J.", "M.R. Shah, J."],
-    "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023"],
-    "sections_referred": ["375", "376", "90", "63"],
-    "topics": ["consent", "fraudulent intention", "promise to marry", "rape"],
+    "bench": [
+      "L. Nageswara Rao, J.",
+      "M.R. Shah, J."
+    ],
+    "statutes_referred": [
+      "Indian Penal Code, 1860",
+      "Bharatiya Nyaya Sanhita, 2023"
+    ],
+    "sections_referred": [
+      "375",
+      "376",
+      "90",
+      "63"
+    ],
+    "topics": [
+      "consent",
+      "fraudulent intention",
+      "promise to marry",
+      "rape"
+    ],
     "source_url": "https://main.sci.gov.in/supremecourt/2018/31201/31201_2018_Judgement_09-Apr-2019.pdf",
     "source_name": "Supreme Court of India Official Judgments (e-SCR)",
     "verified": true,
@@ -142,11 +282,26 @@
         "paragraph_heading": "Mala Fide Promise and Invalidation of Assent",
         "passage_type": "HOLDING",
         "is_holding_or_ratio": true,
-        "text": "If it is established that the accused, from the very beginning, had no intention to marry the victim and harboured a mala fide design to obtain sexual favours under the guise of an assurance of marriage, the consent given by the victim is tainted by misconception of fact. In such a scenario, the act constitutes rape because the physical assent was not voluntary in the true legal sense, but was induced entirely by deceit.",
-        "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023"],
-        "sections_referred": ["375", "90", "63", "27"],
-        "topics": ["mala fide promise", "deceitful consent", "misconception of fact"]
+        "text": "If it is established that the accused, from the very beginning, had no intention to marry the victim and harboured a mala fide design to obtain sexual favours under the guise of an assurance of marriage, the consent given by the victim is tainted by misconception of fact. In such a scenario, the act constitutes rape because the physical assent was not voluntary in the true legal sense, but was induced entirely by deceit. The ruling in Pramod Suryabhan Pawar is clearly distinguishable from a case where the promise to marry was false right from its inception.",
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Bharatiya Nyaya Sanhita, 2023"
+        ],
+        "sections_referred": [
+          "375",
+          "90",
+          "63",
+          "27"
+        ],
+        "topics": [
+          "mala fide promise",
+          "deceitful consent",
+          "misconception of fact"
+        ]
       }
+    ],
+    "distinguished_by": [
+      "Pramod Suryabhan Pawar v. State of Maharashtra"
     ]
   },
   {
@@ -158,10 +313,26 @@
     "citation": "2023 SCC OnLine SC 89",
     "judgment_date": "2023-01-30",
     "case_number": "Criminal Appeal No. 257 of 2023",
-    "bench": ["Ajay Rastogi, J.", "Bela M. Trivedi, J."],
-    "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023"],
-    "sections_referred": ["375", "376", "90", "63"],
-    "topics": ["consensual relationship", "rape", "promise to marry", "mature adults"],
+    "bench": [
+      "Ajay Rastogi, J.",
+      "Bela M. Trivedi, J."
+    ],
+    "statutes_referred": [
+      "Indian Penal Code, 1860",
+      "Bharatiya Nyaya Sanhita, 2023"
+    ],
+    "sections_referred": [
+      "375",
+      "376",
+      "90",
+      "63"
+    ],
+    "topics": [
+      "consensual relationship",
+      "rape",
+      "promise to marry",
+      "mature adults"
+    ],
     "source_url": "https://main.sci.gov.in/supremecourt/2020/22815/22815_2020_1_1502_41249_Judgement_30-Jan-2023.pdf",
     "source_name": "Supreme Court of India Official Judgments (e-SCR)",
     "verified": true,
@@ -172,11 +343,25 @@
         "paragraph_heading": "Prolonged Relationship and Voluntary Agency",
         "passage_type": "HOLDING",
         "is_holding_or_ratio": true,
-        "text": "When an adult woman of sound mind engages in a physical relationship with a person over several years with full knowledge of the consequences, it cannot be presumed that her consent on every occasion was obtained under a misconception of fact. While past consensual intimacy does not mean consent is perpetually given for future acts, the subsequent falling out between the parties or failure to solemnize marriage does not retrospectively transform voluntary acts into non-consensual offences.",
-        "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023"],
-        "sections_referred": ["375", "90", "63"],
-        "topics": ["voluntary agency", "prolonged intimacy", "retrospective characterization"]
+        "text": "When an adult woman of sound mind engages in a physical relationship with a person over several years with full knowledge of the consequences, it cannot be presumed that her consent on every occasion was obtained under a misconception of fact. While past consensual intimacy does not mean consent is perpetually given for future acts, the subsequent falling out between the parties or failure to solemnize marriage does not retrospectively transform voluntary acts into non-consensual offences. Following the principles laid down in Pramod Suryabhan Pawar v. State of Maharashtra, long-term consensual intimacy does not become rape merely upon subsequent breakdown of marriage negotiations.",
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Bharatiya Nyaya Sanhita, 2023"
+        ],
+        "sections_referred": [
+          "375",
+          "90",
+          "63"
+        ],
+        "topics": [
+          "voluntary agency",
+          "prolonged intimacy",
+          "retrospective characterization"
+        ]
       }
+    ],
+    "followed_by": [
+      "Pramod Suryabhan Pawar v. State of Maharashtra"
     ]
   },
   {
@@ -188,10 +373,29 @@
     "citation": "(2010) 9 SCC 189",
     "judgment_date": "2010-08-11",
     "case_number": "Criminal Appeal No. 104 of 2009",
-    "bench": ["Dalveer Bhandari, J.", "K.S. Radhakrishnan, J."],
-    "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023"],
-    "sections_referred": ["299", "300", "302", "304", "100", "101", "103"],
-    "topics": ["murder", "culpable homicide", "intention", "sentencing"],
+    "bench": [
+      "Dalveer Bhandari, J.",
+      "K.S. Radhakrishnan, J."
+    ],
+    "statutes_referred": [
+      "Indian Penal Code, 1860",
+      "Bharatiya Nyaya Sanhita, 2023"
+    ],
+    "sections_referred": [
+      "299",
+      "300",
+      "302",
+      "304",
+      "100",
+      "101",
+      "103"
+    ],
+    "topics": [
+      "murder",
+      "culpable homicide",
+      "intention",
+      "sentencing"
+    ],
     "source_url": "https://main.sci.gov.in/judgment/judis/36636.pdf",
     "source_name": "Supreme Court of India Official Judgments",
     "verified": true,
@@ -203,9 +407,21 @@
         "passage_type": "HOLDING",
         "is_holding_or_ratio": true,
         "text": "Culpable homicide is the genus, and murder is the species. All murders are culpable homicide, but all culpable homicides are not murder. Under the statutory scheme (now codified in Sections 100, 101, and 103 of Bharatiya Nyaya Sanhita, 2023), culpable homicide amounts to murder if the act by which death is caused is done with the intention of causing death, or causing bodily injury sufficient in the ordinary course of nature to cause death. Section 103 prescribes that whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine.",
-        "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023"],
-        "sections_referred": ["300", "302", "101", "103"],
-        "topics": ["genus and species", "murder definition", "punishment for murder"]
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Bharatiya Nyaya Sanhita, 2023"
+        ],
+        "sections_referred": [
+          "300",
+          "302",
+          "101",
+          "103"
+        ],
+        "topics": [
+          "genus and species",
+          "murder definition",
+          "punishment for murder"
+        ]
       },
       {
         "paragraph_number": "20",
@@ -213,9 +429,24 @@
         "passage_type": "HOLDING",
         "is_holding_or_ratio": true,
         "text": "In a case of murder where there is no eyewitness and the prosecution relies entirely on circumstantial evidence, the onus lies heavily on the prosecution to prove that the chain of circumstances is complete and unbroken. The circumstances established must be consistent only with the guilt of the accused and totally inconsistent with his innocence. Conjectures, suspicions, or motive alone cannot substitute for legal proof. Each evidentiary circumstance such as CCTV footage, call detail records, recovery, or forensic reports must be firmly established beyond reasonable doubt.",
-        "statutes_referred": ["Indian Penal Code, 1860", "Bharatiya Nyaya Sanhita, 2023", "Bharatiya Sakshya Adhiniyam, 2023"],
-        "sections_referred": ["300", "302", "101", "103"],
-        "topics": ["circumstantial evidence", "chain of circumstances", "standard of proof", "forensic evidence", "murder conviction"]
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Bharatiya Nyaya Sanhita, 2023",
+          "Bharatiya Sakshya Adhiniyam, 2023"
+        ],
+        "sections_referred": [
+          "300",
+          "302",
+          "101",
+          "103"
+        ],
+        "topics": [
+          "circumstantial evidence",
+          "chain of circumstances",
+          "standard of proof",
+          "forensic evidence",
+          "murder conviction"
+        ]
       }
     ]
   },
@@ -228,10 +459,32 @@
     "citation": "(1984) 4 SCC 116",
     "judgment_date": "1984-07-17",
     "case_number": "Criminal Appeal No. 287 of 1983",
-    "bench": ["S. Murtaza Fazal Ali, J.", "A. Varadarajan, J.", "Sabyasachi Mukharji, J."],
-    "statutes_referred": ["Indian Penal Code, 1860", "Indian Evidence Act, 1872", "Bharatiya Nyaya Sanhita, 2023", "Bharatiya Sakshya Adhiniyam, 2023"],
-    "sections_referred": ["300", "302", "101", "103"],
-    "topics": ["circumstantial evidence", "five golden principles", "panchsheel", "murder conviction", "chain of circumstances", "standard of proof", "benefit of doubt"],
+    "bench": [
+      "S. Murtaza Fazal Ali, J.",
+      "A. Varadarajan, J.",
+      "Sabyasachi Mukharji, J."
+    ],
+    "statutes_referred": [
+      "Indian Penal Code, 1860",
+      "Indian Evidence Act, 1872",
+      "Bharatiya Nyaya Sanhita, 2023",
+      "Bharatiya Sakshya Adhiniyam, 2023"
+    ],
+    "sections_referred": [
+      "300",
+      "302",
+      "101",
+      "103"
+    ],
+    "topics": [
+      "circumstantial evidence",
+      "five golden principles",
+      "panchsheel",
+      "murder conviction",
+      "chain of circumstances",
+      "standard of proof",
+      "benefit of doubt"
+    ],
     "source_url": "https://main.sci.gov.in/judgment/judis/8427.pdf",
     "source_name": "Supreme Court of India Official Judgments",
     "verified": true,
@@ -243,9 +496,23 @@
         "passage_type": "LEGAL_TEST",
         "is_holding_or_ratio": true,
         "text": "A close analysis of the decisions of this Court exhibits the following five golden principles, which constitute the panchsheel of the proof of a case based on circumstantial evidence: (1) The circumstances from which the conclusion of guilt is to be drawn should be fully established. (2) The facts so established should be consistent only with the hypothesis of the guilt of the accused, that is to say, they should not be explainable on any other hypothesis except that the accused is guilty. (3) The circumstances should be of a conclusive nature and tendency. (4) They should exclude every possible hypothesis except the one to be proved. (5) There must be a chain of evidence so complete as not to leave any reasonable ground for the conclusion consistent with the innocence of the accused and must show that in all human probability the act must have been done by the accused.",
-        "statutes_referred": ["Indian Penal Code, 1860", "Indian Evidence Act, 1872", "Bharatiya Nyaya Sanhita, 2023"],
-        "sections_referred": ["300", "302", "101"],
-        "topics": ["circumstantial evidence", "five golden principles", "panchsheel", "judicial test", "standard of proof"]
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Indian Evidence Act, 1872",
+          "Bharatiya Nyaya Sanhita, 2023"
+        ],
+        "sections_referred": [
+          "300",
+          "302",
+          "101"
+        ],
+        "topics": [
+          "circumstantial evidence",
+          "five golden principles",
+          "panchsheel",
+          "judicial test",
+          "standard of proof"
+        ]
       },
       {
         "paragraph_number": "154",
@@ -253,9 +520,23 @@
         "passage_type": "HOLDING",
         "is_holding_or_ratio": true,
         "text": "Where a murder conviction is sought solely on circumstantial evidence, there must not be any missing link in the chain of circumstances. If circumstances such as motive, last seen together, CCTV footage, mobile phone location, call detail records, and forensic or medical reports leave any reasonable doubt or allow for an alternative hypothesis consistent with innocence, the benefit of doubt must inevitably be given to the accused. The distance between 'may be true' and 'must be true' is divide that must be traversed by clear and conclusive circumstantial proof.",
-        "statutes_referred": ["Indian Penal Code, 1860", "Indian Evidence Act, 1872", "Bharatiya Nyaya Sanhita, 2023"],
-        "sections_referred": ["300", "302", "101"],
-        "topics": ["chain of circumstances", "missing link", "benefit of doubt", "forensic evidence", "murder conviction"]
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Indian Evidence Act, 1872",
+          "Bharatiya Nyaya Sanhita, 2023"
+        ],
+        "sections_referred": [
+          "300",
+          "302",
+          "101"
+        ],
+        "topics": [
+          "chain of circumstances",
+          "missing link",
+          "benefit of doubt",
+          "forensic evidence",
+          "murder conviction"
+        ]
       }
     ]
   },
@@ -268,10 +549,25 @@
     "citation": "(2011) 8 SCC 497",
     "judgment_date": "2011-09-02",
     "case_number": "Civil Appeal No. 6454 of 2011",
-    "bench": ["R.V. Raveendran, J.", "A.K. Patnaik, J."],
-    "statutes_referred": ["Right to Information Act, 2005"],
-    "sections_referred": ["2(j)", "3", "6", "8(1)(e)"],
-    "topics": ["RTI", "fiduciary relationship", "evaluated answer scripts", "transparency"],
+    "bench": [
+      "R.V. Raveendran, J.",
+      "A.K. Patnaik, J."
+    ],
+    "statutes_referred": [
+      "Right to Information Act, 2005"
+    ],
+    "sections_referred": [
+      "2(j)",
+      "3",
+      "6",
+      "8(1)(e)"
+    ],
+    "topics": [
+      "RTI",
+      "fiduciary relationship",
+      "evaluated answer scripts",
+      "transparency"
+    ],
     "source_url": "https://main.sci.gov.in/judgment/judis/38477.pdf",
     "source_name": "Supreme Court of India Official Judgments",
     "verified": true,
@@ -283,9 +579,19 @@
         "passage_type": "HOLDING",
         "is_holding_or_ratio": true,
         "text": "The right to information is a cherished right derived from the freedom of speech and expression. An examining body does not hold the evaluated answer scripts in a fiduciary relationship with the examiner under Section 8(1)(e) of the RTI Act. A student is entitled to inspect and obtain a certified copy of their evaluated answer book under Section 3 and Section 6 of the RTI Act, 2005, subject only to reasonable processing charges and statutory procedures.",
-        "statutes_referred": ["Right to Information Act, 2005"],
-        "sections_referred": ["3", "6", "8(1)(e)"],
-        "topics": ["RTI right", "fiduciary duty", "inspection of answer sheets"]
+        "statutes_referred": [
+          "Right to Information Act, 2005"
+        ],
+        "sections_referred": [
+          "3",
+          "6",
+          "8(1)(e)"
+        ],
+        "topics": [
+          "RTI right",
+          "fiduciary duty",
+          "inspection of answer sheets"
+        ]
       }
     ]
   },
@@ -298,10 +604,31 @@
     "citation": "(1978) 1 SCC 248",
     "judgment_date": "1978-01-25",
     "case_number": "Writ Petition (Civil) No. 231 of 1977",
-    "bench": ["M.H. Beg, C.J.", "Y.V. Chandrachud, J.", "P.N. Bhagwati, J.", "V.R. Krishna Iyer, J.", "N.L. Untwalia, J.", "S. Murtaza Fazal Ali, J.", "P.S. Kailasam, J."],
-    "statutes_referred": ["Constitution of India", "Passports Act, 1967"],
-    "sections_referred": ["Article 21", "Article 14", "Article 19", "Section 10(3)(c)"],
-    "topics": ["procedure established by law", "due process", "personal liberty", "natural justice"],
+    "bench": [
+      "M.H. Beg, C.J.",
+      "Y.V. Chandrachud, J.",
+      "P.N. Bhagwati, J.",
+      "V.R. Krishna Iyer, J.",
+      "N.L. Untwalia, J.",
+      "S. Murtaza Fazal Ali, J.",
+      "P.S. Kailasam, J."
+    ],
+    "statutes_referred": [
+      "Constitution of India",
+      "Passports Act, 1967"
+    ],
+    "sections_referred": [
+      "Article 21",
+      "Article 14",
+      "Article 19",
+      "Section 10(3)(c)"
+    ],
+    "topics": [
+      "procedure established by law",
+      "due process",
+      "personal liberty",
+      "natural justice"
+    ],
     "source_url": "https://main.sci.gov.in/judgment/judis/5188.pdf",
     "source_name": "Supreme Court of India Official Judgments",
     "verified": true,
@@ -313,9 +640,363 @@
         "passage_type": "HOLDING",
         "is_holding_or_ratio": true,
         "text": "The principle of reasonableness, which legally as well as philosophically is an essential element of equality or non-arbitrariness, pervades Article 14 like a brooding omnipresence. The procedure contemplated by Article 21 must be 'right and just and fair' and not arbitrary, fanciful or oppressive; otherwise, it would be no procedure at all and the requirement of Article 21 would not be satisfied.",
-        "statutes_referred": ["Constitution of India"],
-        "sections_referred": ["Article 21", "Article 14"],
-        "topics": ["due process", "fair procedure", "personal liberty"]
+        "statutes_referred": [
+          "Constitution of India"
+        ],
+        "sections_referred": [
+          "Article 21",
+          "Article 14"
+        ],
+        "topics": [
+          "due process",
+          "fair procedure",
+          "personal liberty"
+        ]
+      }
+    ]
+  },
+  {
+    "document_id": "sc_2017_puttaswamy",
+    "evidence_type": "CASE_LAW",
+    "case_name": "Justice K.S. Puttaswamy (Retd.) v. Union of India",
+    "court": "Supreme Court of India",
+    "court_level": "SUPREME_COURT",
+    "citation": "(2017) 10 SCC 1",
+    "judgment_date": "2017-08-24",
+    "case_number": "Writ Petition (Civil) No. 494 of 2012",
+    "bench": [
+      "J.S. Khehar, CJI",
+      "J. Chelameswar, J.",
+      "S.A. Bobde, J.",
+      "R.K. Agrawal, J.",
+      "Rohinton Fali Nariman, J.",
+      "A.M. Sapre, J.",
+      "Dr. D.Y. Chandrachud, J.",
+      "Sanjay Kishan Kaul, J.",
+      "S. Abdul Nazeer, J."
+    ],
+    "statutes_referred": [
+      "Constitution of India"
+    ],
+    "sections_referred": [
+      "Article 21",
+      "Article 14",
+      "Article 19"
+    ],
+    "topics": [
+      "right to privacy",
+      "fundamental rights",
+      "overruling",
+      "constitutional bench"
+    ],
+    "source_url": "https://main.sci.gov.in/supremecourt/2012/35071/35071_2012_Judgement_24-Aug-2017.pdf",
+    "source_name": "Supreme Court of India Official Reports (9-Judge Constitution Bench)",
+    "verified": true,
+    "summary": "Nine-judge Constitution Bench declaring privacy a fundamental right under Article 21 and expressly overruling ADM Jabalpur v. Shivkant Shukla.",
+    "paragraphs": [
+      {
+        "paragraph_number": "652",
+        "paragraph_heading": "Overruling of ADM Jabalpur v. Shivkant Shukla",
+        "passage_type": "HOLDING",
+        "is_holding_or_ratio": true,
+        "text": "The judgments rendered by all the four judges constituting the majority in ADM Jabalpur v. Shivkant Shukla are hereby expressly overruled. The view taken by Justice H.R. Khanna in his dissenting opinion represents the correct constitutional position that the right to life and personal liberty is not a creature of the Constitution but an inalienable human right.",
+        "statutes_referred": [
+          "Constitution of India"
+        ],
+        "sections_referred": [
+          "Article 21",
+          "Article 359"
+        ],
+        "topics": [
+          "overruling adm jabalpur",
+          "right to life",
+          "habeas corpus",
+          "emergency"
+        ]
+      }
+    ]
+  },
+  {
+    "document_id": "sc_1976_adm_jabalpur",
+    "evidence_type": "CASE_LAW",
+    "case_name": "Additional District Magistrate, Jabalpur v. Shivkant Shukla",
+    "court": "Supreme Court of India",
+    "court_level": "SUPREME_COURT",
+    "citation": "(1976) 2 SCC 521",
+    "judgment_date": "1976-04-28",
+    "case_number": "Civil Appeal No. 279 of 1975",
+    "bench": [
+      "A.N. Ray, CJI",
+      "H.R. Khanna, J.",
+      "M.H. Beg, J.",
+      "Y.V. Chandrachud, J.",
+      "P.N. Bhagwati, J."
+    ],
+    "statutes_referred": [
+      "Constitution of India",
+      "Maintenance of Internal Security Act, 1971"
+    ],
+    "sections_referred": [
+      "Article 21",
+      "Article 359"
+    ],
+    "topics": [
+      "emergency",
+      "suspension of habeas corpus",
+      "fundamental rights",
+      "overruled"
+    ],
+    "overruled_by": "Justice K.S. Puttaswamy (Retd.) v. Union of India",
+    "source_url": "https://main.sci.gov.in/judgment/judis/5186.pdf",
+    "source_name": "Supreme Court of India Historical Judgments",
+    "verified": true,
+    "summary": "Historical Emergency-era decision holding habeas corpus suspended; explicitly overruled by 9-judge Constitution bench in Puttaswamy.",
+    "paragraphs": [
+      {
+        "paragraph_number": "136",
+        "paragraph_heading": "Suspension of Enforcement of Article 21 During Emergency",
+        "passage_type": "HOLDING",
+        "is_holding_or_ratio": true,
+        "text": "In view of the Presidential Order issued under Article 359(1) of the Constitution, no person has any locus standi to move any writ petition under Article 226 before a High Court for habeas corpus or any other writ to challenge the legality of an order of detention.",
+        "statutes_referred": [
+          "Constitution of India"
+        ],
+        "sections_referred": [
+          "Article 21",
+          "Article 359"
+        ],
+        "topics": [
+          "habeas corpus",
+          "detention",
+          "overruled law",
+          "emergency"
+        ]
+      }
+    ]
+  },
+  {
+    "document_id": "sc_2018_navtej_johar",
+    "evidence_type": "CASE_LAW",
+    "case_name": "Navtej Singh Johar v. Union of India",
+    "court": "Supreme Court of India",
+    "court_level": "SUPREME_COURT",
+    "citation": "(2018) 10 SCC 1",
+    "judgment_date": "2018-09-06",
+    "case_number": "Writ Petition (Criminal) No. 76 of 2016",
+    "bench": [
+      "Dipak Misra, CJI",
+      "R.F. Nariman, J.",
+      "A.M. Khanwilkar, J.",
+      "Dr. D.Y. Chandrachud, J.",
+      "Indu Malhotra, J."
+    ],
+    "statutes_referred": [
+      "Indian Penal Code, 1860",
+      "Constitution of India"
+    ],
+    "sections_referred": [
+      "377",
+      "Article 14",
+      "Article 15",
+      "Article 19",
+      "Article 21"
+    ],
+    "topics": [
+      "section 377",
+      "consensual relations",
+      "decriminalization",
+      "overruling suresh koushal"
+    ],
+    "source_url": "https://main.sci.gov.in/supremecourt/2016/14961/14961_2016_Judgement_06-Sep-2018.pdf",
+    "source_name": "Supreme Court of India Official Reports (5-Judge Constitution Bench)",
+    "verified": true,
+    "summary": "Five-judge Constitution Bench decriminalizing consensual same-sex relations and explicitly overruling Suresh Kumar Koushal v. Naz Foundation.",
+    "paragraphs": [
+      {
+        "paragraph_number": "268",
+        "paragraph_heading": "Overruling of Suresh Kumar Koushal v. Naz Foundation",
+        "passage_type": "HOLDING",
+        "is_holding_or_ratio": true,
+        "text": "The declaration of law in Suresh Kumar Koushal v. Naz Foundation is hereby overruled. Section 377 of the Indian Penal Code, insofar as it criminalizes consensual sexual acts between consenting adults in private, is violative of Articles 14, 15, 19, and 21 of the Constitution.",
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Constitution of India"
+        ],
+        "sections_referred": [
+          "377",
+          "Article 14",
+          "Article 21"
+        ],
+        "topics": [
+          "section 377",
+          "consensual adults",
+          "privacy",
+          "overruled koushal"
+        ]
+      }
+    ]
+  },
+  {
+    "document_id": "sc_2014_suresh_koushal",
+    "evidence_type": "CASE_LAW",
+    "case_name": "Suresh Kumar Koushal v. Naz Foundation",
+    "court": "Supreme Court of India",
+    "court_level": "SUPREME_COURT",
+    "citation": "(2014) 1 SCC 1",
+    "judgment_date": "2013-12-11",
+    "case_number": "Civil Appeal No. 10972 of 2013",
+    "bench": [
+      "G.S. Singhvi, J.",
+      "S.J. Mukhopadhaya, J."
+    ],
+    "statutes_referred": [
+      "Indian Penal Code, 1860"
+    ],
+    "sections_referred": [
+      "377"
+    ],
+    "topics": [
+      "section 377",
+      "legislative domain",
+      "overruled"
+    ],
+    "overruled_by": "Navtej Singh Johar v. Union of India",
+    "source_url": "https://main.sci.gov.in/judgment/judis/41070.pdf",
+    "source_name": "Supreme Court of India",
+    "verified": true,
+    "summary": "Division bench ruling upholding Section 377 IPC; explicitly overruled by 5-Judge Constitution Bench in Navtej Johar.",
+    "paragraphs": [
+      {
+        "paragraph_number": "56",
+        "paragraph_heading": "Upholding Section 377 and Deference to Parliament",
+        "passage_type": "HOLDING",
+        "is_holding_or_ratio": true,
+        "text": "Section 377 IPC does not suffer from any constitutional infirmity. The High Court committed a grave error by declaring Section 377 unconstitutional. It is for the legislature to amend or delete the provision.",
+        "statutes_referred": [
+          "Indian Penal Code, 1860"
+        ],
+        "sections_referred": [
+          "377"
+        ],
+        "topics": [
+          "section 377",
+          "overruled precedent"
+        ]
+      }
+    ]
+  },
+  {
+    "document_id": "hc_2022_delhi_bail",
+    "evidence_type": "CASE_LAW",
+    "case_name": "Sanjay Chandra v. State (NCT of Delhi)",
+    "court": "High Court of Delhi",
+    "court_level": "HIGH_COURT",
+    "citation": "2022 SCC OnLine Del 1520",
+    "judgment_date": "2022-05-18",
+    "case_number": "Bail Appln. No. 892 of 2022",
+    "bench": [
+      "Swarana Kanta Sharma, J."
+    ],
+    "statutes_referred": [
+      "Code of Criminal Procedure, 1973",
+      "Bharatiya Nagarik Suraksha Sanhita, 2023"
+    ],
+    "sections_referred": [
+      "437",
+      "439",
+      "482",
+      "484"
+    ],
+    "topics": [
+      "bail",
+      "economic offences",
+      "delhi jurisdiction",
+      "liberty"
+    ],
+    "source_url": "https://delhihighcourt.nic.in/judgments",
+    "source_name": "Delhi High Court Official Judgments",
+    "verified": true,
+    "summary": "Delhi High Court decision on bail in financial and penal investigations, holding pretrial incarceration should not be punitive.",
+    "paragraphs": [
+      {
+        "paragraph_number": "22",
+        "paragraph_heading": "Bail as Rule and Jail as Exception in Delhi Jurisdiction",
+        "passage_type": "HOLDING",
+        "is_holding_or_ratio": true,
+        "text": "In the territory of the NCT of Delhi, the principle that bail is the rule and jail is an exception applies with full vigor even in complex economic allegations where the investigation is complete and evidence is documentary. Continued incarceration without trial operates as preventive punishment.",
+        "statutes_referred": [
+          "Code of Criminal Procedure, 1973"
+        ],
+        "sections_referred": [
+          "437",
+          "439"
+        ],
+        "topics": [
+          "bail",
+          "liberty",
+          "delhi high court",
+          "pretrial custody"
+        ]
+      }
+    ]
+  },
+  {
+    "document_id": "hc_2021_bombay_cbt",
+    "evidence_type": "CASE_LAW",
+    "case_name": "Godrej & Boyce Mfg. Co. Ltd. v. State of Maharashtra",
+    "court": "High Court of Judicature at Bombay",
+    "court_level": "HIGH_COURT",
+    "citation": "2021 SCC OnLine Bom 884",
+    "judgment_date": "2021-03-24",
+    "case_number": "Criminal Writ Petition No. 1102 of 2020",
+    "bench": [
+      "S.S. Shinde, J.",
+      "N.J. Jamadar, J."
+    ],
+    "statutes_referred": [
+      "Indian Penal Code, 1860",
+      "Bharatiya Nyaya Sanhita, 2023"
+    ],
+    "sections_referred": [
+      "405",
+      "406",
+      "415",
+      "420",
+      "316",
+      "318"
+    ],
+    "topics": [
+      "criminal breach of trust",
+      "cheating",
+      "commercial dispute",
+      "bombay jurisdiction"
+    ],
+    "source_url": "https://bombayhighcourt.nic.in/judgments",
+    "source_name": "Bombay High Court Official Judgments",
+    "verified": true,
+    "summary": "Bombay High Court ruling that a civil contractual dispute cannot be cloaked into a criminal prosecution for criminal breach of trust under Section 406 IPC or Section 316 BNS.",
+    "paragraphs": [
+      {
+        "paragraph_number": "18",
+        "paragraph_heading": "Distinction Between Civil Breach and Criminal Breach of Trust",
+        "passage_type": "HOLDING",
+        "is_holding_or_ratio": true,
+        "text": "Every breach of contract does not give rise to criminal breach of trust under Section 406 of the Penal Code or Section 316 of the Bharatiya Nyaya Sanhita. For an offence of criminal breach of trust, there must be an entrustment with property and a dishonest misappropriation. In Maharashtra, commercial disputes arising out of business defaults cannot be permitted to be converted into criminal prosecution.",
+        "statutes_referred": [
+          "Indian Penal Code, 1860",
+          "Bharatiya Nyaya Sanhita, 2023"
+        ],
+        "sections_referred": [
+          "405",
+          "406",
+          "316"
+        ],
+        "topics": [
+          "criminal breach of trust",
+          "civil dispute",
+          "bombay high court",
+          "entrustment"
+        ]
       }
     ]
   }
